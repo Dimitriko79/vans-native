@@ -3,7 +3,7 @@ import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
 
 export const useSideBarMenu = (props = {}) => {
-    const [categoryUid, setCategoryUid] = useState(null);
+    const [categoryId, setCategoryId] = useState(null);
 
     const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
         fetchPolicy: 'cache-and-network',
@@ -16,9 +16,9 @@ export const useSideBarMenu = (props = {}) => {
 
     const [history, setHistory] = useState([]); // История категорий
 
-    const rootCategoryUid = useMemo(() => {
+    const rootCategoryId = useMemo(() => {
         if (getRootCategoryData) {
-            return getRootCategoryData.storeConfig.root_category_uid;
+            return getRootCategoryData.storeConfig.root_category_id;
         }
     }, [getRootCategoryData]);
 
@@ -26,57 +26,46 @@ export const useSideBarMenu = (props = {}) => {
         const historyUpdated = [...history.slice(0, history.length - 1)];
         if(historyUpdated.length >= 1) {
             setHistory(historyUpdated);
-            setCategoryUid(historyUpdated[historyUpdated.length - 1]);
+            setCategoryId(historyUpdated[historyUpdated.length - 1]);
         } else {
             setHistory([]);
-            setCategoryUid(rootCategoryUid);
+            setCategoryId(rootCategoryId);
         }
     };
 
-    const rootCategory = data && data.categories.items[0];
+    const rootCategory = data?.categoryList[0] || [];
 
     const { children = [] } = rootCategory || {};
-
     const childCategories = useMemo(() => {
         const childCategories = new Map();
 
-        if (
-            rootCategory &&
-            rootCategory.include_in_menu &&
-            rootCategory.url_path
-        ) {
-            childCategories.set(rootCategory.uid, {
-                category: rootCategory,
-                isLeaf: true
-            });
-        }
-
-        children.filter(child => Boolean(child.include_in_menu) && Boolean(child.show_on_mobile)).map(category => {
-            const isLeaf = !parseInt(category.children_count);
-
-            childCategories.set(category.uid, { category, isLeaf });
+        children
+            .sort((a, b) => a.position - b.position)
+            .filter(child => Boolean(child.include_in_menu))
+            .forEach(category => {
+                const isLeaf = !parseInt(category.children_count < 0 ? 0 : category.children_count ) ;
+                childCategories.set(category.id, { category, isLeaf });
         });
 
         return childCategories;
     }, [children, rootCategory]);
-    console.log(3333, childCategories)
 
     useEffect(() => {
-        if(rootCategoryUid && !categoryUid) {
-            setCategoryUid(rootCategoryUid);
+        if(rootCategoryId && !categoryId) {
+            setCategoryId(rootCategoryId);
         }
-    }, [rootCategoryUid]);
+    }, [rootCategoryId]);
 
     useEffect(() => {
-        fetchNavigation({variables: {id: categoryUid}});
-    }, [categoryUid])
-
+        fetchNavigation({variables: {id: categoryId}});
+    }, [categoryId])
+    console.log(111111, childCategories)
     return {
         data,
         history,
         setHistory,
         childCategories,
-        setCategoryUid,
+        setCategoryId,
         handleGoBack,
         loading,
         error

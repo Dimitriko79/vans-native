@@ -2,26 +2,24 @@ import { gql } from '@apollo/client';
 
 export const GET_NAVIGATION_MENU = gql`
     query GetNavigationMenu($id: String!) {
-        categories(filters: { category_uid: { in: [$id] } }) {
-            # eslint-disable-next-line @graphql-eslint/require-id-when-available
-            items {
-                uid
-                name
-                # eslint-disable-next-line @graphql-eslint/require-id-when-available
-                children {
-                    children_count
-                    uid
-                    include_in_menu
-                    name
-                    position
-                    url_path
-                    url_suffix
-                    show_on_mobile
-                }
+        categoryList(filters: {ids: {eq: $id}}){
+            id
+            include_in_menu
+            name
+            path
+            path_in_store
+            url_key
+            url_path
+            children{
+                id
+                position
                 children_count
                 include_in_menu
+                name
+                path
+                path_in_store
+                url_key
                 url_path
-                show_on_mobile
             }
         }
     }
@@ -44,10 +42,10 @@ export const GET_CUSTOMER = gql`
 `;
 
 export const GET_ROOT_CATEGORY_ID = gql`
-    query getRootCategoryId {
+    query {
         storeConfig {
-            store_code
-            root_category_uid
+            code
+            root_category_id
         }
     }
 `;

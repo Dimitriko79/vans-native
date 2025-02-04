@@ -1,10 +1,9 @@
 import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client";
 
-const createApolloClient = (storeCode = 'en') => {
-    console.log(2222, storeCode)
+const createApolloClient = (storeCode = 'he') => {
     return new ApolloClient({
         link: new HttpLink({
-            uri: 'https://www.dutyfree.co.il/graphql',
+            uri: 'https://vans.qa.fisha.co.il/graphql',
             headers: {
                 'Store': storeCode
             }

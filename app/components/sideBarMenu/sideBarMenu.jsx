@@ -18,7 +18,7 @@ const SideBarMenu = ({translateX}) => {
         history,
         setHistory,
         childCategories,
-        setCategoryUid,
+        setCategoryId,
         handleGoBack
     } = useSideBarMenu();
     return (
@@ -42,15 +42,15 @@ const SideBarMenu = ({translateX}) => {
                 <FlatList
                     data={Array.from(childCategories) || []}
                     renderItem={({ item }) => {
-                        const [uid, { category, isLeaf }] = item;
+                        const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
                             <View>
                                 <Text style={styles.sidebarItem}>{category.name}</Text>
                             </View>
                         ) : (
                             <TouchableOpacity onPress={() => {
-                                setHistory([...history, uid]);
-                                setCategoryUid(uid);
+                                setHistory([...history, id]);
+                                setCategoryId(id);
                             }}>
                                 <View>
                                     <Text style={[styles.sidebarItem, styles.branch]}>{category.name}</Text>
