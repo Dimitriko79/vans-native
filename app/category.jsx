@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ActivityIndicator, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ActivityIndicator, ScrollView, Dimensions} from "react-native";
 import {useLocalSearchParams} from "expo-router";
 import {useCategory} from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
@@ -6,6 +6,8 @@ import CustomActivityIndicator from "./components/customActivityIndicator";
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs";
 import FilterSidebar from "./components/filterSidebar/filterSidebar";
 
+
+const { height } = Dimensions.get("window");
 
 const Category = () => {
     const { ids } = useLocalSearchParams();
@@ -22,7 +24,7 @@ const Category = () => {
         isFetching, setIsFetching
     } = talonProps;
 
-    if (loading) return <ActivityIndicator />;
+    if (loading) return <ActivityIndicator style={{height: height / 1.2}}/>;
     if(error) return <Text>Error</Text>;
 
     return (
