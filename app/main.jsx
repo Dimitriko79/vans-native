@@ -1,6 +1,7 @@
 import { ScrollView } from "react-native";
 import { router, Slot } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Footer from "./components/footer/footer";
 
 const Main = () => {
     const [isRedirecting, setIsRedirecting] = useState(false);
@@ -15,6 +16,7 @@ const Main = () => {
     return (
         <ScrollView>
             <Slot />
+            <Footer/>
         </ScrollView>
     );
 };

@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f1f2ed',
         marginTop: 40,
+        marginBottom: 10,
         paddingBottom: 40,
         marginRight: 10,
         marginLeft: 10
