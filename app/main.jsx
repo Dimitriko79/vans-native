@@ -1,13 +1,22 @@
-import {ScrollView} from "react-native";
-import {Redirect, Slot} from "expo-router";
+import { ScrollView } from "react-native";
+import { router, Slot } from "expo-router";
+import { useEffect, useState } from "react";
 
-const Main = props => {
+const Main = () => {
+    const [isRedirecting, setIsRedirecting] = useState(false);
+
+    useEffect(() => {
+        if (!isRedirecting) {
+            setIsRedirecting(true);
+            router.replace({ pathname: "/homepage" });
+        }
+    }, [isRedirecting]);
+
     return (
         <ScrollView>
-            <Redirect href="/homepage" />
             <Slot />
         </ScrollView>
-    )
-}
+    );
+};
 
 export default Main;

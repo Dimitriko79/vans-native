@@ -1,17 +1,16 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
-import {images} from '../constants';
+import {View, StyleSheet, Image, TouchableOpacity} from "react-native";
+import {images} from '../../../constants';
 import {router} from "expo-router";
-import HorizontalSlider from "./components/horizontalSlider";
+import HorizontalSlider from "./horizontalSlider/horizontalSlider";
 import React from "react";
+import {useHeader} from "./useHeader";
 const Header = ({onToggle}) => {
 
-    const handleMenuPress = () => {
-        console.log("Burger menu pressed");
-    };
-
-    const handleSearchPress = () => {
-        console.log("Search pressed");
-    };
+    const {
+        cmsBlockData,
+        loading,
+        error
+    } = useHeader();
 
     const handleCartPress = () => {
         router.replace("/cart");
@@ -24,7 +23,9 @@ const Header = ({onToggle}) => {
     return (
         <View style={styles.container}>
             <View style={styles.banner}>
-                <HorizontalSlider/>
+                {cmsBlockData && cmsBlockData.length && (
+                    <HorizontalSlider data={cmsBlockData[0]}/>
+                )}
             </View>
             <View style={styles.header}>
                 <TouchableOpacity style={styles.button} onPress={onToggle}>

@@ -12,15 +12,19 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-const SideBarMenu = ({translateX}) => {
+const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
 
     const {
         history,
         setHistory,
         childCategories,
         setCategoryId,
-        handleGoBack
-    } = useSideBarMenu();
+        handleGoBack,
+        handleChosenCategory
+    } = useSideBarMenu({onPress, onToggle, isSidebarOpen});
+
+
+
     return (
         <View style={styles.container}>
             <Animated.View
@@ -45,7 +49,13 @@ const SideBarMenu = ({translateX}) => {
                         const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
                             <View>
-                                <Text style={styles.sidebarItem}>{category.name}</Text>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => handleChosenCategory(id)}
+                                >
+                                    <Text style={styles.sidebarItem}>{category.name}</Text>
+                                </TouchableOpacity>
+
                             </View>
                         ) : (
                             <TouchableOpacity onPress={() => {
@@ -68,20 +78,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    // menuIcon: {
-    //     padding: 15,
-    //     backgroundColor: '#007BFF',
-    //     borderRadius: 5,
-    //     position: 'absolute',
-    //     top: 40,
-    //     left: 20,
-    //     zIndex: 10,
-    // },
-    // menuText: {
-    //     color: '#fff',
-    //     fontSize: 24,
-    //     fontWeight: 'bold',
-    // },
     sidebar: {
         position: 'absolute',
         top: 0,

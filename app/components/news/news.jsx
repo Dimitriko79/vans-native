@@ -9,50 +9,53 @@ import {
     Dimensions,
 } from "react-native";
 import {Link} from "expo-router";
-import {newsData} from "../../mockdata/mockdata";
+import {formatImageUrl} from "../../helpers/formatImageUrl";
 
 const { width } = Dimensions.get("window");
 
-const News = () => {
-    const [visibleData, setVisibleData] = useState(newsData.slice(0, 4));
+const News = ({data}) => {
+
+    if (!data || !data.length) return null;
+
+    const [visibleData, setVisibleData] = useState(data.slice(0, 4));
 
     const showMore = () => {
         const currentLength = visibleData.length;
         const nextLength = currentLength + 4;
-        setVisibleData(newsData.slice(0, nextLength));
+        setVisibleData(data.slice(0, nextLength));
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.wrapper_title}>
-                <Text style={styles.title}>
+        <View style={styles.news}>
+            <View style={styles.news_wrapper_title}>
+                <Text style={styles.news_title}>
                     LATEST VANS NEWS
                 </Text>
             </View>
             <FlatList
                 data={visibleData}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.link}
                 numColumns={2}
                 renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <Link href={item.image} style={styles.card_link} target="_blank">
-                            <Image style={styles.card_image} source={item.image} resizeMode="cover" />
-                            <View style={styles.card_text_wrapper}>
-                                <Text style={styles.card_text}>{item.title}</Text>
+                    <View style={styles.news_card}>
+                        <Link href={item.link} style={styles.card_link} target="_blank">
+                            <Image style={styles.news_card_image} source={{uri: item.image === '' ? formatImageUrl("//images.ctfassets.net/zfz8lw2kfnpv/5DDQCyb3ugPLb6mt7RVzmx/27405d6d2a8c89fd4688b3f3ce6bbe60/unnamed.jpg") : formatImageUrl(item.image)}} resizeMode="cover" />
+                            <View style={styles.news_card_text_wrapper}>
+                                <Text style={styles.news_card_text}>{item.title}</Text>
                             </View>
-                            <View style={styles.card_link_bottom}>
-                                <Text style={styles.link_bottom}>קראו עוד</Text>
+                            <View style={styles.news_card_link_bottom}>
+                                <Text style={styles.news_link_bottom}>קראו עוד</Text>
                             </View>
 
                         </Link>
                     </View>
                 )}
-                contentContainerStyle={styles.cards}
+                contentContainerStyle={styles.news_cards}
                 ListFooterComponent={
-                    visibleData.length < newsData.length && (
-                        <View style={styles.card_button_wrapper}>
-                            <TouchableOpacity style={styles.card_button} onPress={showMore}>
-                                <Text style={styles.card_button_text}>ראה עוד</Text>
+                    visibleData.length < data.length && (
+                        <View style={styles.news_card_button_wrapper}>
+                            <TouchableOpacity style={styles.news_card_button} onPress={showMore}>
+                                <Text style={styles.news_card_button_text}>ראה עוד</Text>
                             </TouchableOpacity>
                         </View>
                     )
@@ -65,38 +68,41 @@ const News = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    news: {
         marginTop: 30
     },
-    wrapper_title: {
+    news_wrapper_title: {
         alignItems: "center",
         marginTop: 30,
         marginBottom: 30,
     },
-    title: {
-        fontSize: 38,
-        fontWeight: "bold"
+    news_title: {
+        fontSize: 36,
+        letterSpacing: -1.5,
+        fontWeight: "bold",
+
     },
-    card: {
+    news_card: {
         flex: 1,
         margin: 5,
         marginBottom: 8,
         width: width / 2,
     },
-    card_link: {
+    news_card_link: {
         flex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
         alignItems: "center",
     },
-    card_image: {
+    news_card_image: {
+        width: width / 2,
         height: width / 2,
     },
-    card_text_wrapper: {
+    news_card_text_wrapper: {
         width: "100%",
     },
-    card_text: {
+    news_card_text: {
         color: "#000",
         height: 60,
         fontSize: 16,
@@ -104,10 +110,10 @@ const styles = StyleSheet.create({
         textAlign: "right",
         marginTop: 20,
     },
-    card_link_bottom: {
+    news_card_link_bottom: {
         width: "100%",
     },
-    link_bottom: {
+    news_link_bottom: {
         marginTop: 20,
         fontSize: 12,
         fontWeight: "light",
@@ -116,12 +122,12 @@ const styles = StyleSheet.create({
         textAlign: "right",
         cursor: "pointer",
     },
-    card_button_wrapper: {
+    news_card_button_wrapper: {
         flex: 1,
         display: "flex",
         margin: "auto",
     },
-    card_button: {
+    news_card_button: {
         width: 325,
         height: 42,
         display: "flex",
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#000000",
         marginTop: 10
     },
-    card_button_text: {
+    news_card_button_text: {
         color: "#fff",
         fontSize: 12,
         fontWeight: "normal",

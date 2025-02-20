@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import CustomActivityIndicator from "./components/customActivityIndicator";
 
@@ -7,7 +7,7 @@ const Cart = () => {
     const { loading, error, data } = useQuery(GET_MEGA_MENU, {
         fetchPolicy: "no-cache",
         context: {
-            headers: { Store: "en" },
+            headers: { Store: "he" },
         }
     });
 
@@ -43,7 +43,7 @@ const Cart = () => {
     }, [data, processData]);
 
     if (loading) {
-        return <CustomActivityIndicator />;
+        return <ActivityIndicator />;
     }
 
     if (error) {

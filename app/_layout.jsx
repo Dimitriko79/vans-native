@@ -1,13 +1,14 @@
 import {Animated, Dimensions, SafeAreaView, StatusBar} from "react-native";
-import Header from "./header";
+import Header from "./components/header/header";
 import {ApolloProvider} from "@apollo/client";
 
 import Main from "./main";
 import SideBarMenu from "./components/sideBarMenu/sideBarMenu";
 import React,{createContext, useEffect, useState} from "react";
 import {useFonts} from "expo-font";
-import {SplashScreen} from "expo-router";
+import {router, SplashScreen} from "expo-router";
 import {apolloClient, updateApolloClient} from "../servises/client";
+import '../index.css';
 
 const { width } = Dimensions.get('window');
 SplashScreen.preventAutoHideAsync();
@@ -28,7 +29,12 @@ const RootLayout = () => {
         "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
         "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
         "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-        "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf")
+        "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
+        "LibreFranklin-Bold": require("../assets/fonts/LibreFranklin-Bold.ttf"),
+        "LibreFranklin-Light": require("../assets/fonts/LibreFranklin-Light.ttf"),
+        "LibreFranklin-Medium": require("../assets/fonts/LibreFranklin-Medium.ttf"),
+        "LibreFranklin-Regular": require("../assets/fonts/LibreFranklin-Regular.ttf"),
+        "LibreFranklin-Thin": require("../assets/fonts/LibreFranklin-Thin.ttf"),
     });
 
     useEffect(() => {
@@ -59,13 +65,24 @@ const RootLayout = () => {
         updateApolloClient(newStore);
     };
 
+    const handlePress = id => {
+        if (router.pathname !== "/category") {
+            router.push({ pathname: "/category", params: { ids: id } });
+        }
+    }
+
     return (
         <StoreContext.Provider value={{ storeCode, changeStore }}>
             <ApolloProvider client={apolloClient}>
-                <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+                <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
                     <Header onToggle={toggleSidebar}/>
-                    <SideBarMenu isSidebarOpen={isSidebarOpen} onToggle={toggleSidebar} translateX={translateX}/>
-                    <Main/>
+                    <SideBarMenu
+                        onToggle={toggleSidebar}
+                        isSidebarOpen={isSidebarOpen}
+                        onPress={handlePress}
+                        translateX={translateX}
+                    />
+                    <Main onPress={handlePress}/>
                 </SafeAreaView>
                 <StatusBar barStyle="dark-content"/>
             </ApolloProvider>

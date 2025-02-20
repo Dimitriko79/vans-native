@@ -3,9 +3,9 @@ import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client";
 const createApolloClient = (storeCode = 'he') => {
     return new ApolloClient({
         link: new HttpLink({
-            uri: 'https://vans.qa.fisha.co.il/graphql',
+            uri: 'https://vans-react.fisha.co.il/graphql',
             headers: {
-                'Store': storeCode
+                'Store': "he"
             }
         }),
         cache: new InMemoryCache()

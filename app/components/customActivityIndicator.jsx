@@ -1,6 +1,7 @@
-import {View, Image, StyleSheet} from "react-native";
+import {View, Image, Text, StyleSheet, Dimensions} from "react-native";
 import {images} from '../../constants';
 
+const { width } = Dimensions.get("window");
 
 const CustomActivityIndicator = () => {
 
@@ -9,6 +10,7 @@ const CustomActivityIndicator = () => {
             <Image
                 source={images.loading}
                 style={styles.image}
+                resizeMode="contain"
             />
         </View>
     );
@@ -16,20 +18,16 @@ const CustomActivityIndicator = () => {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 1000,
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        width: width,
+        zIndex: 999
     },
     image: {
-        width: 60,
-        height: 45,
-        resizeMode: 'contain',
+        height: 30,
+        width: 200,
+        resizeMode: "contain",
     },
 });
 

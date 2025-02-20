@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
+import {router} from "expo-router";
 
-export const useSideBarMenu = (props = {}) => {
+export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
     const [categoryId, setCategoryId] = useState(null);
 
     const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
@@ -14,7 +15,7 @@ export const useSideBarMenu = (props = {}) => {
         fetchPolicy: "no-cache",
     });
 
-    const [history, setHistory] = useState([]); // История категорий
+    const [history, setHistory] = useState([]);
 
     const rootCategoryId = useMemo(() => {
         if (getRootCategoryData) {
@@ -33,9 +34,15 @@ export const useSideBarMenu = (props = {}) => {
         }
     };
 
+    const handleChosenCategory = (categoryId) => {
+        onPress(categoryId);
+        onToggle();
+    }
+
     const rootCategory = data?.categoryList[0] || [];
 
     const { children = [] } = rootCategory || {};
+
     const childCategories = useMemo(() => {
         const childCategories = new Map();
 
@@ -51,6 +58,13 @@ export const useSideBarMenu = (props = {}) => {
     }, [children, rootCategory]);
 
     useEffect(() => {
+        if (!isSidebarOpen) {
+            setCategoryId(rootCategoryId);
+            setHistory([]);
+        }
+    }, [isSidebarOpen, rootCategoryId])
+
+    useEffect(() => {
         if(rootCategoryId && !categoryId) {
             setCategoryId(rootCategoryId);
         }
@@ -59,7 +73,7 @@ export const useSideBarMenu = (props = {}) => {
     useEffect(() => {
         fetchNavigation({variables: {id: categoryId}});
     }, [categoryId])
-    console.log(111111, childCategories)
+
     return {
         data,
         history,
@@ -67,6 +81,7 @@ export const useSideBarMenu = (props = {}) => {
         childCategories,
         setCategoryId,
         handleGoBack,
+        handleChosenCategory,
         loading,
         error
     };
