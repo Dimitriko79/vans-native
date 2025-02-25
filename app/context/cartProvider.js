@@ -11,7 +11,7 @@ export const CartContextProvider = ({ children }) => {
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
     const fetchCartDetails = useAwaitQuery(CART_DETAILS_QUERY);
 
-    const [cartId, setCartId] = useState(null);
+
     const [isFetchingCart, setIsFetchingCart] = useState(false);
 
     const TTL = 3600000;
@@ -45,6 +45,8 @@ export const CartContextProvider = ({ children }) => {
             return null;
         }
     };
+
+    const [cartId, setCartId] = useState(getCartIdWithTTL());
 
     const fetchDetails = async () => {
         setIsFetchingCart(true);
