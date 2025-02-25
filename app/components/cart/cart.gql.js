@@ -1,5 +1,6 @@
 import {gql} from "@apollo/client";
 import {CartPageFragment} from "./cartPageFragments.gql";
+import {CartTriggerFragment} from "./cartTriggerFragments.gql";
 
 export const CREATE_CART_MUTATION = gql`
     mutation createCart {
@@ -25,4 +26,14 @@ export const GET_CART_DETAILS = gql`
         }
     }
     ${CartPageFragment}
+`;
+
+export const GET_ITEM_COUNT_QUERY = gql`
+    query getItemCount($cartId: String!) {
+        cart(cart_id: $cartId) {
+            id
+            ...CartTriggerFragment
+        }
+    }
+    ${CartTriggerFragment}
 `;

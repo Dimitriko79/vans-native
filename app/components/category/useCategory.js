@@ -80,19 +80,20 @@ export const useCategory = (ids) => {
         setIsFetchingFirst(false);
     }, [sortFields, setIsFetchingFirst]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const newFilter = transformedFilter;
-            const newSort = {[currentSort.value]: currentSort.sortDirection};
-            try {
-                await runQuery({ variables: { ids: ids } });
-                await getProductsData({variables: {filter: newFilter, sort: newSort}});
-            } catch (e) {
-                console.log(e)
-            } finally {
-                setIsFetching(true);
-            }
+    const fetchData = async () => {
+        const newFilter = transformedFilter;
+        const newSort = {[currentSort.value]: currentSort.sortDirection};
+        try {
+            await runQuery({ variables: { ids: ids } });
+            await getProductsData({variables: {filter: newFilter, sort: newSort}});
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setIsFetching(true);
         }
+    }
+
+    useEffect(() => {
         fetchData();
     }, [ids, currentFilter, currentSort, getProductsData]);
 

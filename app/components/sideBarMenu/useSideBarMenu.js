@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
-import {router} from "expo-router";
 
 export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
     const [categoryId, setCategoryId] = useState(null);

@@ -1,4 +1,4 @@
-import {View, StyleSheet, Image, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Image, TouchableOpacity, Text} from "react-native";
 import {images} from '../../../constants';
 import {router} from "expo-router";
 import HorizontalSlider from "./horizontalSlider/horizontalSlider";
@@ -9,7 +9,8 @@ const Header = ({onToggle}) => {
     const {
         cmsBlockData,
         loading,
-        error
+        error,
+        itemCount
     } = useHeader();
 
     const handleCartPress = () => {
@@ -36,7 +37,7 @@ const Header = ({onToggle}) => {
                     />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={handleCartPress}>
+                <TouchableOpacity style={styles.button} onPress={() => {}}>
                     <Image
                         source={images.search}
                         style={styles.image}
@@ -50,6 +51,9 @@ const Header = ({onToggle}) => {
                         style={styles.image}
                         resizeMode="contain"
                     />
+                    {itemCount > 0 && (
+                        <Text style={styles.count}>{itemCount}</Text>
+                    )}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.logoContainer} onPress={handleLogoPress}>
@@ -96,7 +100,24 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ccc",
         borderStyle: "solid",
+        position: "relative"
 
+    },
+    count: {
+        height: 18,
+        width: 18,
+        borderRadius: 9,
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: 'bold',
+        position: 'absolute',
+        top: 4,
+        right: 4,
+        textAlign: "center",
+        lineHeight: 18,
     },
     image: {
         height: 30,
