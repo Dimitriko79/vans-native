@@ -1,13 +1,16 @@
-import {View, Text, StyleSheet, ActivityIndicator, ScrollView, Dimensions} from "react-native";
+import {View, Text, StyleSheet, ActivityIndicator, ScrollView, Dimensions, TouchableOpacity} from "react-native";
 import {useLocalSearchParams} from "expo-router";
 import {useCategory} from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
-import CustomActivityIndicator from "./components/customActivityIndicator";
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs";
 import FilterSidebar from "./components/filterSidebar/filterSidebar";
+import React from "react";
+import SortSideBar from "./components/sortSideBar/sortSideBar";
+import Icon from "react-native-vector-icons/AntDesign";
+import {useDropdownSideBar} from "./components/sortSideBar/useDropdownSideBar";
 
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const Category = () => {
     const { ids } = useLocalSearchParams();
@@ -16,27 +19,61 @@ const Category = () => {
         categoryData,
         products,
         aggregations,
+        sortFields,
         loading,
         error,
         handlePress,
         currentFilter,
         setCurrentFilter,
-        isFetching, setIsFetching
+        isFetching, setIsFetching,
+        sortProps
     } = talonProps;
 
-    if (loading) return <ActivityIndicator style={{height: height / 1.2}}/>;
-    if(error) return <Text>Error</Text>;
+    const { isOpenFilter, isOpenSort, onToggle } = useDropdownSideBar({isFetching, setIsFetching});
 
-    return (
-        <ScrollView>
+    let content;
+
+    if (loading) {
+        content = (
+            <View style={styles.homepage}>
+                <ActivityIndicator style={{height: height - 200}}/>
+            </View>
+        )
+    } else if (error) {
+        content = (
+            <View style={styles.homepage}>
+                <Text style={{height: height - 200}}>Error</Text>
+            </View>
+        )
+    } else {
+        content = (
             <View style={styles.container}>
                 <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
-                    <FilterSidebar filters={aggregations} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} isFetching={isFetching} setIsFetching={setIsFetching}/>
+                    <View style={styles.choosen_section_top}>
+                        <FilterSidebar filters={aggregations} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} isOpenFilter={isOpenFilter} onToggle={onToggle}/>
+                        <SortSideBar sort={sortFields} sortProps={sortProps} isOpenSort={isOpenSort} onToggle={onToggle}/>
+                    </View>
+                    <View style={styles.choosen_section_bottom}>
+                        {currentFilter.size > 0 && (
+                            <View style={styles.filter_actions}>
+                                <TouchableOpacity style={styles.filter_action} onPress={() => setCurrentFilter(new Map())}>
+                                    <Icon name="close" size={10} color="#000"/>
+                                    <Text style={styles.filter_actions_text}>נקה הכל </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
                 </View>
                 <Gallery items={products}/>
             </View>
+        )
+    }
+
+    return (
+        <ScrollView>
+            {content}
         </ScrollView>
     )
 }
@@ -56,9 +93,36 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     choosen_section: {
+        flexDirection: "column",
+    },
+    choosen_section_top: {
         flexDirection: "row",
         justifyContent: "space-between",
-        direction: "rtl"
+        direction: "rtl",
+        position: "relative",
+    },
+    choosen_section_bottom:{
+        flexDirection: "row",
+        direction: "rtl",
+        position: "relative",
+    },
+    filter_actions: {
+        display: "flex",
+        flexDirection: "row",
+        width: width - 20,
+        backgroundColor: '#ffffff',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    filter_action: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    filter_actions_text: {
+        fontSize: 10,
     }
 });
 

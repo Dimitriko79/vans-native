@@ -9,7 +9,8 @@ const { width } = Dimensions.get("window");
 const GalleryItem = ({ item, onClick }) => {
     const {price} = useItem(item);
     function getUrl(url) {
-        return url.replace("vans-react.fisha.co.il", "vans.co.il");
+        // return url.replace("vans-react.fisha.co.il", "vans.co.il");
+        return url;
     }
 
     return (

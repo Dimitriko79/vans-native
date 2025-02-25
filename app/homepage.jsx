@@ -1,12 +1,13 @@
 import React from "react";
-import {View, StyleSheet, Text, ScrollView, ActivityIndicator} from "react-native";
+import {View, StyleSheet, Text, ScrollView, ActivityIndicator, Dimensions} from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
 import {useHomepage} from "./components/homepage/useHomepage";
 import Hero from "./components/hero/hero";
-import CustomActivityIndicator from "./components/customActivityIndicator";
 import PopularyProduct from "./components/popularyProduct/popularyProduct";
+
+const { height } = Dimensions.get("window");
 
 const Homepage = () => {
     const {
@@ -16,23 +17,40 @@ const Homepage = () => {
         handlePress
     } = useHomepage();
 
-    if (loading && !homepageData) return <ActivityIndicator/>
-    if (error) return <Text>Error</Text>;
+    let content = null;
+
+    if (loading) {
+        content = (
+            <View style={styles.homepage}>
+                <ActivityIndicator style={{height: height - 200}}/>
+            </View>
+        )
+    } else if (error) {
+        content = (
+            <View style={styles.homepage}>
+                <Text style={{height: height - 200}}>Error</Text>
+            </View>
+        )
+    } else {
+        content = (
+            <View contentContainerStyle={styles.homepage}>
+                <Hero data={homepageData.getMainBannerData}/>
+                <ShopNowBanner
+                    data={homepageData.getShopNowData}
+                />
+                <News data={homepageData.getNewsData} />
+                <ShopBy
+                    data={homepageData.getShopByData}
+                    handlePress={handlePress}
+                />
+                <PopularyProduct data={homepageData.getPopularProducts}/>
+            </View>
+        )
+    }
 
     return (
         <ScrollView>
-        <View contentContainerStyle={styles.homepage}>
-            <Hero data={homepageData.getMainBannerData}/>
-            <ShopNowBanner
-                data={homepageData.getShopNowData}
-            />
-            <News data={homepageData.getNewsData} />
-            <ShopBy
-                data={homepageData.getShopByData}
-                handlePress={handlePress}
-            />
-            <PopularyProduct data={homepageData.getPopularProducts}/>
-        </View>
+            {content}
         </ScrollView>
     );
 };

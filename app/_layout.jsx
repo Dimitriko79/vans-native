@@ -9,6 +9,7 @@ import {useFonts} from "expo-font";
 import {router, SplashScreen} from "expo-router";
 import {apolloClient, updateApolloClient} from "../servises/client";
 import '../index.css';
+import Footer from "./components/footer/footer";
 
 const { width } = Dimensions.get('window');
 SplashScreen.preventAutoHideAsync();
@@ -82,7 +83,9 @@ const RootLayout = () => {
                         onPress={handlePress}
                         translateX={translateX}
                     />
-                    <Main onPress={handlePress}/>
+                    <Main onPress={handlePress}>
+                        <Footer/>
+                    </Main>
                 </SafeAreaView>
                 <StatusBar barStyle="dark-content"/>
             </ApolloProvider>

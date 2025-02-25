@@ -16,7 +16,7 @@ const { width } = Dimensions.get("window");
 
 const FilterBlock = ({ blockItem, setCurrentFilter, currentFilter}) => {
     const { label, attribute_code, options } = blockItem;
-console.log(222, blockItem);
+
     const {
         isOpen,
         onToggle ,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
-        borderBottomStyle: 'dashed',
+        borderBottomStyle: 'dashed'
     },
     category: {
         display: "flex",
