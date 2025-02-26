@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 5,
         marginBottom: 8,
-        width: width / 2,
+        width: width / 2 - 14,
     },
     item_link: {
         flex: 1,
@@ -45,14 +45,15 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "flex-start",
         alignItems: "center",
+        width: width / 2 - 14,
     },
     item_image: {
         height: width / 2,
-        width: width / 2,
+        width: "100%",
         backgroundColor: "#ffffff",
     },
     item_text_wrapper: {
-        width: width / 2,
+        width: "100%",
     },
     item_gamechanger: {
         color: '#cb1b2c',
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     item_price_wrapper: {
-        width: width / 2
+        width: "100%",
     },
     item_price: {
         textAlign: "right",
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
 
     },
     item_link_bottom: {
-        width: width / 2,
+        width: "100%",
     },
     link_bottom: {
         marginTop: 20,

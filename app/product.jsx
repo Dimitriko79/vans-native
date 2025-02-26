@@ -7,8 +7,8 @@ import SizeChart from "./components/product/SizeChart";
 import Price from "./components/price/price";
 import AddToCart from "./components/cart/addToCart";
 
-const { width } = Dimensions.get("window");
-const { height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+
   const calcPoints = price => {
         return " " + price/10 + " ";
     }
@@ -20,11 +20,14 @@ const Product = () => {
         loading,
         error
     } = talonProps;
+
     const [selectedValue, setSelectedValue] = useState({});
     const [item, setItem] = useState({});
     const [showError, setShowError] = useState(false);
-    if (loading) return <ActivityIndicator style={{height: height / 1.2}}/>;
-    if(error) return <Text>Error</Text>;
+
+
+    if (loading) return <View style={{height: height}}><ActivityIndicator style={{height: height / 1.4}}/></View>;
+    if(error) return <View style={{height: height}}><Text style={{height: height / 1.4}}>Error</Text></View>;
 
     const handleValueChange = (attributeCode, value) => {
       setSelectedValue( {...selectedValue,[attributeCode]: value});
@@ -36,8 +39,6 @@ const Product = () => {
         setShowError(false);
     };
 
-    console.log('error', error);
-    console.log('productData', productData);
     return (
         <ScrollView>
             <View style={styles.container}>

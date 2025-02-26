@@ -5,11 +5,7 @@ import Item from "./item";
 const { height } = Dimensions.get("window");
 
 const Gallery = ({items}) => {
-// if(items && items.length > 0){
-//     items.forEach(item => {
-//         console.log(item.name)
-//     })
-// }
+
     return  (
         <View style={styles.category}>
             {!items.length ? (
@@ -38,7 +34,7 @@ const styles = StyleSheet.create({
 
     },
     gallery: {
-        flex: 1,
+        paddingHorizontal: 4,
     },
     loading: {
         position: 'absolute',

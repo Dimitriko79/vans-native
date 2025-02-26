@@ -1,11 +1,12 @@
 import React from "react";
-import {View, StyleSheet, Text, ScrollView, ActivityIndicator, Dimensions} from "react-native";
+import {View, StyleSheet, Text, ScrollView, ActivityIndicator, Dimensions, Image} from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
 import {useHomepage} from "./components/homepage/useHomepage";
 import Hero from "./components/hero/hero";
 import PopularyProduct from "./components/popularyProduct/popularyProduct";
+import {images} from "../constants";
 
 const { height } = Dimensions.get("window");
 
@@ -21,14 +22,14 @@ const Homepage = () => {
 
     if (loading) {
         content = (
-            <View style={styles.homepage}>
-                <ActivityIndicator style={{height: height - 200}}/>
+            <View style={{height: height}}>
+                <ActivityIndicator color style={{height: height / 1.4}}/>
             </View>
         )
     } else if (error) {
         content = (
-            <View style={styles.homepage}>
-                <Text style={{height: height - 200}}>Error</Text>
+            <View style={{height: height}}>
+                <Text style={{height: height / 1.4}}>Error</Text>
             </View>
         )
     } else {

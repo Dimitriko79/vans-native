@@ -35,14 +35,14 @@ const Category = () => {
 
     if (loading) {
         content = (
-            <View style={styles.homepage}>
-                <ActivityIndicator style={{height: height - 200}}/>
+            <View style={{height: height}}>
+                <ActivityIndicator style={{height: height / 1.4}}/>
             </View>
         )
     } else if (error) {
         content = (
-            <View style={styles.homepage}>
-                <Text style={{height: height - 200}}>Error</Text>
+            <View style={{height: height}}>
+                <Text style={{height: height / 1.4}}>Error</Text>
             </View>
         )
     } else {
