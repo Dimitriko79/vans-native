@@ -5,6 +5,7 @@ import {useProduct} from "./components/product/useProduct";
 import ProductOptions from "./components/product/ProductOptions";
 import SizeChart from "./components/product/SizeChart";
 import Price from "./components/price/price";
+import AddToCart from "./components/cart/addToCart";
 
 const { width } = Dimensions.get("window");
 const { height } = Dimensions.get("window");
@@ -20,11 +21,19 @@ const Product = () => {
         error
     } = talonProps;
     const [selectedValue, setSelectedValue] = useState({});
+    const [item, setItem] = useState({});
+    const [showError, setShowError] = useState(false);
     if (loading) return <ActivityIndicator style={{height: height / 1.2}}/>;
     if(error) return <Text>Error</Text>;
 
     const handleValueChange = (attributeCode, value) => {
       setSelectedValue( {...selectedValue,[attributeCode]: value});
+    };
+    const handlePress = () => {
+    if (Object.keys(selectedValue).length === 0)
+        setShowError(true);
+      else
+        setShowError(false);
     };
 
     console.log('error', error);
@@ -58,8 +67,9 @@ const Product = () => {
                             {productData.color}
                     </Text>
                     <ProductOptions configurableOptions={productData.configurable_options} selectedValue={selectedValue} onValueChange={handleValueChange} />
+                    {showError && <Text style={styles.showError}>יש לבחור מידה</Text>}
                     <SizeChart/>
-{/*                     <AddToCart /> */}
+                    <AddToCart item={item} onPress={handlePress}/>
                 </View>
             </View>
         </ScrollView>
@@ -77,6 +87,7 @@ const styles = StyleSheet.create({
         textAlign: "right",
         direction: "rtl",
         paddingRight: 10,
+        paddingLeft: 10,
 
     },
     product_attribute_label: {
@@ -129,6 +140,11 @@ const styles = StyleSheet.create({
           borderTopWidth: 1,
           borderTopColor: '#ccc',
           fontSize: 16,
+      },
+      showError: {
+        color: "red",
+        fontSize: 16,
+        marginBottom: 5,
       }
 });
 

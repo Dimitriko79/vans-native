@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 1,
   },
   label_required: {
     color: "#e02b27",
