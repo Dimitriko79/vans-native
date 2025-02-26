@@ -1,5 +1,5 @@
 import {useLazyQuery, useQuery} from '@apollo/client';
-import {useCartProvider} from "../../context/cartProvider";
+import {useCartProvider} from "../../context/cart/cartProvider";
 import {useEffect} from "react";
 
 export const useCartTrigger = props => {
@@ -7,14 +7,13 @@ export const useCartTrigger = props => {
         queries: { getItemCountQuery }
     } = props;
 
-    const { cartId, isFetchingCart, setIsFetchingCart } = useCartProvider();
+    const { cartId, isFetchingCart,  } = useCartProvider()
 
     const [fetchCart, { data }] = useLazyQuery(getItemCountQuery, {
         fetchPolicy: 'cache-and-network',
         variables: {
             cartId
         },
-        skip: !cartId,
         errorPolicy: 'all'
     });
 
@@ -24,18 +23,15 @@ export const useCartTrigger = props => {
         try {
             if(isFetchingCart) {
                 await fetchCart()
-
             }
         } catch (e) {
             console.log(e)
-        } finally {
-            setIsFetchingCart(false);
         }
     }
 
     useEffect(() => {
         fetchData()
-    }, [isFetchingCart, fetchCart]);
+    }, [isFetchingCart, cartId]);
 
     return {
         itemCount

@@ -10,7 +10,7 @@ import {router, SplashScreen} from "expo-router";
 import {apolloClient, updateApolloClient} from "../servises/client";
 import '../index.css';
 import Footer from "./components/footer/footer";
-import {CartContextProvider} from "./context/cartProvider";
+import {CartContextProvider} from "./context/cart/cartProvider";
 
 const { width } = Dimensions.get('window');
 SplashScreen.preventAutoHideAsync();
