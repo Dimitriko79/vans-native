@@ -7,16 +7,14 @@ import Price from "../price/price";
 const { width } = Dimensions.get("window");
 
 const GalleryItem = ({ item, onClick }) => {
-    const {price} = useItem(item);
-    function getUrl(url) {
-        // return url.replace("vans-react.fisha.co.il", "vans.co.il");
-        return url;
-    }
-
+const {price, handlePress} = useItem(item);
+const handleLinkPress = () => {
+    handlePress(item.url_key);
+  };
     return (
         <View style={styles.item}>
-            <Link href={item.image} style={styles.item_link} target="_blank">
-                <Image style={styles.item_image} source={{uri: getUrl(item.image.url)}} resizeMode="cover" />
+            <TouchableOpacity style={styles.item_link} onPress={handleLinkPress} >
+                <Image style={styles.item_image} source={{uri: item.image.url}} resizeMode="cover" />
                 <View style={styles.item_text_wrapper}>
                     <Text style={styles.item_gamechanger}>{item.gamechanger}</Text>
                     <Text style={styles.item_text}>{item.name}</Text>
@@ -26,11 +24,10 @@ const GalleryItem = ({ item, onClick }) => {
                         <Price value={price.value} currencyCode={price.currency} style={styles} />
                     </Text>
                 </View>
-                <View style={styles.item_link_bottom}>
-                    <Text style={styles.link_bottom}>קראו עוד</Text>
+                <View handlePress={handlePress} style={styles.item_link_bottom}>
+                    <Text style={styles.link_bottom}>צבעים נוספים</Text>
                 </View>
-
-            </Link>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -52,6 +49,7 @@ const styles = StyleSheet.create({
     item_image: {
         height: width / 2,
         width: width / 2,
+        backgroundColor: "#ffffff",
     },
     item_text_wrapper: {
         width: width / 2,
@@ -90,14 +88,13 @@ const styles = StyleSheet.create({
 
     },
     item_link_bottom: {
-        width: width / 2
+        width: width / 2,
     },
     link_bottom: {
         marginTop: 20,
         fontSize: 12,
         fontWeight: "light",
         color: "#006bb4",
-        textDecorationLine: "underline",
         textAlign: "right",
         cursor: "pointer",
     },

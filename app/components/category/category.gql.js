@@ -203,3 +203,4 @@ export const GET_PRODUCT_FILTERS_BY_CATEGORY = gql`
         }
     }
 `;
+
