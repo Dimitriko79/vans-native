@@ -1,15 +1,10 @@
 import {useQuery} from "@apollo/client";
 import {GET_CMS_BLOCK} from "./header.gql";
 import {useCartTrigger} from "./useCartTrigger";
-import {GET_ITEM_COUNT_QUERY} from "../cart/cart.gql";
 
 export  const useHeader = () => {
 
-    const {itemCount} = useCartTrigger({
-        queries: {
-            getItemCountQuery: GET_ITEM_COUNT_QUERY
-        }
-    });
+    const {itemCount} = useCartTrigger();
 
     const {data, loading, error} = useQuery(
         GET_CMS_BLOCK,

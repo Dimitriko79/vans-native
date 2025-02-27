@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import { useMutation } from "@apollo/client";
-import { useAwaitQuery } from "../../helpers/useAwaitQuery";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import { CREATE_CART_MUTATION, GET_CART_DETAILS } from "../../components/cart/cart.gql";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { cartReducer, initialState } from "./reducer/cartReducer";
@@ -10,8 +9,9 @@ export const useCartProvider = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
+    const {isFetchingCart} = state;
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
-    const getCartDetailsQuery = useAwaitQuery(GET_CART_DETAILS);
+    const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
 
     const saveCartId = async (id) => {
         if (!id) return;
@@ -45,7 +45,7 @@ export const CartContextProvider = ({ children }) => {
         if (!cartId) return;
 
         try {
-            const response = await getCartDetailsQuery({ variables: { cartId } });
+            const response = await getCartDetailsQuery({ variables: { cartId }, fetchPolicy: "no-cache" });
 
             if (response?.data?.cart) {
                 dispatch({ type: 'GET_CART_DETAILS_SUCCESS', payload: response.data.cart });
@@ -56,8 +56,6 @@ export const CartContextProvider = ({ children }) => {
     };
 
     const fetchDetails = async () => {
-        dispatch({ type: 'FETCH_CART_START' });
-
         try {
             const storedCartId = await getCartId();
 
@@ -79,12 +77,26 @@ export const CartContextProvider = ({ children }) => {
         }
     };
 
+    const startFetchCart = async () => {
+        dispatch({ type: 'FETCH_IS_FETCHING_CART'});
+    }
+
     useEffect(() => {
         fetchDetails();
     }, []);
 
+    useEffect(() => {
+        async function fetchDetails () {
+            const storedCartId = await getCartId();
+            if(isFetchingCart && storedCartId) {
+                await getCartDetails(storedCartId);
+            }
+        }
+        fetchDetails();
+    },[isFetchingCart]);
+
     return (
-        <CartContext.Provider value={{ ...state, dispatch, removeCartId, getCartDetails }}>
+        <CartContext.Provider value={{ ...state, dispatch, removeCartId, getCartDetails, startFetchCart }}>
             {children}
         </CartContext.Provider>
     );

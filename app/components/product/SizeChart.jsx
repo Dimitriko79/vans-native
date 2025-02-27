@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 20,
     paddingRight: 5,
+    textAlign: "right"
   },
   modalOverlay: {
     flex: 1,

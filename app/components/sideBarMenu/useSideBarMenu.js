@@ -6,8 +6,7 @@ export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
     const [categoryId, setCategoryId] = useState(null);
 
     const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-first'
+        fetchPolicy: 'no-cache'
     });
 
     const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {

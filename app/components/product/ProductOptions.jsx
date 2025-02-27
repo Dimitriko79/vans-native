@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import ModalSelector from "react-native-modal-selector";
 
-const ProductOptions = ({ configurableOptions, selectedValue, onValueChange }) => {
+const ProductOptions = ({ configurableOptions, optionSelections, handleSelectionChange }) => {
   return (
       <View style={styles.product_options}>
         {configurableOptions.map((option) => {
@@ -10,6 +10,8 @@ const ProductOptions = ({ configurableOptions, selectedValue, onValueChange }) =
             key: `${option.attribute_code}_${value.value_index}`, // Добавлен уникальный key
             label: value.label,
             value: String(value.value_index),
+            attribute_code: option.attribute_code,
+            attribute_id: option.attribute_id,
           }));
 
           return (
@@ -18,7 +20,8 @@ const ProductOptions = ({ configurableOptions, selectedValue, onValueChange }) =
                 <ModalSelector
                     data={items}
                     initValue={`בחרו ${option.label}`}
-                    onChange={(option) => onValueChange(option.attribute_code, option.value)}
+                    value={optionSelections}
+                    onChange={(option) => handleSelectionChange(option.attribute_id, option.value)}
                     style={styles.modal}
                 />
               </View>
@@ -36,6 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+    textAlign: "right"
   },
   label_required: {
     color: "#e02b27",

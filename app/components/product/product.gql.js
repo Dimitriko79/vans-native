@@ -4,7 +4,6 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
     query getProductDetailForProductPage($urlKey: String!) {
         products(filter: { url_key: { eq: $urlKey } }) {
             items {
-
                 activity
                 attribute_set_id
                 ... on ConfigurableProduct {
@@ -22,6 +21,10 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
                       id
                       name
                       sku
+                      media_gallery{
+                    label
+                    url
+                }
                       price {
                         regularPrice {
                           amount {
@@ -77,6 +80,10 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
                   url
                 }
                 manufacturer
+                media_gallery{
+                    label
+                    url
+                }
                 meta_description
                 meta_keyword
                 meta_title
