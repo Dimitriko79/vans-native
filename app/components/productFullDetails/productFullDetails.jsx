@@ -4,6 +4,9 @@ import ProductOptions from "../product/ProductOptions";
 import SizeChart from "../product/SizeChart";
 import AddToCart from "../cart/addToCart";
 import {useProductFullDetails} from "./useProductFullDetails";
+import {router} from "expo-router";
+import Breadcrumbs from "../breadcrumbs/breadcrumbs";
+import React from "react";
 
 const { width } = Dimensions.get("window");
 
@@ -11,16 +14,22 @@ const ProductFullDetails = ({ product }) => {
 
     const {
         showError,
+        setShowError,
         optionSelections,
-        handleValueChange,
         handleSelectionChange,
         handlePress,
-        calcPoints
-
+        calcPoints,
+        isAddToCartDisabled,
+        breadcrumbCategoryId
     } = useProductFullDetails({product});
+
+    const handlePressCategory = id => {
+        return  router.push({ pathname: "/category", params: { ids: id } })
+    }
 
     return (
         <View style={styles.product_top_details}>
+            <Breadcrumbs categoryIds={breadcrumbCategoryId} currentProduct={product.name} onPress={handlePressCategory}/>
             <Text style={styles.product_name}>{product.name}</Text>
             <View style={styles.product_sku}>
                 <Text style={styles.product_attribute_label}>מק״ט: </Text>
@@ -45,10 +54,10 @@ const ProductFullDetails = ({ product }) => {
                 <Text style={styles.product_attribute_label}>צבע:  </Text>
                 {product.color}
             </Text>
-            <ProductOptions configurableOptions={product.configurable_options} optionSelections={optionSelections} handleSelectionChange={handleSelectionChange} />
+            <ProductOptions configurableOptions={product.configurable_options} handleSelectionChange={handleSelectionChange} setShowError={setShowError} product={product} />
             {showError && <Text style={styles.showError}>יש לבחור מידה</Text>}
             <SizeChart/>
-            <AddToCart onPress={handlePress}/>
+            <AddToCart onPress={handlePress} disabled={isAddToCartDisabled} />
         </View>
     )
 }
@@ -75,7 +84,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Bold',
         fontWeight: 700,
         marginBottom: 20,
-        marginTop: 20,
         textTransform: "uppercase",
         textAlign: "right"
     },
@@ -125,6 +133,7 @@ const styles = StyleSheet.create({
         color: "red",
         fontSize: 16,
         marginBottom: 5,
+        textAlign: "right",
     }
 })
 export default ProductFullDetails;

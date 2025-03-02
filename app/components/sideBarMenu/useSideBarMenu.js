@@ -3,14 +3,17 @@ import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
 
 export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
-    const [categoryId, setCategoryId] = useState(null);
 
     const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
-        fetchPolicy: 'no-cache'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: "cache-first",
+        errorPolicy: "all"
     });
 
     const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: "cache-first",
+        errorPolicy: "all"
     });
 
     const [history, setHistory] = useState([]);
@@ -20,6 +23,8 @@ export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
             return getRootCategoryData.storeConfig.root_category_id;
         }
     }, [getRootCategoryData]);
+
+    const [categoryId, setCategoryId] = useState(rootCategoryId);
 
     const handleGoBack = () => {
         const historyUpdated = [...history.slice(0, history.length - 1)];
@@ -44,16 +49,16 @@ export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
     const childCategories = useMemo(() => {
         const childCategories = new Map();
 
-        children
+        [...children]
             .sort((a, b) => a.position - b.position)
             .filter(child => Boolean(child.include_in_menu))
             .forEach(category => {
-                const isLeaf = !parseInt(category.children_count < 0 ? 0 : category.children_count ) ;
+                const isLeaf = Number(category.children_count) === 0;
                 childCategories.set(category.id, { category, isLeaf });
-        });
+            });
 
         return childCategories;
-    }, [children, rootCategory]);
+    }, [children]);
 
     useEffect(() => {
         if (!isSidebarOpen) {

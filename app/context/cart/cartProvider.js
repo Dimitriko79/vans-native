@@ -43,15 +43,18 @@ export const CartContextProvider = ({ children }) => {
 
     const getCartDetails = async (cartId) => {
         if (!cartId) return;
-
+        await startFetchCart(true);
         try {
             const response = await getCartDetailsQuery({ variables: { cartId }, fetchPolicy: "no-cache" });
 
             if (response?.data?.cart) {
                 dispatch({ type: 'GET_CART_DETAILS_SUCCESS', payload: response.data.cart });
+
             }
         } catch (error) {
-            console.error("Error getting cart details:", error);
+            dispatch({ type: 'FETCH_CART_ERROR', payload: error.message });
+        } finally {
+            await startFetchCart(false);
         }
     };
 
@@ -77,8 +80,8 @@ export const CartContextProvider = ({ children }) => {
         }
     };
 
-    const startFetchCart = async () => {
-        dispatch({ type: 'FETCH_IS_FETCHING_CART'});
+    const startFetchCart = async payload => {
+        dispatch({ type: 'FETCH_IS_FETCHING_CART', payload: payload});
     }
 
     useEffect(() => {
@@ -94,6 +97,7 @@ export const CartContextProvider = ({ children }) => {
         }
         fetchDetails();
     },[isFetchingCart]);
+
 
     return (
         <CartContext.Provider value={{ ...state, dispatch, removeCartId, getCartDetails, startFetchCart }}>

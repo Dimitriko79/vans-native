@@ -10,11 +10,11 @@ export const cartReducer = (state, action) => {
         case 'SET_CART_ID':
             return { ...state, cartId: action.payload };
         case 'FETCH_IS_FETCHING_CART':
-            return { ...state, isFetchingCart: true, error: null };
+            return { ...state, isFetchingCart: action.payload, error: null };
         case 'FETCH_CART_SUCCESS':
-            return { ...state, cartId: action.payload, isFetchingCart: false };
+            return { ...state, cartId: action.payload };
         case 'FETCH_CART_ERROR':
-            return { ...state, error: action.payload, isFetchingCart: false };
+            return { ...state, error: action.payload };
         case 'REMOVE_CART_ID':
             return { ...state, cartId: null, details: null };
         case 'GET_CART_DETAILS_SUCCESS':

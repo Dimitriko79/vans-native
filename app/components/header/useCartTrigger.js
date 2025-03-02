@@ -1,12 +1,37 @@
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {useCartProvider} from "../../context/cart/cartProvider";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 export const useCartTrigger = props => {
+    const {
+        queries: { getItemCountQuery }
+    } = props;
 
-    const { details } = useCartProvider();
+    const { cartId, isFetchingCart,  } = useCartProvider()
 
-    const itemCount = details?.total_quantity || 0
+    const [fetchCart, { data }] = useLazyQuery(getItemCountQuery, {
+        fetchPolicy: "no-cache",
+        variables: {
+            cartId
+        },
+    });
+
+    const itemCount = data?.cart?.total_quantity || 0;
+
+    const fetchData = async () => {
+        try {
+            await fetchCart()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        if(isFetchingCart){
+            fetchData()
+        }
+    }, [isFetchingCart]);
+
     return {
         itemCount
     };

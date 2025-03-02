@@ -38,16 +38,16 @@ const Breadcrumbs = ({categoryIds, currentProduct, onPress}) => {
     }
 
     const currentCategoryLink = currentProduct ? (
-        <Text style={styles.link} onPress={() => onPress(currentProduct.id)}>{currentCategory}</Text>
+        <Text style={styles.link} onPress={() => onPress(categoryIds)}>{currentCategory}</Text>
     ) : (
         <Text style={styles.currentLink}>{currentCategory}</Text>
     );
 
     const currentProductNode = currentProduct ? (
-        <View style={styles.container}>
-            <Text style={styles.delimiter}>{DELIMITER}</Text>
-            <Text style={styles.link}>{currentProduct.name}</Text>
-        </View>
+        // <View style={styles.container}>
+
+            <Text style={styles.text}>{currentProduct}</Text>
+        // </View>
     ) : null;
 
     return (
@@ -56,6 +56,9 @@ const Breadcrumbs = ({categoryIds, currentProduct, onPress}) => {
             {links}
             <Text style={styles.delimiter}>{DELIMITER}</Text>
             {currentCategoryLink}
+            {currentProductNode && (
+                <Text style={styles.delimiter}>{DELIMITER}</Text>
+            )}
             {currentProductNode}
         </View>
     )
@@ -77,7 +80,11 @@ const styles = StyleSheet.create({
         fontSize: 11,
         fontWeight: 500,
         color: '#589bc6',
-
+    },
+    text: {
+        fontSize: 11,
+        fontWeight: 500,
+        color: '#000000',
     },
     currentLink: {
         fontSize: 11,

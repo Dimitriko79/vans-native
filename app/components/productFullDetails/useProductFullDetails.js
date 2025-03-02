@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {isProductConfigurable} from "../../helpers/isProductConfigurable";
 import {findMatchingVariant} from "../../helpers/findMatchingProductVariant";
 import { isSupportedProductType as isSupported } from '../../helpers/isSupportedProductType';
@@ -6,6 +6,7 @@ import {useCartProvider} from "../../context/cart/cartProvider";
 import {useMutation} from "@apollo/client";
 import {ADD_CONFIGURABLE_MUTATION, ADD_SIMPLE_MUTATION} from "./productFullDetails.gql";
 import {appendOptionsToPayload} from "../../helpers/appendOptionsToPayload";
+import {Alert} from "react-native";
 
 const INITIAL_OPTION_CODES = new Map();
 const INITIAL_OPTION_SELECTIONS = new Map();
@@ -128,26 +129,27 @@ const getIsAllOutOfStock = product => {
 
 const getBreadcrumbCategoryId = categories => {
     // Exit if there are no categories for this product.
+
     if (!categories || !categories.length) {
         return;
     }
     const breadcrumbSet = new Set();
     categories.forEach(({ breadcrumbs }) => {
         // breadcrumbs can be `null`...
-        (breadcrumbs || []).forEach(({ category_id }) =>
+        (breadcrumbs || []).forEach(({ category_id }) => {
             breadcrumbSet.add(category_id)
-        );
+        });
     });
 
     // Until we can get the single canonical breadcrumb path to a product we
     // will just return the first category id of the potential leaf categories.
     const leafCategory = categories.find(
-        category => !breadcrumbSet.has(category.uid)
+        category => !breadcrumbSet.has(category.id)
     );
 
     // If we couldn't find a leaf category then just use the first category
     // in the list for this product.
-    return leafCategory.uid || categories[0].uid;
+    return leafCategory.id || categories[0].id;
 };
 
 const getConfigPrice = (product, optionCodes, optionSelections) => {
@@ -215,10 +217,6 @@ export  const useProductFullDetails = ({product}) => {
         () => getBreadcrumbCategoryId(product.categories),
         [product.categories]
     );
-
-    const handleValueChange = (attributeCode, value) => {
-        setOptionSelections( {...optionSelections, [attributeCode]: value});
-    };
 
     const handleSelectionChange = useCallback(
         (optionId, selection) => {
@@ -303,54 +301,66 @@ export  const useProductFullDetails = ({product}) => {
 
     const handleAddToCart = useCallback(
         async () => {
-            const quantity  = 1;
+            try {
+                const quantity  = 1;
 
-            const payload = {
-                item: product,
-                productType,
-                quantity
-            };
-
-            if (isProductConfigurable(product)) {
-                appendOptionsToPayload(
-                    payload,
-                    optionSelections,
-                    optionCodes
-                );
-            }
-
-            if (isSupportedProductType) {
-                const variables = {
-                    cartId,
-                    parentSku: product.sku,
-                    product: payload.item,
-                    quantity: payload.quantity,
-                    sku: payload.item.sku
+                const payload = {
+                    item: product,
+                    productType,
+                    quantity
                 };
 
-                // Use the proper mutation for the type.
-                if (productType === 'SimpleProduct') {
-                    try {
-                        await addSimpleProductToCart({
-                            variables
-                        });
-                    } catch {
-                        return;
-                    }
-                } else if (productType === 'ConfigurableProduct') {
-                    try {
-                        await addConfigurableProductToCart({
-                            variables
-                        });
-                    } catch {
-                        return;
-                    }
+                if (isProductConfigurable(product)) {
+                    appendOptionsToPayload(
+                        payload,
+                        optionSelections,
+                        optionCodes
+                    );
                 }
-                await startFetchCart();
-            } else {
-                console.error(
-                    'Unsupported product type. Cannot add to cart.'
-                );
+
+                if (isSupportedProductType) {
+
+                    const variables = {
+                        cartId,
+                        parentSku: product.sku,
+                        product: payload.item,
+                        quantity: payload.quantity,
+                        sku: payload.item.sku
+                    };
+
+                    // Use the proper mutation for the type.
+                    if (productType === 'SimpleProduct') {
+                        try {
+                            await addSimpleProductToCart({
+                                variables
+                            });
+                        } catch (e) {
+                            console.log(e);
+                            Alert.alert(e.message);
+                            return
+                        }
+                    } else if (productType === 'ConfigurableProduct') {
+
+                        try {
+                            await addConfigurableProductToCart({
+                                variables
+                            });
+                        } catch (e) {
+                            console.log(e);
+                            Alert.alert(e.message);
+                            return
+                        }
+                    }
+                    await startFetchCart(true);
+                } else {
+                    console.log(
+                        'Unsupported product type. Cannot add to cart.'
+                    );
+                    await startFetchCart(false);
+                }
+            } catch (e) {
+                console.log(e);
+                Alert.alert(e.message);
             }
         },
         [
@@ -367,23 +377,32 @@ export  const useProductFullDetails = ({product}) => {
         ]
     );
 
-    const handlePress = () => {
-        if (Object.keys(optionSelections).length === 0)
-            setShowError(true);
-        else
-            setShowError(false);
-            handleAddToCart();
+    const handlePress = async () => {
+        if (isMissingOptions) {
+           setShowError(true);
+           return;
+        }
+        await handleAddToCart();
+        return;
     };
 
     const calcPoints = price => {
         return " " + price/10 + " ";
     }
+
     return {
         showError,
+        setShowError,
         optionSelections,
-        handleValueChange,
         handleSelectionChange,
         handlePress,
-        calcPoints
+        calcPoints,
+        breadcrumbCategoryId,
+        isAddToCartDisabled:
+            // isOutOfStock ||
+            // isEverythingOutOfStock ||
+            // isMissingOptions ||
+            isAddConfigurableLoading ||
+            isAddSimpleLoading
     }
 }

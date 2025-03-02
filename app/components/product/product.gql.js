@@ -21,6 +21,7 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
                       id
                       name
                       sku
+                      stock_status
                       media_gallery{
                     label
                     url
@@ -47,6 +48,9 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
                   name
                   path
                   url_suffix
+                  breadcrumbs{
+                    category_id
+                  }
                 }
                 category_gear
                 climate

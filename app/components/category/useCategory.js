@@ -39,6 +39,7 @@ export const useCategory = (ids) => {
     );
 
     const categoryData = data?.categoryList[0] || null;
+
     const products = productData?.products?.items || [];
 
     const aggregations = useMemo(() => {

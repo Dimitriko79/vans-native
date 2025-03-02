@@ -8,9 +8,11 @@ const { width } = Dimensions.get("window");
 
 const GalleryItem = ({ item, onClick }) => {
 const {price, handlePress} = useItem(item);
+
 const handleLinkPress = () => {
     handlePress(item.url_key);
   };
+
     return (
         <View style={styles.item}>
             <TouchableOpacity style={styles.item_link} onPress={handleLinkPress} >

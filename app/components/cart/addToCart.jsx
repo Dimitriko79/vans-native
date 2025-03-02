@@ -1,9 +1,9 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-const AddToCart = ({ item, onPress}) => {
+const AddToCart = ({onPress, disabled}) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.5} disabled={disabled} style={[styles.button, disabled && styles.buttonDisabled]} onPress={onPress}>
       <Text style={styles.buttonText}>הוספה לסל</Text>
     </TouchableOpacity>
   );
@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: "center",
     marginBottom: 20,
+  },
+  buttonDisabled: {
+    opacity: 0.5
   },
   buttonText: {
     color: "#fff",
