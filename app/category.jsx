@@ -48,7 +48,9 @@ const Category = () => {
     } else {
         content = (
             <View style={styles.container}>
-                <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
+                <View style={styles.breadcrumbs}>
+                    <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
+                </View>
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
@@ -83,6 +85,10 @@ const styles = StyleSheet.create({
         flex: 1,
         position: "relative",
         backgroundColor: "#f1f2ed",
+
+    },
+    breadcrumbs: {
+        width: width - 10,
 
     },
     category_name: {

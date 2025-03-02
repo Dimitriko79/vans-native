@@ -4,7 +4,7 @@ import { useMemo} from "react";
 import {router} from "expo-router";
 
 const DELIMITER = '/';
-const { width: screenWidth  } = Dimensions.get("window");
+const { width  } = Dimensions.get("window");
 
 const Breadcrumbs = ({categoryIds, currentProduct, onPress}) => {
     const {
@@ -68,13 +68,13 @@ const styles = StyleSheet.create({
     breadcrumbs: {
         display: "flex",
         flexDirection: "row",
+        flexWrap: "wrap",
         direction: "rtl",
         justifyContent: "flex-start",
         alignItems: "center",
-        width: screenWidth,
         marginTop: 10,
         marginBottom: 20,
-        paddingRight: 10
+
     },
     link: {
         fontSize: 11,

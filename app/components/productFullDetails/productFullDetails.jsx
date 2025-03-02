@@ -7,6 +7,7 @@ import {useProductFullDetails} from "./useProductFullDetails";
 import {router} from "expo-router";
 import Breadcrumbs from "../breadcrumbs/breadcrumbs";
 import React from "react";
+import ImageCarousel from "../carousel/imageCarousel";
 
 const { width } = Dimensions.get("window");
 
@@ -20,16 +21,21 @@ const ProductFullDetails = ({ product }) => {
         handlePress,
         calcPoints,
         isAddToCartDisabled,
-        breadcrumbCategoryId
+        breadcrumbCategoryId,
+        mediaGalleryEntries
     } = useProductFullDetails({product});
 
     const handlePressCategory = id => {
         return  router.push({ pathname: "/category", params: { ids: id } })
     }
 
+    const images = mediaGalleryEntries.map(({ url, label }) => ({ url, label }));
+
     return (
         <View style={styles.product_top_details}>
-            <Breadcrumbs categoryIds={breadcrumbCategoryId} currentProduct={product.name} onPress={handlePressCategory}/>
+            <View style={styles.breadcrumbs}>
+                <Breadcrumbs categoryIds={breadcrumbCategoryId} currentProduct={product.name} onPress={handlePressCategory}/>
+            </View>
             <Text style={styles.product_name}>{product.name}</Text>
             <View style={styles.product_sku}>
                 <Text style={styles.product_attribute_label}>מק״ט: </Text>
@@ -49,7 +55,8 @@ const ProductFullDetails = ({ product }) => {
                 {calcPoints(product.price_range.maximum_price.regular_price.value)}
                 נקודות*
             </Text>
-            <Image style={styles.item_image} source={{uri: product.image.url}} resizeMode="cover" />
+            {/*<Image style={styles.item_image} source={{uri: product.image.url}} resizeMode="cover" />*/}
+            <ImageCarousel images={images}/>
             <Text style={styles.choose_color}>
                 <Text style={styles.product_attribute_label}>צבע:  </Text>
                 {product.color}
@@ -64,8 +71,12 @@ const ProductFullDetails = ({ product }) => {
 
 const styles = StyleSheet.create({
     product_top_details: {
+        flex: 1,
         paddingRight: 10,
         paddingLeft: 10,
+    },
+    breadcrumbs: {
+        width: width - 20,
 
     },
     product_attribute_label: {

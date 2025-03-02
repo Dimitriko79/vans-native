@@ -398,6 +398,7 @@ export  const useProductFullDetails = ({product}) => {
         handlePress,
         calcPoints,
         breadcrumbCategoryId,
+        mediaGalleryEntries,
         isAddToCartDisabled:
             // isOutOfStock ||
             // isEverythingOutOfStock ||
