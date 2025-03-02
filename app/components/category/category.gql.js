@@ -6,6 +6,7 @@ query getCategory ($ids: String!){
     name
     path
     path_in_store
+    description
     pl_size_chart
     position
     product_count

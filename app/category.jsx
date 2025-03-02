@@ -8,12 +8,14 @@ import React from "react";
 import SortSideBar from "./components/sortSideBar/sortSideBar";
 import Icon from "react-native-vector-icons/AntDesign";
 import {useDropdownSideBar} from "./components/sortSideBar/useDropdownSideBar";
+import RichContent from "./components/richContent/richContent";
 
 
 const { height, width } = Dimensions.get("window");
 
 const Category = () => {
     const { ids } = useLocalSearchParams();
+
     const talonProps = useCategory(ids);
     const {
         categoryData,
@@ -51,6 +53,7 @@ const Category = () => {
                 <View style={styles.breadcrumbs}>
                     <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
                 </View>
+                <RichContent html={categoryData.description} />
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
