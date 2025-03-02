@@ -53,7 +53,7 @@ const Category = () => {
                 <View style={styles.breadcrumbs}>
                     <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
                 </View>
-                <RichContent html={categoryData.description} />
+                <RichContent html={categoryData?.description || ''} />
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
