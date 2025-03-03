@@ -1,10 +1,16 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+const TEXT_BUTTON = {
+  pending: 'הוספה לסל',
+  addition: 'מוסיף...',
+  added: 'הוסף'
+}
 
-const AddToCart = ({onPress, disabled}) => {
+const AddToCart = ({onPress, disabled, stateAddToCartButton}) => {
+
   return (
     <TouchableOpacity activeOpacity={0.5} disabled={disabled} style={[styles.button, disabled && styles.buttonDisabled]} onPress={onPress}>
-      <Text style={styles.buttonText}>הוספה לסל</Text>
+      <Text style={styles.buttonText}>{TEXT_BUTTON[stateAddToCartButton]}</Text>
     </TouchableOpacity>
   );
 };

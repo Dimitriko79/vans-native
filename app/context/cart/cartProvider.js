@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { cartReducer, initialState } from "./reducer/cartReducer";
 
 const CartContext = createContext(null);
-export const useCartProvider = () => useContext(CartContext);
+const useCartProvider = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
@@ -105,3 +105,5 @@ export const CartContextProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
+
+export default useCartProvider;

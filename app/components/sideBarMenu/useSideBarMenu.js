@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
 
-export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
+const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
 
     const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
         fetchPolicy: 'cache-and-network',
@@ -89,3 +89,5 @@ export const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
         error
     };
 };
+
+export default useSideBarMenu;

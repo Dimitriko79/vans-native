@@ -1,12 +1,12 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {isProductConfigurable} from "../../helpers/isProductConfigurable";
-import {findMatchingVariant} from "../../helpers/findMatchingProductVariant";
-import { isSupportedProductType as isSupported } from '../../helpers/isSupportedProductType';
-import {useCartProvider} from "../../context/cart/cartProvider";
+import isProductConfigurable from "../../helpers/isProductConfigurable";
+import findMatchingVariant from "../../helpers/findMatchingProductVariant";
+import useCartProvider from "../../context/cart/cartProvider";
 import {useMutation} from "@apollo/client";
 import {ADD_CONFIGURABLE_MUTATION, ADD_SIMPLE_MUTATION} from "./productFullDetails.gql";
-import {appendOptionsToPayload} from "../../helpers/appendOptionsToPayload";
+import appendOptionsToPayload from "../../helpers/appendOptionsToPayload";
 import {Alert} from "react-native";
+import isSupportedProductType from "../../helpers/isSupportedProductType";
 
 const INITIAL_OPTION_CODES = new Map();
 const INITIAL_OPTION_SELECTIONS = new Map();
@@ -179,11 +179,12 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
     return value;
 };
 
-export  const useProductFullDetails = ({product}) => {
+const useProductFullDetails = ({product}) => {
 
     const {cartId, startFetchCart} = useCartProvider();
+    const [stateAddToCartButton, setStateAddToCartButton] = useState('pending');
     const productType = product.__typename;
-    const isSupportedProductType = isSupported(productType);
+    const isSupportedType = isSupportedProductType(productType);
     const derivedOptionSelections = useMemo(
         () => deriveOptionSelectionsFromProduct(product),
         [product]
@@ -301,6 +302,7 @@ export  const useProductFullDetails = ({product}) => {
 
     const handleAddToCart = useCallback(
         async () => {
+            setStateAddToCartButton('addition');
             try {
                 const quantity  = 1;
 
@@ -310,6 +312,7 @@ export  const useProductFullDetails = ({product}) => {
                     quantity
                 };
 
+
                 if (isProductConfigurable(product)) {
                     appendOptionsToPayload(
                         payload,
@@ -318,7 +321,7 @@ export  const useProductFullDetails = ({product}) => {
                     );
                 }
 
-                if (isSupportedProductType) {
+                if (isSupportedType) {
 
                     const variables = {
                         cartId,
@@ -336,6 +339,7 @@ export  const useProductFullDetails = ({product}) => {
                             });
                         } catch (e) {
                             console.log(e);
+                            setStateAddToCartButton('pending');
                             Alert.alert(e.message);
                             return
                         }
@@ -347,19 +351,23 @@ export  const useProductFullDetails = ({product}) => {
                             });
                         } catch (e) {
                             console.log(e);
+                            setStateAddToCartButton('pending');
                             Alert.alert(e.message);
                             return
                         }
                     }
                     await startFetchCart(true);
+                    setStateAddToCartButton('added');
                 } else {
-                    console.log(
+                    Alert.alert(
                         'Unsupported product type. Cannot add to cart.'
                     );
                     await startFetchCart(false);
+                    setStateAddToCartButton('pending');
                 }
             } catch (e) {
                 console.log(e);
+                setStateAddToCartButton('pending');
                 Alert.alert(e.message);
             }
         },
@@ -367,7 +375,7 @@ export  const useProductFullDetails = ({product}) => {
             addConfigurableProductToCart,
             addSimpleProductToCart,
             cartId,
-            isSupportedProductType,
+            isSupportedType,
             optionCodes,
             optionSelections,
             product,
@@ -390,6 +398,12 @@ export  const useProductFullDetails = ({product}) => {
         return " " + price/10 + " ";
     }
 
+    useEffect(() => {
+        if(stateAddToCartButton === 'added'){
+            setTimeout(() => setStateAddToCartButton('pending'), 2000 )
+        }
+    }, [stateAddToCartButton])
+
     return {
         showError,
         setShowError,
@@ -399,6 +413,7 @@ export  const useProductFullDetails = ({product}) => {
         calcPoints,
         breadcrumbCategoryId,
         mediaGalleryEntries,
+        stateAddToCartButton,
         isAddToCartDisabled:
             // isOutOfStock ||
             // isEverythingOutOfStock ||
@@ -407,3 +422,5 @@ export  const useProductFullDetails = ({product}) => {
             isAddSimpleLoading
     }
 }
+
+export default useProductFullDetails;

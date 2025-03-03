@@ -1,14 +1,16 @@
 import {useLazyQuery, useQuery} from '@apollo/client';
-import {useCartProvider} from "../../context/cart/cartProvider";
-import {useEffect} from "react";
+import useCartProvider from "../../context/cart/cartProvider";
+import {useEffect, useState} from "react";
 
-export const useCartTrigger = props => {
+const useCartTrigger = props => {
     const {
         queries: { getItemCountQuery }
     } = props;
 
-    const { cartId, isFetchingCart,  } = useCartProvider()
+    const [miniCartIsOpen, setMiniCartIsOpen] = useState(false);
+    const [isFirstFetching, setIsFirstFetching] = useState(true);
 
+    const { cartId, isFetchingCart,  } = useCartProvider();
     const [fetchCart, { data }] = useLazyQuery(getItemCountQuery, {
         fetchPolicy: "no-cache",
         variables: {
@@ -20,9 +22,15 @@ export const useCartTrigger = props => {
 
     const fetchData = async () => {
         try {
-            await fetchCart()
+            await fetchCart();
+            if(!isFirstFetching) {
+                setMiniCartIsOpen(true);
+            }
         } catch (e) {
-            console.log(e)
+            console.log(e);
+            setMiniCartIsOpen(false);
+        } finally {
+            setIsFirstFetching(false);
         }
     }
 
@@ -33,6 +41,10 @@ export const useCartTrigger = props => {
     }, [isFetchingCart]);
 
     return {
-        itemCount
+        itemCount,
+        miniCartIsOpen,
+        setMiniCartIsOpen
     };
 };
+
+export default useCartTrigger;

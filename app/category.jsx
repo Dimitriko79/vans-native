@@ -1,13 +1,13 @@
 import {View, Text, StyleSheet, ActivityIndicator, ScrollView, Dimensions, TouchableOpacity} from "react-native";
 import {useLocalSearchParams} from "expo-router";
-import {useCategory} from "./components/category/useCategory";
+import useCategory from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs";
 import FilterSidebar from "./components/filterSidebar/filterSidebar";
 import React from "react";
 import SortSideBar from "./components/sortSideBar/sortSideBar";
 import Icon from "react-native-vector-icons/AntDesign";
-import {useDropdownSideBar} from "./components/sortSideBar/useDropdownSideBar";
+import useDropdownSideBar from "./components/sortSideBar/useDropdownSideBar";
 import RichContent from "./components/richContent/richContent";
 
 
@@ -53,7 +53,7 @@ const Category = () => {
                 <View style={styles.breadcrumbs}>
                     <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
                 </View>
-                <RichContent html={categoryData?.description || ''} />
+                <RichContent html={categoryData?.description} />
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>

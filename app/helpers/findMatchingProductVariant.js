@@ -1,4 +1,4 @@
-export const findMatchingVariant = ({
+const findMatchingVariant = ({
                                         variants,
                                         optionCodes,
                                         optionSelections
@@ -28,3 +28,5 @@ export const findMatchingVariant = ({
         return true;
     });
 };
+
+export default findMatchingVariant;

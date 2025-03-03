@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, ScrollView, ActivityIndicator, Dimensions, Image
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
-import {useHomepage} from "./components/homepage/useHomepage";
+import useHomepage from "./components/homepage/useHomepage";
 import Hero from "./components/hero/hero";
 import PopularyProduct from "./components/popularyProduct/popularyProduct";
 import {images} from "../constants";

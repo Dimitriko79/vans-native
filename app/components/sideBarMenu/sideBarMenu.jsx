@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     Dimensions, FlatList,
 } from 'react-native';
-import {useSideBarMenu} from "./useSideBarMenu";
+import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');

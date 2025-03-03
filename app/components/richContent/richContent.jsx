@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import { useWindowDimensions } from 'react-native';
 
-const RichContent = ({ html, styles }) => {
+const RichContent = ({ html = '', styles = {} }) => {
     const { width } = useWindowDimensions();
 
     return (

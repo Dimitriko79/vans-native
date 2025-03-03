@@ -1,4 +1,4 @@
-export const DEFAULT_SORT_METHODS = new Map([
+const DEFAULT_SORT_METHODS = new Map([
     [
         'position',
         {
@@ -56,3 +56,5 @@ export const DEFAULT_SORT_METHODS = new Map([
         }
     ]
 ])
+
+export default DEFAULT_SORT_METHODS;

@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export const useFilterBlock = ({setCurrentFilter, currentFilter}) => {
+const useFilterBlock = ({setCurrentFilter, currentFilter}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const onToggle = () => {
@@ -47,3 +47,5 @@ export const useFilterBlock = ({setCurrentFilter, currentFilter}) => {
         checkedForSelected
     }
 }
+
+export default useFilterBlock;

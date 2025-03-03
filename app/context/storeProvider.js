@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import {apolloClient, updateApolloClient} from "../../servises/client";
 
 const StoreContext = createContext();
-
+const useStoreContext = () => useContext(StoreContext);
 export const StoreProvider = ({ children }) => {
     const [storeCode, setStoreCode] = useState('default');
 
@@ -19,4 +19,5 @@ export const StoreProvider = ({ children }) => {
     );
 };
 
-export const useStore = () => useContext(StoreContext);
+export default useStoreContext;
+

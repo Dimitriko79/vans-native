@@ -1,11 +1,11 @@
 import {useQuery} from "@apollo/client";
 import {GET_CMS_BLOCK} from "./header.gql";
-import {useCartTrigger} from "./useCartTrigger";
+import useCartTrigger from "./useCartTrigger";
 import {GET_ITEM_COUNT_QUERY} from "../cart/cart.gql";
 
-export  const useHeader = () => {
+const useHeader = () => {
 
-    const {itemCount} = useCartTrigger({
+    const {itemCount, miniCartIsOpen, setMiniCartIsOpen} = useCartTrigger({
         queries: {
             getItemCountQuery: GET_ITEM_COUNT_QUERY
         }
@@ -26,6 +26,10 @@ export  const useHeader = () => {
         cmsBlockData,
         loading,
         error,
-        itemCount
+        itemCount,
+        miniCartIsOpen,
+        setMiniCartIsOpen
     }
 }
+
+export default useHeader;

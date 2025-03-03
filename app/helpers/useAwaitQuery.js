@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useApolloClient } from '@apollo/client';
 
-export const useAwaitQuery = query => {
+const useAwaitQuery = query => {
     const apolloClient = useApolloClient();
 
     return useCallback(
@@ -14,3 +14,5 @@ export const useAwaitQuery = query => {
         [apolloClient, query]
     );
 };
+
+export default useAwaitQuery;

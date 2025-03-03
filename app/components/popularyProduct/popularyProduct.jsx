@@ -1,6 +1,6 @@
 import {View, StyleSheet, Text, Dimensions, Image, TouchableOpacity, FlatList} from "react-native";
 import {Link} from "expo-router";
-import {formatImageUrl} from "../../helpers/formatImageUrl";
+import formatImageUrl from "../../helpers/formatImageUrl";
 import React from "react";
 
 const { width } = Dimensions.get("window");

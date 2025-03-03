@@ -1,6 +1,6 @@
 import {router} from "expo-router";
 
-export const useItem = item => {
+const useItem = item => {
     const { price_range } = item;
     const { maximum_price } = price_range;
     const {regular_price} = maximum_price;
@@ -13,3 +13,5 @@ export const useItem = item => {
         handlePress
     }
 }
+
+export default useItem;

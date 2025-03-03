@@ -3,7 +3,7 @@ import Price from "../price/price";
 import ProductOptions from "../product/ProductOptions";
 import SizeChart from "../product/SizeChart";
 import AddToCart from "../cart/addToCart";
-import {useProductFullDetails} from "./useProductFullDetails";
+import useProductFullDetails from "./useProductFullDetails";
 import {router} from "expo-router";
 import Breadcrumbs from "../breadcrumbs/breadcrumbs";
 import React from "react";
@@ -22,7 +22,8 @@ const ProductFullDetails = ({ product }) => {
         calcPoints,
         isAddToCartDisabled,
         breadcrumbCategoryId,
-        mediaGalleryEntries
+        mediaGalleryEntries,
+        stateAddToCartButton
     } = useProductFullDetails({product});
 
     const handlePressCategory = id => {
@@ -64,7 +65,7 @@ const ProductFullDetails = ({ product }) => {
             <ProductOptions configurableOptions={product.configurable_options} handleSelectionChange={handleSelectionChange} setShowError={setShowError} product={product} />
             {showError && <Text style={styles.showError}>יש לבחור מידה</Text>}
             <SizeChart/>
-            <AddToCart onPress={handlePress} disabled={isAddToCartDisabled} />
+            <AddToCart onPress={handlePress} disabled={isAddToCartDisabled} stateAddToCartButton={stateAddToCartButton} />
         </View>
     )
 }

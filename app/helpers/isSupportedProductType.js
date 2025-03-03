@@ -1,5 +1,7 @@
 const SUPPORTED_PRODUCT_TYPES = ['SimpleProduct', 'ConfigurableProduct'];
 
-export const isSupportedProductType = productType => {
+const isSupportedProductType = productType => {
     return SUPPORTED_PRODUCT_TYPES.includes(productType);
 };
+
+export default isSupportedProductType;

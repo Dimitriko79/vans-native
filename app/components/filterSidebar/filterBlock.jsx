@@ -1,6 +1,6 @@
 import {FlatList, Text, TouchableOpacity, View, StyleSheet, Dimensions} from "react-native";
 import React, {useEffect} from "react";
-import { useFilterBlock } from "./useFilterBlock";
+import useFilterBlock from "./useFilterBlock";
 import Icon from "react-native-vector-icons/AntDesign";
 
 const FILTER_LABELS = {

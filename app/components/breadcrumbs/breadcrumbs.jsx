@@ -1,5 +1,5 @@
 import {Text, View, StyleSheet, TouchableOpacity, Alert, Dimensions} from "react-native";
-import {useBreadcrumbs} from "./useBreadcrumbs";
+import useBreadcrumbs from "./useBreadcrumbs";
 import { useMemo} from "react";
 import {router} from "expo-router";
 

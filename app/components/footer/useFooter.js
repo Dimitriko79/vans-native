@@ -1,7 +1,7 @@
 import {useQuery} from "@apollo/client";
 import {GET_CMS_BLOCK} from "../header/header.gql";
 
-export const useFooter = () => {
+const useFooter = () => {
 
     const {data, loading, error} = useQuery(
         GET_CMS_BLOCK,
@@ -20,3 +20,5 @@ export const useFooter = () => {
         error
     }
 }
+
+export default useFooter;

@@ -1,7 +1,7 @@
 import {Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import React from "react";
-import {DEFAULT_SORT_METHODS} from "../../helpers/defaultSortMetods";
+import DEFAULT_SORT_METHODS from "../../helpers/defaultSortMetods";
 
 const { width } = Dimensions.get("window");
 

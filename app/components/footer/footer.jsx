@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions, FlatList, Pressable } from "react-native";
-import { useFooter } from "./useFooter";
+import useFooter from "./useFooter";
 import { useState } from "react";
 import { Link } from "expo-router";
 

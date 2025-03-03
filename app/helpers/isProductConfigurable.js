@@ -1,2 +1,4 @@
-export const isProductConfigurable = product =>
+const isProductConfigurable = product =>
     product?.__typename === 'ConfigurableProduct';
+
+export default isProductConfigurable;

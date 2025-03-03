@@ -1,7 +1,7 @@
 import {gql, useQuery} from "@apollo/client";
 import {useMemo} from "react";
 
-export const useBreadcrumbs = props => {
+const useBreadcrumbs = props => {
     const { ids } = props;
     const { data, loading, error } = useQuery(GET_BREADCRUMBS, {
         variables: { ids: ids },
@@ -38,6 +38,8 @@ export const useBreadcrumbs = props => {
         normalizedData: normalizedData || [],
     }
 }
+
+export default useBreadcrumbs;
 
 export const GET_BREADCRUMBS = gql`
 query getBreadcrumbs ($ids: String!){

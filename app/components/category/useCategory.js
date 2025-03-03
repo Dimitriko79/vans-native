@@ -2,11 +2,11 @@ import {useLazyQuery, useQuery} from "@apollo/client";
 import {router} from "expo-router";
 import {GET_CATEGORY, GET_PRODUCT_FILTERS_BY_CATEGORY, GET_PRODUCTS} from "./category.gql";
 import {useEffect, useMemo, useState} from "react";
-import {useSort} from "../sortSideBar/useSort";
-import {DEFAULT_SORT_METHODS} from "../../helpers/defaultSortMetods";
+import useSort from "../sortSideBar/useSort";
+import DEFAULT_SORT_METHODS from "../../helpers/defaultSortMetods";
 
 
-export const useCategory = (ids) => {
+const useCategory = (ids) => {
     const [currentFilter, setCurrentFilter] = useState(new Map());
     const [isFetching, setIsFetching] = useState(false);
     const sortProps = useSort({ defaultSortMagento: null });
@@ -112,3 +112,5 @@ export const useCategory = (ids) => {
         sortProps
     }
 }
+
+export default useCategory;

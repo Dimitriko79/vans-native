@@ -3,19 +3,23 @@ import {images} from '../../../constants';
 import {router} from "expo-router";
 import HorizontalSlider from "./horizontalSlider/horizontalSlider";
 import React from "react";
-import {useHeader} from "./useHeader";
+import useHeader from "./useHeader";
+import MiniCart from "../miniCart/miniCart";
+
 const Header = ({onToggle}) => {
 
     const {
         cmsBlockData,
         loading,
         error,
-        itemCount
+        itemCount,
+        miniCartIsOpen,
+        setMiniCartIsOpen
     } = useHeader();
-
-    const handleCartPress = () => {
-        router.replace("/cart");
-    };
+    //
+    // const handleCartPress = () => {
+    //     router.replace("/cart");
+    // };
 
     const handleLogoPress = () => {
         router.replace("/homepage");
@@ -45,7 +49,7 @@ const Header = ({onToggle}) => {
                     />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={handleCartPress}>
+                <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>
                     <Image
                         source={images.cart}
                         style={styles.image}
@@ -63,6 +67,7 @@ const Header = ({onToggle}) => {
                         resizeMode="contain"
                     />
                 </TouchableOpacity>
+                <MiniCart isOpen={miniCartIsOpen} setIsOpen={setMiniCartIsOpen}/>
             </View>
         </View>
     )
@@ -88,7 +93,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: "relative"
     },
     button: {
         display: 'flex',

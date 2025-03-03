@@ -1,9 +1,9 @@
-import { findMatchingVariant } from './findMatchingProductVariant';
+import findMatchingVariant from './findMatchingProductVariant';
 
 /**
  * TODO Document
  */
-export const appendOptionsToPayload = (
+const appendOptionsToPayload = (
     payload,
     optionSelections,
     optionCodes = null
@@ -42,3 +42,5 @@ export const appendOptionsToPayload = (
 
     return payload;
 };
+
+export default appendOptionsToPayload;

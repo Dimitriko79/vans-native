@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 
-export const useDropdownSideBar = ({ isFetching, setIsFetching }) => {
+const useDropdownSideBar = ({ isFetching, setIsFetching }) => {
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [isOpenSort, setIsOpenSort] = useState(false);
 
@@ -35,3 +35,5 @@ export const useDropdownSideBar = ({ isFetching, setIsFetching }) => {
         onToggle
     };
 };
+
+export default useDropdownSideBar;

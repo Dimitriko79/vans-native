@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, Dimensions, ImageBackground, TouchableOpacity, Linking} from "react-native";
-import {formatImageUrl} from "../../helpers/formatImageUrl";
+import formatImageUrl from "../../helpers/formatImageUrl";
 import React from "react";
 
 const { width  } = Dimensions.get("window");

@@ -1,7 +1,7 @@
 import {Link} from "expo-router";
 import {Image, View, StyleSheet, Dimensions, Text} from "react-native";
 import React from "react";
-import {formatImageUrl} from "../../helpers/formatImageUrl";
+import formatImageUrl from "../../helpers/formatImageUrl";
 
 const { width: screenWidth  } = Dimensions.get("window");
 

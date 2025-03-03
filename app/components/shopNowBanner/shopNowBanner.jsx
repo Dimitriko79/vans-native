@@ -1,7 +1,7 @@
 import {Dimensions, Image, Text, View, StyleSheet, Linking} from "react-native";
 import CustomButton from "../customButton";
 import React from "react";
-import {formatImageUrl} from "../../helpers/formatImageUrl";
+import formatImageUrl from "../../helpers/formatImageUrl";
 import RenderHTML from 'react-native-render-html';
 
 const { width } = Dimensions.get("window");

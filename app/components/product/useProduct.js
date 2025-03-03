@@ -4,7 +4,7 @@ import {GET_PRODUCT_DETAIL_QUERY} from "./product.gql";
 import {useEffect, useMemo, useState} from "react";
 
 
-export const useProduct = (urlKey) => {
+const useProduct = (urlKey) => {
     const { loading, error, data } = useQuery(GET_PRODUCT_DETAIL_QUERY, {
         fetchPolicy: "no-cache",
         variables: {urlKey}
@@ -22,3 +22,5 @@ export const useProduct = (urlKey) => {
         error
     }
 }
+
+export default useProduct;

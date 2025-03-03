@@ -9,7 +9,7 @@ import {
     Dimensions,
 } from "react-native";
 import {Link} from "expo-router";
-import {formatImageUrl} from "../../helpers/formatImageUrl";
+import formatImageUrl from "../../helpers/formatImageUrl";
 
 const { width } = Dimensions.get("window");
 

@@ -2,7 +2,7 @@ import {useQuery} from "@apollo/client";
 import {GET_HOMEPAGE} from "./homepage.gql";
 import {router} from "expo-router";
 
-export const useHomepage = () => {
+const useHomepage = () => {
 
     const {data, loading, error} = useQuery(GET_HOMEPAGE, {
         fetchPolicy: 'cache-and-network',
@@ -21,3 +21,5 @@ export const useHomepage = () => {
         handlePress
     }
 }
+
+export default useHomepage;
