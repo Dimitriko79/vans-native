@@ -4,7 +4,7 @@ import {router} from "expo-router";
 import HorizontalSlider from "./horizontalSlider/horizontalSlider";
 import React from "react";
 import useHeader from "./useHeader";
-import MiniCart from "../miniCart/miniCart";
+import MiniCart from "../minicart/miniCart";
 
 const Header = ({onToggle}) => {
 

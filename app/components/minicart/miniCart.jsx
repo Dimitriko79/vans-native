@@ -1,8 +1,5 @@
 import {
-    ActivityIndicator,
     Dimensions,
-    FlatList,
-    Image,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -12,8 +9,8 @@ import {
 } from "react-native";
 import useMiniCart from "./useMiniCart";
 import React from "react";
-import formatImageUrl from "../../helpers/formatImageUrl";
 import Price from "../price/price";
+import ProductList from "./productList/productList";
 
 const { height, width } = Dimensions.get("window");
 
@@ -23,7 +20,6 @@ const MiniCart = ({ isOpen, setIsOpen }) => {
         closeMiniCart,
         handleEditCart,
         handleProceedToCheckout,
-        handleRemoveItem,
         loading,
         productList,
         subTotal,
@@ -43,56 +39,20 @@ const MiniCart = ({ isOpen, setIsOpen }) => {
             <View style={styles.overlay}>
                 <TouchableWithoutFeedback onPress={() => {}}>
                     <View style={styles.container}>
-                        {loading ? (
-                            <View style={{height: 400}}>
-                                <ActivityIndicator style={{height: 400}}/>
-                            </View>
-                        ) : productList ? (
                             <View style={styles.minicart}>
                                 <View style={styles.minicart_header}>
                                     <Text style={styles.minicart_title_total}>{`${totalQuantity} פריטים בסל`}</Text>
                                     <Text style={styles.minicart_title_title}>עגלת קניות</Text>
                                 </View>
                                 <View style={styles.minicart_items_wrapper}>
-                                    <FlatList
-                                        data={productList}
-                                        keyExtractor={(item, index) => index.toString()}
-                                        numColumns={1}
-                                        renderItem={({ item }) => {
-                                            const { product, configurable_options, prices, quantity } = item;
-                                            return (
-                                                <View style={styles.minicart_item}>
-                                                    <TouchableOpacity onPress={() => handlePress(product.url_key)} style={styles.minicart_item_link}>
-                                                        <Image style={styles.minicart_item_image} resizeMode="cover" source={{ uri: formatImageUrl(product.image.url) }} />
-                                                    </TouchableOpacity>
-                                                    <View style={styles.minicart_item_content}>
-                                                        <Text style={styles.minicart_item_content_name}>{product.name}</Text>
-                                                        <View style={styles.minicart_item_content_size}>
-                                                            <Text style={styles.minicart_item_content_size_label}>{`${configurable_options[0].option_label}:`}</Text>
-                                                            <Text style={styles.minicart_item_content_size_value}>{`${configurable_options[0].value_label} `}</Text>
-                                                        </View>
-                                                        <Text style={styles.minicart_item_content_price}>
-                                                            <Price value={prices.price.value} currencyCode={prices.price.currency} style={styles} />
-                                                        </Text>
-                                                        <View style={styles.minicart_item_content_quantity}>
-                                                            <Text style={styles.minicart_item_content_quantity_label}>כמות:</Text>
-                                                            <Text style={styles.minicart_item_content_quantity_value}>{quantity} </Text>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                            );
-                                        }}
-                                        contentContainerStyle={styles.minicart_items}
-                                        scrollEnabled={true}
-                                        nestedScrollEnabled={true}
-                                    />
+                                    <ProductList products={productList} onPress={handlePress}/>
                                 </View>
                                 <View style={styles.minicart_total_prices}>
                                     <Price value={subTotal.value} currencyCode={subTotal.currency} style={styles} />
                                     <Text style={styles.minicart_total_prices_title}>סה"כ</Text>
                                 </View>
                                 <View style={styles.minicart_footer}>
-                                    <TouchableOpacity style={styles.minicart_footer_primary_button}>
+                                    <TouchableOpacity onPress={handleProceedToCheckout} style={styles.minicart_footer_primary_button}>
                                         <Text style={styles.minicart_footer_button_text}>לרכישה עכשיו</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={handleEditCart} style={styles.minicart_footer_secondary_button}>
@@ -100,7 +60,6 @@ const MiniCart = ({ isOpen, setIsOpen }) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        ) : null}
                     </View>
                 </TouchableWithoutFeedback>
             </View>
@@ -170,68 +129,6 @@ const styles = StyleSheet.create({
     minicart_items_wrapper: {
         maxHeight: 300,
         marginTop: 10
-    },
-    minicart_items: {
-        flexGrow: 1
-    },
-    minicart_item: {
-        flex: 1,
-        flexDirection: 'row',
-        direction: "rtl",
-        gap: 20,
-        height: 128,
-        paddingVertical: 10,
-        borderBottomColor: 'rgb(220, 221, 218)',
-        borderBottomWidth: 1,
-    },
-    minicart_item_link: {
-        width: 108,
-        height: 108,
-    },
-    minicart_item_image: {
-        width: 108,
-        height: 108,
-    },
-    minicart_item_content: {
-        display: "flex",
-        flexDirection: "column",
-        gap: 3
-    },
-    minicart_item_content_name: {
-        fontWeight: 700,
-        textTransform: 'uppercase',
-        lineHeight: 19,
-        color: '#2b2b2b',
-        fontSize: 13,
-    },
-    minicart_item_content_size: {
-        flexDirection: 'row',
-        direction: "rtl",
-    },
-    minicart_item_content_size_label: {
-        fontSize: 13
-    },
-    minicart_item_content_size_value: {
-        fontSize: 13
-    },
-    minicart_item_content_price: {
-        textAlign: "left",
-    },
-    currency: {
-        fontSize: 13
-    },
-    value: {
-        fontSize: 13
-    },
-    minicart_item_content_quantity: {
-        flexDirection: 'row',
-        direction: "rtl",
-    },
-    minicart_item_content_quantity_label: {
-        fontSize: 13
-    },
-    minicart_item_content_quantity_value: {
-        fontSize: 13
     },
     minicart_total_prices: {
         marginTop: 20,

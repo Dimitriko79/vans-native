@@ -11,6 +11,7 @@ const useCartTrigger = props => {
     const [isFirstFetching, setIsFirstFetching] = useState(true);
 
     const { cartId, isFetchingCart,  } = useCartProvider();
+    console.log('cartId', cartId)
     const [fetchCart, { data }] = useLazyQuery(getItemCountQuery, {
         fetchPolicy: "no-cache",
         variables: {
