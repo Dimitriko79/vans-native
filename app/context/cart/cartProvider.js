@@ -9,14 +9,15 @@ const useCartProvider = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
-    const {isFetchingCart} = state;
+    const {isFetchingCart, cartId} = state;
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
     const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
 
     const saveCartId = async (id) => {
         if (!id) return;
         try {
-            await AsyncStorage.setItem("cartId", id);
+            // await AsyncStorage.setItem("cartId", id);
+            dispatch({type: "SET_CART_ID", payload: id})
         } catch (error) {
             console.error("Error saving cartId:", error);
         }
@@ -24,8 +25,8 @@ export const CartContextProvider = ({ children }) => {
 
     const getCartId = async () => {
         try {
-            const data = await AsyncStorage.getItem("cartId");
-            return data || null;
+            // const data = await AsyncStorage.getItem("cartId");
+            return cartId || null;
         } catch (error) {
             console.error("Error getting cartId:", error);
             return null;
@@ -34,7 +35,7 @@ export const CartContextProvider = ({ children }) => {
 
     const removeCartId = async () => {
         try {
-            await AsyncStorage.removeItem("cartId");
+            // await AsyncStorage.removeItem("cartId");
             dispatch({ type: 'REMOVE_CART_ID' });
         } catch (error) {
             console.error("Error removing cartId:", error);
@@ -49,7 +50,6 @@ export const CartContextProvider = ({ children }) => {
 
             if (response?.data?.cart) {
                 dispatch({ type: 'GET_CART_DETAILS_SUCCESS', payload: response.data.cart });
-
             }
         } catch (error) {
             dispatch({ type: 'FETCH_CART_ERROR', payload: error.message });

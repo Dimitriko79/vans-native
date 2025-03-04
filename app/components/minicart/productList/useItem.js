@@ -1,4 +1,4 @@
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Alert} from "react-native";
 import useCartProvider from "../../../context/cart/cartProvider";
 import {useMutation} from "@apollo/client";
@@ -7,6 +7,8 @@ import {REMOVE_ITEM_MUTATION} from "../miniCartQuery.gql";
 const useItem = () => {
 
     const { cartId, startFetchCart } = useCartProvider();
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [itemForRemoving, setItemForRemoving] = useState(null);
 
     const [
         removeItem,
@@ -31,13 +33,28 @@ const useItem = () => {
                 Alert.alert(e.message);
                 await startFetchCart(false);
                 // Error is logged by apollo link - no need to double log.
+            } finally {
+                setItemForRemoving(null);
             }
         },
         [removeItem, cartId]
     );
 
+    const confirmDeletionOfItem = () => {
+        setIsOpenModal(true);
+    }
+
+    useEffect(() => {
+        if(itemForRemoving) {
+            setIsOpenModal(false);
+            handleRemoveItem(itemForRemoving);
+        }
+    }, [itemForRemoving]);
+
     return {
-        handleRemoveItem,
+        setItemForRemoving,
+        isOpenModal, setIsOpenModal,
+        confirmDeletionOfItem,
         loading: (removeItemCalled && removeItemLoading),
     }
 }

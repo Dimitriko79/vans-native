@@ -45,13 +45,13 @@ const useMiniCart = props => {
     }, [setIsOpen]);
 
     const handleProceedToCheckout = useCallback(() => {
-        closeMiniCart();
         router.push({ pathname: '/checkout'});
+        closeMiniCart();
     }, [setIsOpen]);
 
     const handleEditCart = useCallback(() => {
-        closeMiniCart();
         router.push({ pathname: "/cart"});
+        closeMiniCart();
     }, [setIsOpen]);
 
     const handlePress = url_key => {
@@ -66,7 +66,7 @@ const useMiniCart = props => {
     return {
         closeMiniCart,
         handleEditCart,
-
+        handleProceedToCheckout,
         loading: miniCartLoading,
         productList,
         subTotal,

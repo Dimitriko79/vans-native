@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
         left: 14,
         backgroundColor: '#eee',
         width: width * 0.93,
-        minHeight: 400,
         borderTopWidth: 3,
         borderTopColor: '#c9192e',
         borderWidth: 1,

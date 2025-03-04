@@ -1,16 +1,20 @@
-import {Image, Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import {Image, Text, TouchableOpacity, View, StyleSheet, Modal, Button, Dimensions, Pressable} from "react-native";
 import formatImageUrl from "../../../helpers/formatImageUrl";
 import Price from "../../price/price";
 import Icon from "react-native-vector-icons/AntDesign";
 import React from "react";
 import useItem from "./useItem";
 
+const { height, width } = Dimensions.get("window");
+
 const Item = ({item, onPress}) => {
 
     const { product, configurable_options, prices, quantity } = item;
 
     const {
-        handleRemoveItem,
+        setItemForRemoving,
+        isOpenModal, setIsOpenModal,
+        confirmDeletionOfItem,
         loading
     } = useItem();
 
@@ -34,15 +38,88 @@ const Item = ({item, onPress}) => {
                 </View>
             </View>
             <View>
-                <TouchableOpacity onPress={() => handleRemoveItem(item.id)}>
+                <TouchableOpacity onPress={confirmDeletionOfItem}>
                     <Icon name="close" size={16} color="#000"/>
                 </TouchableOpacity>
             </View>
+            <Modal
+                animationType="slide" // Доступны: 'slide', 'fade', 'none'
+                transparent={true}
+                visible={isOpenModal}
+                onRequestClose={() => setIsOpenModal(false)} // Для Android-кнопки "Назад"
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modal_view}>
+                        <TouchableOpacity style={styles.modal_view_close} onPress={() => setIsOpenModal(false)}>
+                            <Icon name="close" size={20} color="#fff"/>
+                        </TouchableOpacity>
+                        <Text style={styles.modal_view_title}>האם להסיר פריט זה מעגלת הקניות?</Text>
+                        <View style={styles.modal_view_actions}>
+                            <Pressable style={styles.modal_view_action_primary} onPress={() => setItemForRemoving(item.id)} ><Text style={{color: "#fff", fontSize: 14, fontWeight: "600"}}>אישור</Text></Pressable>
+                            <Pressable style={styles.modal_view_action_secondary} onPress={() => setIsOpenModal(false)}><Text style={{color: "#fff", fontSize: 14, fontWeight: "600"}}>ביטול</Text></Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    modalOverlay: {
+        position: "absolute",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        top: 0,
+        width: width,
+    },
+    modal_view: {
+        marginTop: 120,
+        width: 300,
+        backgroundColor: "#fff",
+        paddingTop: 40,
+        padding: 20,
+        position: "relative",
+    },
+    modal_view_close: {
+        position: "absolute",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        left: 20,
+        top: 20,
+        width: 30,
+        height: 30,
+        backgroundColor: "#d41921",
+    },
+    modal_view_title: {
+        marginTop: 20,
+        fontSize: 14,
+        fontWeight: 400,
+        textAlign: 'center'
+    },
+    modal_view_actions: {
+        flexDirection: "row-reverse",
+        justifyContent: "center",
+        gap: 10,
+        height: 30,
+        marginTop: 55
+    },
+    modal_view_action_primary: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        width: 60,
+        backgroundColor: "#d41921",
+    },
+    modal_view_action_secondary: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        width: 60,
+        backgroundColor: "#000",
+    },
     item: {
         flex: 1,
         flexDirection: 'row',
