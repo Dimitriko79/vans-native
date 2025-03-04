@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import {useLazyQuery, useMutation} from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_CART_MUTATION, GET_CART_DETAILS } from "../../components/cart/cart.gql";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { cartReducer, initialState } from "./reducer/cartReducer";
 
 const CartContext = createContext(null);
@@ -9,98 +8,69 @@ const useCartProvider = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
-    const {isFetchingCart, cartId} = state;
+    const { cartId, isFetchingCart } = state;
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
     const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
 
-    const saveCartId = async (id) => {
+    // Сохранение cartId в store
+    const saveCartId = (id) => {
         if (!id) return;
-        try {
-            // await AsyncStorage.setItem("cartId", id);
-            dispatch({type: "SET_CART_ID", payload: id})
-        } catch (error) {
-            console.error("Error saving cartId:", error);
-        }
+        dispatch({ type: "SET_CART_ID", payload: id });
     };
 
-    const getCartId = async () => {
-        try {
-            // const data = await AsyncStorage.getItem("cartId");
-            return cartId || null;
-        } catch (error) {
-            console.error("Error getting cartId:", error);
-            return null;
-        }
-    };
-
-    const removeCartId = async () => {
-        try {
-            // await AsyncStorage.removeItem("cartId");
-            dispatch({ type: 'REMOVE_CART_ID' });
-        } catch (error) {
-            console.error("Error removing cartId:", error);
-        }
-    };
-
+    // Получение деталей корзины
     const getCartDetails = async (cartId) => {
         if (!cartId) return;
-        await startFetchCart(true);
-        try {
-            const response = await getCartDetailsQuery({ variables: { cartId }, fetchPolicy: "no-cache" });
+        startFetchCart(true);
 
-            if (response?.data?.cart) {
-                dispatch({ type: 'GET_CART_DETAILS_SUCCESS', payload: response.data.cart });
+        try {
+            const { data } = await getCartDetailsQuery({
+                variables: { cartId },
+                fetchPolicy: "no-cache",
+            });
+
+            if (data?.cart) {
+                dispatch({ type: "GET_CART_DETAILS_SUCCESS", payload: data.cart });
             }
         } catch (error) {
-            dispatch({ type: 'FETCH_CART_ERROR', payload: error.message });
+            dispatch({ type: "FETCH_CART_ERROR", payload: error.message });
         } finally {
-            await startFetchCart(false);
+            startFetchCart(false);
         }
     };
 
-    const fetchDetails = async () => {
+    // Создание новой корзины
+    const createNewCart = async () => {
         try {
-            const storedCartId = await getCartId();
-
-            if (storedCartId) {
-                dispatch({ type: 'FETCH_CART_SUCCESS', payload: storedCartId });
-                await getCartDetails(storedCartId);
-            } else {
-                const res = await fetchCartId();
-
-                if (res?.data) {
-                    const newCartId = res.data.cartId;
-                    await saveCartId(newCartId);
-                    dispatch({ type: 'FETCH_CART_SUCCESS', payload: newCartId });
-                    await getCartDetails(newCartId);
-                }
+            const res = await fetchCartId();
+            if (res?.data?.cartId) {
+                saveCartId(res.data.cartId);
+                await getCartDetails(res.data.cartId);
             }
         } catch (error) {
-            dispatch({ type: 'FETCH_CART_ERROR', payload: error.message });
+            dispatch({ type: "FETCH_CART_ERROR", payload: error.message });
         }
     };
 
-    const startFetchCart = async payload => {
-        dispatch({ type: 'FETCH_IS_FETCHING_CART', payload: payload});
-    }
+    // Функция управления состоянием загрузки
+    const startFetchCart = (payload) => {
+        dispatch({ type: "FETCH_IS_FETCHING_CART", payload });
+    };
 
+    // При загрузке приложения создаем новую корзину
     useEffect(() => {
-        fetchDetails();
+        createNewCart();
     }, []);
 
+    // Если isFetchingCart изменился, запрашиваем детали корзины
     useEffect(() => {
-        async function fetchDetails () {
-            const storedCartId = await getCartId();
-            if(isFetchingCart && storedCartId) {
-                await getCartDetails(storedCartId);
-            }
+        if (isFetchingCart && cartId) {
+            getCartDetails(cartId);
         }
-        fetchDetails();
-    },[isFetchingCart]);
-
+    }, [isFetchingCart, cartId]);
 
     return (
-        <CartContext.Provider value={{ ...state, dispatch, removeCartId, getCartDetails, startFetchCart }}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, startFetchCart }}>
             {children}
         </CartContext.Provider>
     );

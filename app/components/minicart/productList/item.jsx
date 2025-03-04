@@ -10,7 +10,7 @@ const { height, width } = Dimensions.get("window");
 const Item = ({item, onPress}) => {
 
     const { product, configurable_options, prices, quantity } = item;
-
+    const image = product.thumbnail || product.image;
     const {
         setItemForRemoving,
         isOpenModal, setIsOpenModal,
@@ -21,7 +21,7 @@ const Item = ({item, onPress}) => {
     return (
         <View style={[styles.item, {opacity: loading ? 0.5 : 1}]}>
             <TouchableOpacity onPress={() => onPress(product.url_key)} style={styles.item_link}>
-                <Image style={styles.item_image} resizeMode="cover" source={{ uri: formatImageUrl(product.image.url) }} />
+                <Image style={styles.item_image} resizeMode="cover" source={{ uri: formatImageUrl(image.url) }} />
             </TouchableOpacity>
             <View style={styles.item_content}>
                 <Text style={styles.item_content_name}>{product.name}</Text>

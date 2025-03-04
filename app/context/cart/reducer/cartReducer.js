@@ -1,7 +1,7 @@
 export const initialState = {
     cartId: null,
     details: null,
-    isFetchingCart: false,
+    isFetchingCart: true,
     error: null
 };
 
