@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ActivityIndicator, Dimensions, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, ActivityIndicator, Dimensions, TouchableOpacity, ScrollView} from "react-native";
 import {useLocalSearchParams} from "expo-router";
 import useCategory from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
@@ -53,7 +53,7 @@ const Category = () => {
                 <View style={styles.breadcrumbs}>
                     <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
                 </View>
-                <RichContent html={categoryData?.description} />
+                <RichContent html={categoryData?.description || ''} />
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
@@ -76,7 +76,11 @@ const Category = () => {
         )
     }
 
-    return content;
+    return (
+        <ScrollView keyboardShouldPersistTaps="handled">
+            {content}
+        </ScrollView>
+    )
 }
 
 const styles = StyleSheet.create({

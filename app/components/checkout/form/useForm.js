@@ -1,5 +1,3 @@
-import * as Yup from "yup";
-
 const useForm = ({handleStep, handleCustomerDetails}) => {
     const initialValues = {
         email: '',
@@ -16,15 +14,6 @@ const useForm = ({handleStep, handleCustomerDetails}) => {
         delivery: ''
     }
 
-    const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .email("נא להזין אימייל חוקי")
-            .required("שדה דוא\"ל נדרש"),
-        firstname: Yup.string().required("שדה השם הפרטי נדרש"),
-        lastname: Yup.string().required("שדה השם משפחה נדרש"),
-        house: Yup.string().required("שדה המספר בניין נדרש"),
-    });
-
     const onSubmit = values => {
         handleCustomerDetails({...values});
         handleStep("SENDING");
@@ -32,7 +21,6 @@ const useForm = ({handleStep, handleCustomerDetails}) => {
 
     return {
         initialValues,
-        validationSchema,
         onSubmit
     }
 }

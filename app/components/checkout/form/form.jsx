@@ -5,12 +5,12 @@ import { Formik } from "formik";
 import useForm from "./useForm";
 import Checkbox from "./checkbox";
 import RadioButton from "./radioButton";
+import {validationSchema} from "../../../helpers/validationSchema";
 
 const Form = props => {
 
     const {
         initialValues,
-        validationSchema,
         onSubmit
     } = useForm(props);
 
@@ -175,9 +175,27 @@ const Form = props => {
                     <View style={styles.checkout_form_shipping_method}>
                         <Text style={styles.checkout_form_shipping_method_title}>בחירת שיטת משלוח</Text>
                         <View style={styles.checkout_form_shipping_method_checkboxes}>
-                            <Checkbox handleChange={setFieldValue} values={values} option={{id: 'joining_club', label: 'מעוניין להצטרף למועדון (מאשר את התקנון)'}}/>
-                            <Checkbox handleChange={setFieldValue} values={values} option={{id: 'confirm_terms', label: 'מאשר שקראתי את תנאי השימוש ו מדיניות הפרטיות של Vans.'}}/>
-                            <Checkbox handleChange={setFieldValue} values={values} option={{id: 'receive_announcements', label: 'אני רוצה לקבל מכם פרסומים על הטבות, שיתופי פעולה ועדכונים באמצעות דוא”ל ו SMS'}}/>
+                            <Checkbox
+                                handleChange={setFieldValue}
+                                values={values}
+                                option={{id: 'joining_club', label: 'מעוניין להצטרף למועדון (מאשר את התקנון)'}}
+                                touched={touched}
+                                errors={errors}
+                            />
+                            <Checkbox
+                                handleChange={setFieldValue}
+                                values={values}
+                                option={{id: 'confirm_terms', label: 'מאשר שקראתי את תנאי השימוש ו מדיניות הפרטיות של Vans.'}}
+                                touched={touched}
+                                errors={errors}
+                            />
+                            <Checkbox
+                                handleChange={setFieldValue}
+                                values={values}
+                                option={{id: 'receive_announcements', label: 'אני רוצה לקבל מכם פרסומים על הטבות, שיתופי פעולה ועדכונים באמצעות דוא”ל ו SMS'}}
+                                touched={touched}
+                                errors={errors}
+                            />
                         </View>
                     </View>
                     <View style={styles.checkout_form_delivery_method}>
@@ -232,7 +250,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 4,
         marginLeft: -4,
     },
-    errorText: { fontSize: 13, textAlign: "right", color: "#d41921" },
+    errorText: { fontSize: 13, textAlign: "right", color: "#d41921", marginTop: 5 },
     checkout_form_shipping_method: {
         backgroundColor: "#f1f2ed",
         paddingTop: 20,

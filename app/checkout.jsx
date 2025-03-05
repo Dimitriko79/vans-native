@@ -1,12 +1,11 @@
-import {View, Text, StyleSheet, Dimensions} from "react-native";
+import {View, Text, StyleSheet, ScrollView} from "react-native";
 import useCheckout, {CHECKOUT_STEP} from "./components/checkout/useCheckout";
 import RichContent from "./components/richContent/richContent";
 import React from "react";
 import ProgressBar from "./components/checkout/progressBar/progressBar";
 import Form from "./components/checkout/form/form";
 import ItemReview from "./components/checkout/itemsReview/itemsReview";
-
-const { width } = Dimensions.get("window");
+import Error from "./components/error/error";
 
 const Checkout = () => {
 
@@ -16,7 +15,9 @@ const Checkout = () => {
         totalPrice,
         cmsBlockData,
         handleCustomerDetails,
-        handleStep
+        handleStep,
+        errorMessage,
+        onErrorMessage
     } = useCheckout();
     let content;
 
@@ -48,12 +49,15 @@ const Checkout = () => {
     }
 
     return (
+        <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.container}>
-                {cmsBlockData && cmsBlockData.length && cmsBlockData.map((item, index) =><View key={index}><RichContent html={item.content}/></View> )}
+                <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
+                {cmsBlockData && cmsBlockData.length && cmsBlockData.map((item, index) =><View key={index}><RichContent html={item?.content || ''}/></View> )}
                 <ProgressBar step={step}/>
                 {content}
                 <ItemReview totalPrice={totalPrice} productList={productList}/>
             </View>
+        </ScrollView>
     )
 }
 

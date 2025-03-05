@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ActivityIndicator, Dimensions} from "react-native";
+import {View, Text, StyleSheet, ActivityIndicator, Dimensions, ScrollView} from "react-native";
 import {useLocalSearchParams} from "expo-router";
 import useProduct from "./components/product/useProduct";
 import ProductFullDetails from "./components/productFullDetails/productFullDetails";
@@ -33,9 +33,11 @@ const Product = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <ProductFullDetails product={productData}/>
-        </View>
+        <ScrollView keyboardShouldPersistTaps="handled">
+            <View style={styles.container}>
+                <ProductFullDetails product={productData}/>
+            </View>
+        </ScrollView>
     );
 }
 

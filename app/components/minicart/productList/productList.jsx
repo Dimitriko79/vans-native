@@ -15,8 +15,8 @@ const ProductList = ({products, onPress, isCheckout}) => {
                 );
             }}
             contentContainerStyle={styles.product_list}
-            scrollEnabled={true}
-            nestedScrollEnabled={true}
+            scrollEnabled={false}
+            nestedScrollEnabled={false}
         />
     )
 }

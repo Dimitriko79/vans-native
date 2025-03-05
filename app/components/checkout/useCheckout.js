@@ -18,6 +18,7 @@ const useCheckout = () => {
     const { details } = useCartProvider();
 
     const [step, setStep] = useState("WELCOME");
+    const [errorMessage, setErrorMessage] = useState([]);
     const [customerDetails, setCustomerDetails] = useState(null);
 
     const {data, loading, error} = useQuery(
@@ -51,7 +52,9 @@ const useCheckout = () => {
         totalPrice,
         cmsBlockData,
         handleCustomerDetails: setCustomerDetails,
-        handleStep: setStep
+        handleStep: setStep,
+        errorMessage,
+        onErrorMessage: setErrorMessage
     }
 }
 

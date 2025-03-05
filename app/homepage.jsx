@@ -1,5 +1,5 @@
 import React from "react";
-import {View, StyleSheet, Text, ActivityIndicator, Dimensions } from "react-native";
+import {View, StyleSheet, Text, ActivityIndicator, Dimensions, ScrollView} from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
@@ -47,7 +47,11 @@ const Homepage = () => {
             </View>
         )
     }
-    return content;
+    return (
+        <ScrollView keyboardShouldPersistTaps="handled">
+            {content}
+        </ScrollView>
+    )
 };
 
 const styles = StyleSheet.create({
