@@ -7,7 +7,6 @@ import {
     Text,
     Dimensions,
 } from "react-native";
-import RenderHTML from "react-native-render-html";
 import {Link} from "expo-router";
 import he from "he";
 import Icon from "react-native-vector-icons/AntDesign";

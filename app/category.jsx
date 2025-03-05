@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ActivityIndicator, ScrollView, Dimensions, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, ActivityIndicator, Dimensions, TouchableOpacity} from "react-native";
 import {useLocalSearchParams} from "expo-router";
 import useCategory from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
@@ -76,11 +76,7 @@ const Category = () => {
         )
     }
 
-    return (
-        <ScrollView>
-            {content}
-        </ScrollView>
-    )
+    return content;
 }
 
 const styles = StyleSheet.create({

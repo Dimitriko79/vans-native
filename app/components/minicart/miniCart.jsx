@@ -52,12 +52,12 @@ const MiniCart = ({ isOpen, setIsOpen }) => {
                                     <Text style={styles.minicart_total_prices_title}>סה"כ</Text>
                                 </View>
                                 <View style={styles.minicart_footer}>
-                                    <TouchableOpacity onPress={handleProceedToCheckout} style={styles.minicart_footer_primary_button}>
+                                    <TouchableOpacity onPress={handleProceedToCheckout} style={styles.minicart_footer_secondary_button}>
                                         <Text style={styles.minicart_footer_button_text}>לרכישה עכשיו</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={handleEditCart} style={styles.minicart_footer_secondary_button}>
-                                        <Text style={styles.minicart_footer_button_text}>צפייה בעגלה</Text>
-                                    </TouchableOpacity>
+                                    {/*<TouchableOpacity onPress={handleEditCart} style={styles.minicart_footer_secondary_button}>*/}
+                                    {/*    <Text style={styles.minicart_footer_button_text}>צפייה בעגלה</Text>*/}
+                                    {/*</TouchableOpacity>*/}
                                 </View>
                             </View>
                     </View>

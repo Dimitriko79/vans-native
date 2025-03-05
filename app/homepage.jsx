@@ -1,12 +1,11 @@
 import React from "react";
-import {View, StyleSheet, Text, ScrollView, ActivityIndicator, Dimensions, Image} from "react-native";
+import {View, StyleSheet, Text, ActivityIndicator, Dimensions } from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
 import useHomepage from "./components/homepage/useHomepage";
 import Hero from "./components/hero/hero";
 import PopularyProduct from "./components/popularyProduct/popularyProduct";
-import {images} from "../constants";
 
 const { height } = Dimensions.get("window");
 
@@ -48,12 +47,7 @@ const Homepage = () => {
             </View>
         )
     }
-
-    return (
-        <ScrollView>
-            {content}
-        </ScrollView>
-    );
+    return content;
 };
 
 const styles = StyleSheet.create({

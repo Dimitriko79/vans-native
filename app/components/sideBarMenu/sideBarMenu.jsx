@@ -5,10 +5,11 @@ import {
     StyleSheet,
     Animated,
     TouchableOpacity,
-    Dimensions, FlatList,
+    Dimensions, FlatList, Image,
 } from 'react-native';
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
+import {images} from "../../../constants";
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,7 +21,8 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
         childCategories,
         setCategoryId,
         handleGoBack,
-        handleChosenCategory
+        handleChosenCategory,
+        handlePress
     } = useSideBarMenu({onPress, onToggle, isSidebarOpen});
 
 
@@ -55,7 +57,6 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                                 >
                                     <Text style={styles.sidebarItem}>{category.name}</Text>
                                 </TouchableOpacity>
-
                             </View>
                         ) : (
                             <TouchableOpacity onPress={() => {
@@ -66,8 +67,17 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                                     <Text style={[styles.sidebarItem, styles.branch]}>{category.name}</Text>
                                 </View>
                             </TouchableOpacity>
-                        )
-                    }}/>
+                        );
+                    }}
+                    ListFooterComponent={() => (
+                        <TouchableOpacity onPress={handlePress}>
+                            <View style={{ flexDirection: "row", alignItems: 'baseline', gap: 5, justifyContent: "flex-end" }}>
+                                <Text style={[styles.sidebarItem, styles.branch]}>התחברות</Text>
+                                <Image source={images.customer} style={{ width: 16, height: 16 }} />
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                />
             </Animated.View>
         </View>
     );

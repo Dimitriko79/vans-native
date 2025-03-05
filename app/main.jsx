@@ -16,7 +16,7 @@ const Main = ({children}) => {
     }, [isRedirecting]);
 
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow: 1}}>
             <Slot />
             {children}
         </ScrollView>

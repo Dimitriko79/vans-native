@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
+import {router} from "expo-router";
 
 const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
 
@@ -60,6 +61,11 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
         return childCategories;
     }, [children]);
 
+    const handlePress = url_key => {
+        router.push({ pathname: "/account" });
+        onToggle();
+    }
+
     useEffect(() => {
         if (!isSidebarOpen) {
             setCategoryId(rootCategoryId);
@@ -85,6 +91,7 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
         setCategoryId,
         handleGoBack,
         handleChosenCategory,
+        handlePress,
         loading,
         error
     };
