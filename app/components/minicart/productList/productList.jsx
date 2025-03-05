@@ -2,7 +2,7 @@ import {FlatList, StyleSheet} from "react-native";
 import React from "react";
 import Item from "./item";
 
-const ProductList = ({products, onPress}) => {
+const ProductList = ({products, onPress, isCheckout}) => {
 
     return (
         <FlatList
@@ -11,7 +11,7 @@ const ProductList = ({products, onPress}) => {
             numColumns={1}
             renderItem={({ item }) => {
                 return (
-                    <Item item={item} onPress={onPress}/>
+                    <Item item={item} onPress={onPress} isCheckout={isCheckout}/>
                 );
             }}
             contentContainerStyle={styles.product_list}

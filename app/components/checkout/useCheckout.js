@@ -1,5 +1,7 @@
 import {useQuery} from "@apollo/client";
 import {GET_CMS_BLOCK} from "../header/header.gql";
+import {useMemo, useState} from "react";
+import useCartProvider from "../../context/cart/cartProvider";
 
 export const CHECKOUT_STEP = {
     WELCOME: {id:1, title: 'עמוד תשלום'},
@@ -7,7 +9,16 @@ export const CHECKOUT_STEP = {
     PAYMENT: {id: 3, title: null}
 };
 
+const DEFAULT_PRICE = {
+    value: 0.00,
+    currency: 'ILS'
+}
+
 const useCheckout = () => {
+    const { details } = useCartProvider();
+
+    const [step, setStep] = useState("WELCOME");
+    const [customerDetails, setCustomerDetails] = useState(null);
 
     const {data, loading, error} = useQuery(
         GET_CMS_BLOCK,
@@ -20,8 +31,27 @@ const useCheckout = () => {
 
     const cmsBlockData = data?.cmsBlocks?.items || [];
 
+    const totalPrice = useMemo(() => {
+        if(details){
+            return details.prices.grand_total;
+        }
+        return DEFAULT_PRICE;
+    }, [details]);
+
+    const productList = useMemo(() => {
+        if(details){
+            return details.items;
+        }
+        return [];
+    }, [details]);
+
     return {
-        cmsBlockData
+        step,
+        productList,
+        totalPrice,
+        cmsBlockData,
+        handleCustomerDetails: setCustomerDetails,
+        handleStep: setStep
     }
 }
 

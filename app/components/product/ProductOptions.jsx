@@ -41,6 +41,7 @@ const ProductOptions = ({ configurableOptions, handleSelectionChange, setShowErr
                       setSelectedAttribute(option.label);
                       setShowError(false);
                     }}
+                    overlayStyle={{ flex: 1, padding: '5%', paddingTop: '15%', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.8)' }}
                     style={styles.modal}
                     contentContainerStyle={styles.modal_container}
                 >

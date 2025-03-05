@@ -356,7 +356,6 @@ const useProductFullDetails = ({product}) => {
                             return
                         }
                     }
-                    await startFetchCart(true);
                     setStateAddToCartButton('added');
                 } else {
                     Alert.alert(
@@ -369,6 +368,8 @@ const useProductFullDetails = ({product}) => {
                 console.log(e);
                 setStateAddToCartButton('pending');
                 Alert.alert(e.message);
+            } finally {
+                await startFetchCart(true);
             }
         },
         [

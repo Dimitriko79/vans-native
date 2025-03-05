@@ -28,12 +28,11 @@ const useItem = () => {
                         itemId: Number(id)
                     }
                 });
-                await startFetchCart(true);
             } catch (e) {
                 Alert.alert(e.message);
-                await startFetchCart(false);
                 // Error is logged by apollo link - no need to double log.
             } finally {
+                await startFetchCart(true);
                 setItemForRemoving(null);
             }
         },

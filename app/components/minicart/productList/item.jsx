@@ -7,7 +7,7 @@ import useItem from "./useItem";
 
 const { height, width } = Dimensions.get("window");
 
-const Item = ({item, onPress}) => {
+const Item = ({item, onPress, isCheckout}) => {
 
     const { product, configurable_options, prices, quantity } = item;
     const image = product.thumbnail || product.image;
@@ -37,11 +37,13 @@ const Item = ({item, onPress}) => {
                     <Text style={styles.item_content_quantity_value}>{quantity} </Text>
                 </View>
             </View>
-            <View>
-                <TouchableOpacity onPress={confirmDeletionOfItem}>
-                    <Icon name="close" size={16} color="#000"/>
-                </TouchableOpacity>
-            </View>
+            {!isCheckout && (
+                <View>
+                    <TouchableOpacity onPress={confirmDeletionOfItem}>
+                        <Icon name="close" size={16} color="#000"/>
+                    </TouchableOpacity>
+                </View>
+            )}
             <Modal
                 animationType="slide" // Доступны: 'slide', 'fade', 'none'
                 transparent={true}

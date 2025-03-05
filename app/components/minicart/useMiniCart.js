@@ -1,44 +1,33 @@
 import useCartProvider from "../../context/cart/cartProvider";
-import {useLazyQuery, useMutation, useQuery} from "@apollo/client";
-import {MINI_CART_QUERY, REMOVE_ITEM_MUTATION} from "./miniCartQuery.gql";
-import {useCallback, useEffect, useMemo} from "react";
-import {Alert} from "react-native";
+import {useCallback, useMemo} from "react";
 import {router} from "expo-router";
 
 const useMiniCart = props => {
-    const {isOpen, setIsOpen} = props;
-    const { cartId, isFetchingCart } = useCartProvider();
-    const [fetchMiniCart, { data: miniCartData, loading: miniCartLoading }] = useLazyQuery(
-        MINI_CART_QUERY,
-        {
-            fetchPolicy: 'no-cache',
-            // nextFetchPolicy: 'cache-first',
-            variables: { cartId }
-        }
-    );
+    const {setIsOpen} = props;
+    const { details } = useCartProvider();
 
     const totalQuantity = useMemo(() => {
-        if (miniCartData) {
-            return miniCartData?.cart?.total_quantity;
+        if (details) {
+            return details.total_quantity;
         }
         return 0;
-    }, [miniCartData]);
+    }, [details]);
 
     const subTotal = useMemo(() => {
-        if (miniCartData) {
-            return miniCartData?.cart?.prices?.subtotal_excluding_tax;
+        if (details) {
+            return details.prices?.subtotal_excluding_tax;
         }
         return {
             currency: "ILS",
             value: 0
         }
-    }, [miniCartData]);
+    }, [details]);
 
     const productList = useMemo(() => {
-        if (miniCartData) {
-            return miniCartData?.cart?.items;
+        if (details) {
+            return details.items;
         }
-    }, [miniCartData]);
+    }, [details]);
 
     const closeMiniCart = useCallback(() => {
         setIsOpen(false);
@@ -59,15 +48,11 @@ const useMiniCart = props => {
         closeMiniCart();
     }
 
-    useEffect(() => {
-        fetchMiniCart();
-    }, [isFetchingCart])
-
     return {
         closeMiniCart,
         handleEditCart,
         handleProceedToCheckout,
-        loading: miniCartLoading,
+        loading: !!details,
         productList,
         subTotal,
         totalQuantity,

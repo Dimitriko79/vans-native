@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, {createContext, useCallback, useContext, useEffect, useReducer} from 'react';
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_CART_MUTATION, GET_CART_DETAILS } from "../../components/cart/cart.gql";
 import { cartReducer, initialState } from "./reducer/cartReducer";
@@ -10,7 +10,7 @@ export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
     const { cartId, isFetchingCart } = state;
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
-    const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
+    const [getCartDetailsQuery, {data, error}] = useLazyQuery(GET_CART_DETAILS);
 
     // Сохранение cartId в store
     const saveCartId = (id) => {
@@ -19,16 +19,15 @@ export const CartContextProvider = ({ children }) => {
     };
 
     // Получение деталей корзины
-    const getCartDetails = async (cartId) => {
+    const getCartDetails = useCallback(async (cartId) => {
         if (!cartId) return;
         startFetchCart(true);
 
         try {
-            const { data } = await getCartDetailsQuery({
+            const { data, error } = await getCartDetailsQuery({
                 variables: { cartId },
                 fetchPolicy: "no-cache",
             });
-
             if (data?.cart) {
                 dispatch({ type: "GET_CART_DETAILS_SUCCESS", payload: data.cart });
             }
@@ -37,7 +36,7 @@ export const CartContextProvider = ({ children }) => {
         } finally {
             startFetchCart(false);
         }
-    };
+    }, [isFetchingCart, cartId, getCartDetailsQuery]);
 
     // Создание новой корзины
     const createNewCart = async () => {

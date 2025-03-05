@@ -1,16 +1,4 @@
 import {gql} from "@apollo/client";
-import { MiniCartFragment } from './miniCartFragments.gql';
-import {CartPageFragment} from "../cart/cartPageFragments.gql";
-
-export const MINI_CART_QUERY = gql`
-  query MiniCartQuery($cartId: String!) {
-    cart(cart_id: $cartId) {
-      id
-      ...MiniCartFragment
-    }
-  }
-   ${MiniCartFragment}
-`;
 
 export const REMOVE_ITEM_MUTATION = gql`
     mutation RemoveItemForMiniCart($cartId: String!, $itemId: Int!) {
@@ -19,11 +7,7 @@ export const REMOVE_ITEM_MUTATION = gql`
         ) {
             cart {
                 id
-                ...MiniCartFragment
-                ...CartPageFragment
             }
         }
     }
-    ${MiniCartFragment}
-    ${CartPageFragment}
 `;

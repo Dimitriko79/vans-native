@@ -1,40 +1,43 @@
 import {View, Text, StyleSheet, Dimensions} from "react-native";
 import useCheckout, {CHECKOUT_STEP} from "./components/checkout/useCheckout";
-import Icon from "react-native-vector-icons/AntDesign";
 import RichContent from "./components/richContent/richContent";
 import React from "react";
-import {TextInput} from "react-native-element-textinput";
 import ProgressBar from "./components/checkout/progressBar/progressBar";
 import Form from "./components/checkout/form/form";
+import ItemReview from "./components/checkout/itemsReview/itemsReview";
 
 const { width } = Dimensions.get("window");
 
 const Checkout = () => {
-    const STEP = "WELCOME";
 
     const {
-        cmsBlockData
+        step,
+        productList,
+        totalPrice,
+        cmsBlockData,
+        handleCustomerDetails,
+        handleStep
     } = useCheckout();
     let content;
 
-    if(CHECKOUT_STEP[STEP].id === 1) {
+    if(CHECKOUT_STEP[step].id === 1) {
         content = (
             <View style={styles.checkout_content}>
                 <View style={styles.checkout_content_title}>
-                    <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[STEP].title}</Text>
+                    <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
-                <Form/>
+                <Form handleStep={handleStep} handleCustomerDetails={handleCustomerDetails}/>
             </View>
         )
-    } else if(CHECKOUT_STEP[STEP].id === 2) {
+    } else if(CHECKOUT_STEP[step].id === 2) {
         content = (
             <View style={styles.checkout_content}>
                 <View style={styles.checkout_content_title}>
-                    <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[STEP].title}</Text>
+                    <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
             </View>
         )
-    } else if (CHECKOUT_STEP[STEP].id === 3) {
+    } else if (CHECKOUT_STEP[step].id === 3) {
         content = (
             <View style={styles.checkout_content}>
 
@@ -47,8 +50,9 @@ const Checkout = () => {
     return (
             <View style={styles.container}>
                 {cmsBlockData && cmsBlockData.length && cmsBlockData.map((item, index) =><View key={index}><RichContent html={item.content}/></View> )}
-                <ProgressBar step={STEP}/>
+                <ProgressBar step={step}/>
                 {content}
+                <ItemReview totalPrice={totalPrice} productList={productList}/>
             </View>
     )
 }
