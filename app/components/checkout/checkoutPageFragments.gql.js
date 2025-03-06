@@ -28,12 +28,33 @@ export const CheckoutPageFragment = gql`
         telephone
       }
       shipping_addresses{
+        available_shipping_methods{
+            amount{
+                currency
+                value
+            }
+            available
+            carrier_code
+            carrier_title
+            error_message
+            method_code
+            method_title
+            price_excl_tax{
+                currency
+                value
+            }
+            price_incl_tax{
+                currency
+                value
+            }
+        }
         city
         company
         country{
           code
           label
         }
+        customer_notes
         firstname
         lastname
         postcode
@@ -43,6 +64,16 @@ export const CheckoutPageFragment = gql`
         }
         street
         telephone
+        selected_shipping_method{
+            amount{
+                currency
+                value
+            }
+            carrier_code
+            carrier_title
+            method_code
+            method_title
+        }
       }
       prices{
         applied_taxes{
@@ -78,6 +109,7 @@ export const CheckoutPageFragment = gql`
       }
         total_quantity
         available_payment_methods {
+            title
             code
         }
     }

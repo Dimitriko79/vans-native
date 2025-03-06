@@ -5,7 +5,6 @@ import Icon from "react-native-vector-icons/AntDesign";
 const Checkbox = props => {
     const { option, values, handleChange, touched, errors } = props;
     const {id, label} = option;
-    console.log(3333, errors)
     const [focusedCheckbox, setFocusedCheckbox] = useState(null);
 
     return (

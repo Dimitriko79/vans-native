@@ -5,7 +5,8 @@ import { Formik } from "formik";
 import useForm from "./useForm";
 import Checkbox from "./checkbox";
 import RadioButton from "./radioButton";
-import {validationSchema} from "../../../helpers/validationSchema";
+import {validateMobilePhone} from "../../../helpers/validationSchema";
+import * as Yup from "yup";
 
 const Form = props => {
 
@@ -13,6 +14,26 @@ const Form = props => {
         initialValues,
         onSubmit
     } = useForm(props);
+
+    const validationSchema = Yup.object().shape({
+        email: Yup.string()
+            .email("נא להזין אימייל חוקי")
+            .required("שדה דוא\"ל נדרש"),
+        firstname: Yup.string()
+            .matches(/^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s]+$/, "רק אותיות")
+            .min(3, "השם הפרטי חייב להיות באורך של 3 תווים לפחות")
+            .required("שדה השם הפרטי נדרש"),
+        lastname: Yup.string()
+            .matches(/^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s]+$/, "רק אותיות")
+            .min(3, "השם משפחה חייב להיות באורך של 3 תווים לפחות")
+            .required("שדה השם משפחה נדרש"),
+        city: Yup.string().required("שדה זה הוא חובה"),
+        street: Yup.string().required("שדה זה הוא חובה"),
+        telephone: Yup.string()
+            .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
+            .required("שדה זה הוא חובה"),
+        confirm_terms: Yup.boolean().oneOf([true], "עליך לקבל את תנאי השימוש"),
+    });
 
     return (
         <Formik
@@ -119,7 +140,7 @@ const Form = props => {
                         </View>
                         <View style={styles.checkout_form_field}>
                             <TextInput
-                                keyboardType="numeric"
+                                keyboardType="default"
                                 name="house"
                                 style={styles.input}
                                 inputStyle={styles.inputStyle}
@@ -137,7 +158,7 @@ const Form = props => {
                         </View>
                         <View style={styles.checkout_form_field}>
                             <TextInput
-                                keyboardType="numeric"
+                                keyboardType="default"
                                 name="apartment"
                                 style={styles.input}
                                 inputStyle={styles.inputStyle}
