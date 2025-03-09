@@ -14,7 +14,7 @@ export const UserContextProvider = ({ children }) => {
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
-    // AsyncStorage.setItem("sign-token", "0jsgnjlyg3pg73nkjsudkzt00cciji04")
+    // AsyncStorage.setItem("sign-token", "67lrlj9dk1os39th72bc1s9hxz094r84")
     const loadUser = useCallback(async () => {
         dispatch({type: 'FETCH_IS_FETCHING_USER', payload: true})
         try {

@@ -22,7 +22,7 @@ const useCheckout = () => {
     const [step, setStep] = useState("WELCOME");
     const [errorMessage, setErrorMessage] = useState([]);
     const [customerDetails, setCustomerDetails] = useState(null);
-    console.log(3333, customerDetails)
+
     const {data, loading, error} = useQuery(
         GET_CMS_BLOCK,
         {
@@ -50,7 +50,7 @@ const useCheckout = () => {
 
     const shippingMethods = useMemo(() => {
         if(details && details.shipping_addresses && details.shipping_addresses.length > 0) {
-            return details.shipping_addresses;
+            return details.shipping_addresses[0].available_shipping_methods;
         }
         return [{
             carrier_code: "fisha_pickup",

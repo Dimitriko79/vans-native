@@ -5,9 +5,12 @@ import React from "react";
 
 const ShippingMethods = ({methods, values, setFieldValue, touched, errors}) => {
 
+    if(!methods) return null
+
     const methodItems = methods.map((method, index) => (
-        <RadioButton index={index} handleChange={setFieldValue} values={values} name="delivery"  option={{id: method.method_code, price: {value: 0.00, currencyCode: "ILS"}, label: method.method_title}}/>
-    ))
+            <RadioButton index={index} handleChange={setFieldValue} values={values} name="delivery"  option={{id: method.method_code, price: {value: 0.00, currencyCode: "ILS"}, label: method.method_title}}/>
+    ));
+
     return (
         <View style={styles.checkout_form_delivery_method}>
            {methodItems}
