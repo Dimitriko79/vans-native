@@ -15,7 +15,7 @@ const DEFAULT_PRICE = {
 }
 
 const useCheckout = () => {
-    const { details, shippingCustomerDetails } = useCartProvider();
+    const { details } = useCartProvider();
 
     const [isStepOneDone, setStepOneDone] = useState(false);
     const [step, setStep] = useState("WELCOME");
@@ -73,7 +73,6 @@ const useCheckout = () => {
         totalPrice,
         paymentMethods,
         shippingMethods,
-        shippingCustomerDetails,
         cmsBlockData,
         handleCustomerDetails: setCustomerDetails,
         handleStep: setStep,

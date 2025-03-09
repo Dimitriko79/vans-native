@@ -7,10 +7,7 @@ const useCartTrigger = props => {
         queries: { getItemCountQuery }
     } = props;
 
-    const [miniCartIsOpen, setMiniCartIsOpen] = useState(false);
-    const [isFirstFetching, setIsFirstFetching] = useState(true);
-
-    const { cartId, isFetchingCart,  } = useCartProvider();
+    const { cartId, isFetchingCart, miniCartIsOpen, setMiniCartIsOpen } = useCartProvider();
 
     const [fetchCart, { data }] = useLazyQuery(getItemCountQuery, {
         fetchPolicy: "no-cache",
@@ -24,14 +21,9 @@ const useCartTrigger = props => {
     const fetchData = async () => {
         try {
             await fetchCart();
-            if(!isFirstFetching) {
-                setMiniCartIsOpen(true);
-            }
         } catch (e) {
             console.log(e);
             setMiniCartIsOpen(false);
-        } finally {
-            setIsFirstFetching(false);
         }
     }
 
@@ -40,7 +32,7 @@ const useCartTrigger = props => {
             fetchData()
         }
     }, [isFetchingCart, cartId]);
-
+    console.log('cartId', cartId)
     return {
         itemCount,
         miniCartIsOpen,

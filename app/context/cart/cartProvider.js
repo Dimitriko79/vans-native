@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useContext, useEffect, useReducer} from 'react';
+import React, {createContext, useCallback, useContext, useEffect, useReducer, useState} from 'react';
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {CREATE_CART_MUTATION, GET_CART_DETAILS, GET_CUSTOMER_CART, MERGE_CARTS} from "../../components/cart/cart.gql";
 import { cartReducer, initialState } from "./reducer/cartReducer";
@@ -9,7 +9,8 @@ const useCartProvider = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
-    const { cartId, isFetchingCart } = state;
+    const [miniCartIsOpen, setMiniCartIsOpen] = useState(false);
+    const { cartId, isFetchingCart, shippingCustomerDetails } = state;
     const {isSignedIn} = useUserContext();
 
 
@@ -77,7 +78,7 @@ export const CartContextProvider = ({ children }) => {
     }, [isFetchingCart, cartId]);
 
     return (
-        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, startFetchCart, retrieveCartId, mergeCarts }}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen, shippingCustomerDetails }}>
             {children}
         </CartContext.Provider>
     );

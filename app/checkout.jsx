@@ -17,7 +17,6 @@ const Checkout = () => {
         totalPrice,
         paymentMethods,
         shippingMethods,
-        shippingCustomerDetails,
         cmsBlockData,
         handleCustomerDetails,
         handleStep,
@@ -32,17 +31,17 @@ const Checkout = () => {
                 <View style={styles.checkout_content_title}>
                     <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
-                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} shippingCustomerDetails={shippingCustomerDetails} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
+                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
             </View>
         )
     } else if(CHECKOUT_STEP[step].id === 2) {
         content = (
             <View style={styles.checkout_content}>
-                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} shippingCustomerDetails={shippingCustomerDetails} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
+                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
                 <View style={styles.checkout_content_title}>
                     <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
-                <FormPayment payments={paymentMethods}/>
+                <FormPayment payments={paymentMethods} handleStep={handleStep}/>
             </View>
         )
     } else if (CHECKOUT_STEP[step].id === 3) {

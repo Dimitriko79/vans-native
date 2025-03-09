@@ -71,3 +71,13 @@ export const IS_EMAIL_AVAILABLE = gql`
     }
 `;
 
+export const PLACE_ORDER = gql`
+    mutation ($cartId: String!){
+        placeOrder(input: {cart_id: $cartId}){
+            order{
+                order_number
+            }
+        }
+    }
+`;
+

@@ -181,7 +181,7 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
 
 const useProductFullDetails = ({product}) => {
 
-    const {cartId, startFetchCart} = useCartProvider();
+    const {cartId, startFetchCart, setMiniCartIsOpen} = useCartProvider();
     const [stateAddToCartButton, setStateAddToCartButton] = useState('pending');
     const productType = product.__typename;
     const isSupportedType = isSupportedProductType(productType);
@@ -337,6 +337,7 @@ const useProductFullDetails = ({product}) => {
                             await addSimpleProductToCart({
                                 variables
                             });
+                            setMiniCartIsOpen(true);
                         } catch (e) {
                             console.log(e);
                             setStateAddToCartButton('pending');
@@ -349,6 +350,7 @@ const useProductFullDetails = ({product}) => {
                             await addConfigurableProductToCart({
                                 variables
                             });
+                            setMiniCartIsOpen(true);
                         } catch (e) {
                             console.log(e);
                             setStateAddToCartButton('pending');
@@ -392,6 +394,7 @@ const useProductFullDetails = ({product}) => {
            return;
         }
         await handleAddToCart();
+
         return;
     };
 

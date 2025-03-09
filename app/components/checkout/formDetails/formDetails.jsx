@@ -15,16 +15,23 @@ const FormDetails = props => {
 
     const {
         isSignedIn,
+        isEmailAvailable,
         initialValues,
         customerDetails,
+        handleEmailAvailable,
         onSubmit,
-        loading
+        onLogin,
+        loading,
+        loadingLogin
     } = useFormDetails(props);
 
     const validationSchema = Yup.object().shape({
         email: !isSignedIn ? Yup.string()
             .email("נא להזין אימייל חוקי")
             .required("שדה דוא\"ל נדרש") : null,
+        password: !isEmailAvailable && !isSignedIn ? Yup.string()
+            .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
+            .required("נדרשת סיסמה") : null,
         firstname: Yup.string()
             .matches(/^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s]+$/, "רק אותיות")
             .min(3, "השם הפרטי חייב להיות באורך של 3 תווים לפחות")
@@ -61,6 +68,7 @@ const FormDetails = props => {
                     <DetailsReview details={customerDetails}/>
                 ) : (
                     <Formik
+                        key={JSON.stringify(initialValues)}
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={(values, {resetForm}) => {
@@ -86,10 +94,42 @@ const FormDetails = props => {
                                                 focusColor="#00699d"
                                                 value={values.email}
                                                 onChangeText={handleChange("email")}
-                                                onBlur={handleBlur("email")}
+                                                onBlur={(e) => {
+                                                    handleBlur("email")(e);
+                                                    handleEmailAvailable(values.email);
+                                                }}
                                             />
                                             {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                                         </View>
+                                    )}
+                                    {!isEmailAvailable && !isSignedIn && (
+                                        <>
+                                            <View style={styles.checkout_form_field}>
+                                                <TextInput
+                                                    keyboardType="default"
+                                                    name="password"
+                                                    style={styles.input}
+                                                    inputStyle={styles.inputStyle}
+                                                    labelStyle={styles.labelStyle}
+                                                    placeholderStyle={styles.placeholderStyle}
+                                                    textErrorStyle={styles.textErrorStyle}
+                                                    label="סיסמה"
+                                                    placeholderTextColor="#64686b"
+                                                    focusColor="#00699d"
+                                                    value={values.password}
+                                                    onChangeText={handleChange("password")}
+                                                    onBlur={handleBlur("password")}
+                                                    secureTextEntry={true}
+                                                    autoCapitalize="none"
+                                                    autoCorrect={false}
+                                                />
+                                                {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                                            </View>
+                                            <Text style={styles.sign_in_content_form_submit_description}>יש לך כבר חשבון אצלנו. היכנס או המשך כאורח.</Text>
+                                            <TouchableOpacity activeOpacity={0.5} disabled={loadingLogin} style={[styles.sign_in_content_form_submit, loadingLogin && styles.disabled]} onPress={() => onLogin(values)}>
+                                                <Text style={styles.sign_in_content_form_submit_text}>התחברות</Text>
+                                            </TouchableOpacity>
+                                        </>
                                     )}
                                     <View style={styles.checkout_form_field}>
                                         <TextInput
@@ -327,7 +367,25 @@ const styles = StyleSheet.create({
     },
     disabled: {
         opacity: 0.5
-    }
+    },
+    sign_in_content_form_submit: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#d41921",
+        height: 52
+    },
+    sign_in_content_form_submit_description: {
+        fontSize: 14,
+        fontWeight: 400,
+        color: '#333',
+        textAlign: 'right'
+    },
+    sign_in_content_form_submit_text: {
+        color: "#fefefe",
+        fontSize: 18,
+        fontWeight: 600,
+    },
 })
 
 export default FormDetails;

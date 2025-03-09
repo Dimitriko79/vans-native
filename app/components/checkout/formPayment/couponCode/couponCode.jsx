@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderWidth: 1,
         borderColor: '#DDDDDD',
+        backgroundColor: '#fff',
         fontSize: 14,
         direction: "rtl",
     },

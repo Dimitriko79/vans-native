@@ -17,7 +17,6 @@ export const UserContextProvider = ({ children }) => {
     const [SignInCustomer] = useMutation(SIGN_IN);
 
     const setToken = async token => {
-        console.log('setToken', token);
         await AsyncStorage.setItem("sign-token", token);
     }
 
