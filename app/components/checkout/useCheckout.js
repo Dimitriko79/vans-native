@@ -22,7 +22,7 @@ const useCheckout = () => {
     const [step, setStep] = useState("WELCOME");
     const [errorMessage, setErrorMessage] = useState([]);
     const [customerDetails, setCustomerDetails] = useState(null);
-
+    console.log(3333, customerDetails)
     const {data, loading, error} = useQuery(
         GET_CMS_BLOCK,
         {
@@ -48,11 +48,23 @@ const useCheckout = () => {
         return [];
     }, [details]);
 
+    const shippingMethods = useMemo(() => {
+        if(details && details.shipping_addresses && details.shipping_addresses.length > 0) {
+            return details.shipping_addresses;
+        }
+        return [{
+            carrier_code: "fisha_pickup",
+            carrier_title: "איסוף מסניף",
+            method_code: "fisha_pickup",
+            method_title: "איסוף מסניף"
+        }]
+    }, [details])
     return {
         user,
         step,
         productList,
         totalPrice,
+        shippingMethods,
         cmsBlockData,
         handleCustomerDetails: setCustomerDetails,
         handleStep: setStep,

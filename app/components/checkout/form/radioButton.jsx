@@ -3,15 +3,14 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Price from "../../price/price";
 
 const RadioButton = (props) => {
-    const { option, name, values, handleChange } = props;
+    const { option, name, values, handleChange, index } = props;
 
     const {id, label, price} = option;
-
     const [focusedCheckbox, setFocusedCheckbox] = useState(null);
 
     return (
         <TouchableOpacity
-            key={id}
+            key={index}
             style={[
                 styles.radioboxContainer,
                 focusedCheckbox === id && styles.radioboxFocused

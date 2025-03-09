@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useReducer, useState} from 'react';
-import {initialState, storeReducer} from "../store/reducer/storeReducer";
+import {initialState, storeReducer} from "./reducer/storeReducer";
 import {useLazyQuery, useQuery} from "@apollo/client";
-import {GET_STORE_CONFIG} from "../../components/store/store.gql";
+import {GET_COUNTRIES, GET_COUNTRY_BY_ID, GET_STORE_CONFIG} from "../../components/store/store.gql";
 
 const StoreContext = createContext(null);
 const useStoreContext = () => useContext(StoreContext);
@@ -15,6 +15,9 @@ export const StoreContextProvider = ({ children }) => {
             errorPolicy: "all"
         }
     )
+
+    const { data: dataCountries } = useQuery(GET_COUNTRIES, { fetchPolicy: 'network-only' });
+    const [getCountryByID, {}] = useLazyQuery(GET_COUNTRY_BY_ID, {fetchPolicy: 'network-only'});
 
     const fetchStore = async () => {
         try {
@@ -30,6 +33,20 @@ export const StoreContextProvider = ({ children }) => {
     useEffect(() => {
         fetchStore();
     }, []);
+
+    useEffect(() => {
+        if (dataCountries && dataCountries.countries && dataCountries.countries.length > 0) {
+            getCountryByID({variables: {id: dataCountries.countries[0].id}})
+                .then((response) => {
+                    if(response && response.data) {
+                        dispatch({type: "SET_COUNTRY", payload: response.data.country})
+                    }
+                })
+                .catch((e) => {
+                    console.log(e.message);
+                })
+        }
+    }, [dataCountries])
 
     return (
         <StoreContext.Provider value={{ ...state}}>

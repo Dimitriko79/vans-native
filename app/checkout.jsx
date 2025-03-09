@@ -14,6 +14,7 @@ const Checkout = () => {
         step,
         productList,
         totalPrice,
+        shippingMethods,
         cmsBlockData,
         handleCustomerDetails,
         handleStep,
@@ -28,7 +29,7 @@ const Checkout = () => {
                 <View style={styles.checkout_content_title}>
                     <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
-                <Form user={user} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails}/>
+                <Form user={user} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods}/>
             </View>
         )
     } else if(CHECKOUT_STEP[step].id === 2) {

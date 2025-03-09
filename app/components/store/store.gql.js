@@ -51,3 +51,28 @@ export const GET_STORE_CONFIG = gql`
         }
     }
 `;
+
+export const GET_COUNTRIES = gql`
+    query{
+        countries{
+            id
+        }
+    }
+`;
+
+export const GET_COUNTRY_BY_ID = gql`
+    query($id: String!) {
+        country(id: $id) {
+    available_regions{
+      code
+      id
+      name
+    }
+    full_name_english
+    full_name_locale
+    id
+    three_letter_abbreviation
+    two_letter_abbreviation
+  }
+    }
+`;

@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, Alert, Button, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, Alert, Button, TouchableOpacity, Image} from "react-native";
 import {TextInput} from "react-native-element-textinput";
 import React from "react";
 import { Formik } from "formik";
@@ -7,8 +7,12 @@ import Checkbox from "./checkbox";
 import RadioButton from "./radioButton";
 import {validateMobilePhone} from "../../../helpers/validationSchema";
 import * as Yup from "yup";
+import Icon from "react-native-vector-icons/AntDesign";
+import {images} from "../../../../constants";
+import ShippingMethods from "../shippingMethods/shippingMethods";
 
 const Form = props => {
+    const{shippingMethods} = props;
 
     const {
         initialValues,
@@ -33,6 +37,7 @@ const Form = props => {
             .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
             .required("שדה זה הוא חובה"),
         confirm_terms: Yup.boolean().oneOf([true], "עליך לקבל את תנאי השימוש"),
+        delivery: Yup.string().required()
     });
 
     return (
@@ -219,10 +224,13 @@ const Form = props => {
                             />
                         </View>
                     </View>
-                    <View style={styles.checkout_form_delivery_method}>
-                        <RadioButton handleChange={setFieldValue} values={values} name="delivery" option={{id: 'pickup', price: {value: 0.00, currencyCode: "ILS"}, label: 'שליח עד הבית'}}/>
-                        <RadioButton handleChange={setFieldValue} values={values} name="delivery"  option={{id: 'delivery', price: {value: 0.00, currencyCode: "ILS"}, label: 'איסוף מסניף'}}/>
-                    </View>
+                    <ShippingMethods
+                        methods={shippingMethods}
+                        values={values}
+                        setFieldValue={setFieldValue}
+                        touched={touched}
+                        errors={errors}
+                    />
                     <View style={styles.checkout_form_submit_container}>
                         <TouchableOpacity style={styles.checkout_form_submit} onPress={() => handleSubmit()}>
                             <Text style={styles.checkout_form_submit_text}>הבא</Text>
@@ -272,24 +280,6 @@ const styles = StyleSheet.create({
         marginLeft: -4,
     },
     errorText: { fontSize: 13, textAlign: "right", color: "#d41921", marginTop: 5 },
-    checkout_form_shipping_method: {
-        backgroundColor: "#f1f2ed",
-        paddingTop: 20,
-        borderTopWidth: 1,
-        borderTopColor: '#d8d9d5'
-    },
-    checkout_form_shipping_method_title: {
-        textAlign: "right",
-        fontSize: 16,
-        fontWeight: 700,
-    },
-    checkout_form_delivery_method: {
-        marginTop: 40,
-        backgroundColor: "#fff",
-        paddingTop: 20,
-        paddingHorizontal: 20,
-        paddingVertical: 20
-    },
     checkout_form_submit_container: {
         backgroundColor: "#fff",
         paddingHorizontal: 20,

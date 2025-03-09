@@ -16,6 +16,7 @@ import categoriesMen from '../assets/images/hp_categories_men.jpg';
 import categoriesWomen from '../assets/images/hp_categories_women.jpg';
 import categoriesKids from '../assets/images/hp_categories_kids.jpg';
 import customer from '../assets/images/account.png';
+import warning from '../assets/images/warning.png';
 import exit from '../assets/images/exit.png';
 
-export default {cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
+export default {warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };

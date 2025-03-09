@@ -11,7 +11,8 @@ import useStoreContext from "../../../context/store/storeProvider";
 
 const useForm = ({user, handleStep, handleCustomerDetails}) => {
     const {cartId} = useCartProvider();
-    const {storeConfig} = useStoreContext();
+    const {storeConfig, country} = useStoreContext();
+
     const initialValues = {
         email: user?.email || '',
         firstname: user?.firstname || '',
