@@ -3,16 +3,19 @@ import useCheckout, {CHECKOUT_STEP} from "./components/checkout/useCheckout";
 import RichContent from "./components/richContent/richContent";
 import React from "react";
 import ProgressBar from "./components/checkout/progressBar/progressBar";
-import Form from "./components/checkout/form/form";
+import FormDetails from "./components/checkout/formDetails/formDetails";
 import ItemReview from "./components/checkout/itemsReview/itemsReview";
 import Error from "./components/error/error";
+import FormPayment from "./components/checkout/formPayment/formPayment";
 
 const Checkout = () => {
 
     const {
         step,
+        isStepOneDone, setStepOneDone,
         productList,
         totalPrice,
+        paymentMethods,
         shippingMethods,
         shippingCustomerDetails,
         cmsBlockData,
@@ -29,15 +32,17 @@ const Checkout = () => {
                 <View style={styles.checkout_content_title}>
                     <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
-                <Form handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} shippingCustomerDetails={shippingCustomerDetails}/>
+                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} shippingCustomerDetails={shippingCustomerDetails} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
             </View>
         )
     } else if(CHECKOUT_STEP[step].id === 2) {
         content = (
             <View style={styles.checkout_content}>
+                <FormDetails step={step} handleStep={handleStep} handleCustomerDetails={handleCustomerDetails} shippingMethods={shippingMethods} shippingCustomerDetails={shippingCustomerDetails} isStepOneDone={isStepOneDone} setStepOneDone={setStepOneDone}/>
                 <View style={styles.checkout_content_title}>
                     <Text style={styles.checkout_content_title_text}>{CHECKOUT_STEP[step].title}</Text>
                 </View>
+                <FormPayment payments={paymentMethods}/>
             </View>
         )
     } else if (CHECKOUT_STEP[step].id === 3) {

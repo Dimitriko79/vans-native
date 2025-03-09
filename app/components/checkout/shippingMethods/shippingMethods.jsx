@@ -1,4 +1,4 @@
-import RadioButton from "../form/radioButton";
+import RadioButton from "../formDetails/radioButton";
 import {Image, Text, View, StyleSheet} from "react-native";
 import {images} from "../../../../constants";
 import React from "react";

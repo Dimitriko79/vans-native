@@ -9,7 +9,7 @@ import useCartProvider from "../../../context/cart/cartProvider";
 import {Alert} from "react-native";
 import useUserContext from "../../../context/user/userProvider";
 
-const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) => {
+const useFormDetails = ({shippingCustomerDetails, handleStep, handleCustomerDetails, setStepOneDone}) => {
     const {cartId, dispatch} = useCartProvider();
     const {isSignedIn} = useUserContext();
 
@@ -22,9 +22,9 @@ const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) =
         building: shippingCustomerDetails?.building || '',
         apartment: shippingCustomerDetails?.apartment || '',
         telephone: shippingCustomerDetails?.telephone || '',
-        joining_club: false,
-        confirm_terms: false,
-        receive_announcements: false,
+        joining_club: shippingCustomerDetails?.joining_club || false,
+        confirm_terms: shippingCustomerDetails?.confirm_terms || false,
+        receive_announcements: shippingCustomerDetails?.receive_announcements || false,
         delivery: shippingCustomerDetails?.delivery || '',
     }
 
@@ -54,10 +54,11 @@ const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) =
 
     const onSubmit = useCallback(async (values, resetForm) => {
         if(!values) return;
+        console.log(2222, values)
         try {
             const address = {
                 city: values.city,
-                country_code: shippingCustomerDetails.country.code || 'IL',
+                country_code: shippingCustomerDetails?.country?.code || 'IL',
                 firstname: values.firstname,
                 lastname: values.lastname,
                 street: values.street,
@@ -86,11 +87,15 @@ const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) =
                     building: values.building,
                     apartment: values.apartment,
                     telephone: values.telephone,
+                    joining_club: values.joining_club,
+                    confirm_terms: values.confirm_terms,
+                    receive_announcements: values.receive_announcements,
                     delivery: values.delivery,
                 }});
             await handleCustomerDetails({...values});
             await resetForm();
             await handleStep("SENDING");
+            setStepOneDone(true);
         } catch (e) {
             Alert.alert(e.message)
         }
@@ -100,9 +105,10 @@ const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) =
     return {
         isSignedIn,
         initialValues,
+        customerDetails: shippingCustomerDetails,
         onSubmit,
         loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading,
     }
 }
 
-export default useForm
+export default useFormDetails

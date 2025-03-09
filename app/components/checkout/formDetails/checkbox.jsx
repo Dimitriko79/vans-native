@@ -15,7 +15,7 @@ const Checkbox = props => {
                     styles.checkboxContainer,
                     focusedCheckbox === id && styles.checkboxFocused
                 ]}
-                onPress={() => handleChange(id, !values[id])}
+                onPress={handleChange}
                 onFocus={() => setFocusedCheckbox(id)}
                 onBlur={() => setFocusedCheckbox(null)}
                 activeOpacity={0.8}
@@ -28,7 +28,7 @@ const Checkbox = props => {
                 </View>
                 <Text style={styles.checkboxLabel}>{label}</Text>
             </TouchableOpacity>
-            {touched[id] && errors[id] && <Text style={styles.errorText}>{errors[id]}</Text>}
+            {touched && touched[id] && errors && errors[id] && <Text style={styles.errorText}>{errors[id]}</Text>}
         </React.Fragment>
     )
 }

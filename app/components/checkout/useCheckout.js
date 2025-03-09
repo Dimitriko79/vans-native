@@ -4,8 +4,8 @@ import {useMemo, useState} from "react";
 import useCartProvider from "../../context/cart/cartProvider";
 
 export const CHECKOUT_STEP = {
-    WELCOME: {id:1, title: 'עמוד תשלום'},
-    SENDING: {id: 2, title: 'בחירת שיטת משלוח'},
+    WELCOME: {id:1, title: 'בחירת שיטת משלוח'},
+    SENDING: {id: 2, title: 'בחרו את סוג התשלום'},
     PAYMENT: {id: 3, title: null}
 };
 
@@ -17,6 +17,7 @@ const DEFAULT_PRICE = {
 const useCheckout = () => {
     const { details, shippingCustomerDetails } = useCartProvider();
 
+    const [isStepOneDone, setStepOneDone] = useState(false);
     const [step, setStep] = useState("WELCOME");
     const [errorMessage, setErrorMessage] = useState([]);
     const [customerDetails, setCustomerDetails] = useState(null);
@@ -58,10 +59,19 @@ const useCheckout = () => {
         }]
     }, [details]);
 
+    const paymentMethods = useMemo(() => {
+        if(details && details.available_payment_methods.length > 0) {
+            return details.available_payment_methods;
+        }
+        return [];
+    }, [details]);
+
     return {
         step,
+        isStepOneDone, setStepOneDone,
         productList,
         totalPrice,
+        paymentMethods,
         shippingMethods,
         shippingCustomerDetails,
         cmsBlockData,
