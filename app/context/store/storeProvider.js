@@ -7,7 +7,7 @@ const StoreContext = createContext(null);
 const useStoreContext = () => useContext(StoreContext);
 export const StoreContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(storeReducer, initialState);
-
+    const {storeConfig, country} = state;
     const [fetchStoreConfig] = useLazyQuery(GET_STORE_CONFIG,
         {
             fetchPolicy: 'cache-and-network',
@@ -49,7 +49,7 @@ export const StoreContextProvider = ({ children }) => {
     }, [dataCountries])
 
     return (
-        <StoreContext.Provider value={{ ...state}}>
+        <StoreContext.Provider value={{ ...state, storeConfig, country}}>
             {children}
         </StoreContext.Provider>
     );

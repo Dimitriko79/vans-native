@@ -4,16 +4,32 @@ import React from "react";
 import {TextInput} from "react-native-element-textinput";
 import {Formik} from "formik";
 import useSignin from "./useSignin";
-import {validationSchema} from "../../helpers/validationSchema";
+import {validateMobilePhone} from "../../helpers/validationSchema";
+import * as Yup from "yup";
+
+export const validationSchemaOTP = Yup.object().shape({
+    telephone: Yup.string()
+        .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
+        .required("שדה זה הוא חובה"),
+});
+export const validationSchema = Yup.object().shape({
+    email: Yup.string()
+        .email("נא להזין אימייל חוקי")
+        .required("שדה דוא\"ל נדרש"),
+    password: Yup.string()
+        .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
+        .required("נדרשת סיסמה"),
+});
 
 const Signin = () => {
 
     const {
+        loading,
         errorMessage,
         onErrorMessage,
-        initialValuesPhone,
-        initialValuesMail,
-        onSubmit
+        initialValues,
+        onSubmit,
+        handleResetForm
     } = useSignin();
 
     return (
@@ -22,11 +38,10 @@ const Signin = () => {
             <View style={styles.inner}>
                 <View style={styles.sign_in_content_phone}>
                     <Formik
-                        initialValues={initialValuesPhone}
-                        validationSchema={validationSchema}
+                        initialValues={initialValues}
+                        validationSchema={validationSchemaOTP}
                         onSubmit={(values, {resetForm}) => {
-                            onSubmit(values);
-                            resetForm();
+                            onSubmit(values, 'otp', resetForm);
                         }}
                     >
                         {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (
@@ -51,7 +66,7 @@ const Signin = () => {
                                         />
                                         {touched.telephone && errors.telephone && <Text style={styles.errorText}>{errors.telephone}</Text>}
                                     </View>
-                                    <TouchableOpacity style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
+                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.sign_in_content_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
                                         <Text style={styles.sign_in_content_form_submit_text}>כניסה</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -66,11 +81,10 @@ const Signin = () => {
                 </View>
                 <View style={styles.sign_in_content_mail}>
                     <Formik
-                        initialValues={initialValuesMail}
+                        initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={(values, {resetForm}) => {
-                            onSubmit(values);
-                            resetForm();
+                            onSubmit(values, 'default', resetForm);
                         }}
                     >
                         {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (
@@ -116,7 +130,7 @@ const Signin = () => {
                                         />
                                         {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                                     </View>
-                                    <TouchableOpacity style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
+                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.sign_in_content_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
                                         <Text style={styles.sign_in_content_form_submit_text}>התחברות</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -224,6 +238,9 @@ const styles = StyleSheet.create({
     sign_in_content_mail: {
         flex: 1,
     },
+    disabled: {
+        opacity: 0.5
+    }
 })
 
 export default Signin;

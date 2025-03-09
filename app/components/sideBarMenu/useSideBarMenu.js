@@ -4,7 +4,7 @@ import {GET_NAVIGATION_MENU} from "./sideBarMenu.gql";
 import {router} from "expo-router";
 import useStoreContext from "../../context/store/storeProvider";
 
-const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
+const useSideBarMenu = ({onPress, onToggle, isSidebarOpen, signOut}) => {
     const {storeConfig} = useStoreContext();
 
     const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
@@ -62,6 +62,11 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
         onToggle();
     }
 
+    const handleSignOut = async () => {
+        await signOut();
+        onToggle();
+    }
+
     useEffect(() => {
         if (!isSidebarOpen) {
             setCategoryId(rootCategoryId);
@@ -87,6 +92,7 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
         setCategoryId,
         handleGoBack,
         handleChosenCategory,
+        handleSignOut,
         handlePress,
         loading,
         error

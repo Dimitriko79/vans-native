@@ -219,3 +219,11 @@ export const REVOKE_CUSTOMER_TOKEN = gql`
         }
     }
 `;
+
+export const SIGN_IN = gql`
+    mutation ($email: String!, $password: String!) {
+        generateCustomerToken(email: $email, password: $password){
+            token
+        }
+    }
+`;

@@ -23,8 +23,9 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
         setCategoryId,
         handleGoBack,
         handleChosenCategory,
-        handlePress
-    } = useSideBarMenu({onPress, onToggle, isSidebarOpen});
+        handlePress,
+        handleSignOut
+    } = useSideBarMenu({onPress, onToggle, isSidebarOpen, signOut});
 
     return (
         <View style={styles.container}>
@@ -78,7 +79,7 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                                 </View>
                             </TouchableOpacity>
                             {isSignedIn && (
-                                <TouchableOpacity onPress={signOut}>
+                                <TouchableOpacity onPress={handleSignOut}>
                                     <View style={{ flexDirection: "row", alignItems: 'center', gap: 5, justifyContent: "flex-end" }}>
                                         <Text style={[styles.sidebarItem]}>התנתק</Text>
                                         <Image source={images.exit} style={{ width: 16, height: 18 }} />

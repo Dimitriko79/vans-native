@@ -1,8 +1,8 @@
-import React, {createContext, useEffect, useCallback, useContext, useReducer} from "react";
+import React, {createContext, useCallback, useContext, useEffect, useReducer} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {userReducer, initialState} from "./reducer/userReducer";
+import {initialState, userReducer} from "./reducer/userReducer";
 import {useLazyQuery, useMutation} from "@apollo/client";
-import {GET_CUSTOMER_DETAILS, REVOKE_CUSTOMER_TOKEN} from "./user.gql.js";
+import {GET_CUSTOMER_DETAILS, REVOKE_CUSTOMER_TOKEN, SIGN_IN} from "./user.gql.js";
 import {Alert} from "react-native";
 import {router} from "expo-router";
 
@@ -14,7 +14,13 @@ export const UserContextProvider = ({ children }) => {
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
-    // AsyncStorage.setItem("sign-token", "67lrlj9dk1os39th72bc1s9hxz094r84")
+    const [SignInCustomer] = useMutation(SIGN_IN);
+
+    const setToken = async token => {
+        console.log('setToken', token);
+        await AsyncStorage.setItem("sign-token", token);
+    }
+
     const loadUser = useCallback(async () => {
         dispatch({type: 'FETCH_IS_FETCHING_USER', payload: true})
         try {
@@ -57,15 +63,30 @@ export const UserContextProvider = ({ children }) => {
             }
         } catch (e) {
             console.log(e)
+            Alert.alert(e.message);
         }
     };
+
+    const signIn = async credentinals => {
+        try {
+            return await SignInCustomer({
+                variables: {
+                    email: credentinals.email,
+                    password: credentinals.password,
+                }
+            });
+        } catch (e) {
+            console.log(e);
+            Alert.alert(e.message);
+        }
+    }
 
     useEffect(() => {
         loadUser();
     }, []);
 
     return (
-        <UserContext.Provider value={{...state, signOut}}>
+        <UserContext.Provider value={{...state, signIn, signOut, setToken, loadUser}}>
             {children}
         </UserContext.Provider>
     );

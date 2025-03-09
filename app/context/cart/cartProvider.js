@@ -1,6 +1,6 @@
 import React, {createContext, useCallback, useContext, useEffect, useReducer} from 'react';
-import {gql, useLazyQuery, useMutation} from "@apollo/client";
-import { CREATE_CART_MUTATION, GET_CART_DETAILS } from "../../components/cart/cart.gql";
+import {useLazyQuery, useMutation} from "@apollo/client";
+import {CREATE_CART_MUTATION, GET_CART_DETAILS, GET_CUSTOMER_CART, MERGE_CARTS} from "../../components/cart/cart.gql";
 import { cartReducer, initialState } from "./reducer/cartReducer";
 import useUserContext from "../user/userProvider";
 
@@ -14,7 +14,9 @@ export const CartContextProvider = ({ children }) => {
 
 
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
+    const [mergeCarts] = useMutation(MERGE_CARTS);
     const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
+    const [getCustomerCart] = useLazyQuery(GET_CUSTOMER_CART);
 
     const saveCartId = (id) => {
         if (!id) return;
@@ -32,7 +34,8 @@ export const CartContextProvider = ({ children }) => {
                 errorPolicy: "all"
             });
             if (data?.cart) {
-                dispatch({ type: "GET_CART_DETAILS_SUCCESS", payload: data.cart });
+                dispatch({ type: "SET_CART_DETAILS_SUCCESS", payload: data.cart });
+                dispatch({ type: "SET_SHIPPING_CUSTOMER_DETAILS", payload: data.cart.shipping_addresses[0]});
             }
         } catch (error) {
             dispatch({ type: "FETCH_CART_ERROR", payload: error.message });
@@ -41,7 +44,7 @@ export const CartContextProvider = ({ children }) => {
         }
     }, [isFetchingCart, cartId, getCartDetailsQuery]);
 
-    const createNewCart = async () => {
+    const createCart = async () => {
         try {
             const res = await fetchCartId();
             if (res?.data?.cartId) {
@@ -57,10 +60,15 @@ export const CartContextProvider = ({ children }) => {
         dispatch({ type: "FETCH_IS_FETCHING_CART", payload });
     };
 
-    useEffect(() => {
-        createNewCart();
-    }, [isSignedIn]);
+    const retrieveCartId = async () => {
+        const res = await getCustomerCart();
 
+        return res?.data?.customerCart?.id;
+    }
+
+    useEffect(() => {
+        createCart();
+    }, [isSignedIn]);
 
     useEffect(() => {
         if (isFetchingCart && cartId) {
@@ -68,9 +76,8 @@ export const CartContextProvider = ({ children }) => {
         }
     }, [isFetchingCart, cartId]);
 
-
     return (
-        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, startFetchCart }}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, startFetchCart, retrieveCartId, mergeCarts }}>
             {children}
         </CartContext.Provider>
     );

@@ -4,25 +4,24 @@ import React from "react";
 import { Formik } from "formik";
 import useForm from "./useForm";
 import Checkbox from "./checkbox";
-import RadioButton from "./radioButton";
 import {validateMobilePhone} from "../../../helpers/validationSchema";
 import * as Yup from "yup";
-import Icon from "react-native-vector-icons/AntDesign";
-import {images} from "../../../../constants";
 import ShippingMethods from "../shippingMethods/shippingMethods";
 
 const Form = props => {
     const{shippingMethods} = props;
 
     const {
+        isSignedIn,
         initialValues,
-        onSubmit
+        onSubmit,
+        loading
     } = useForm(props);
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string()
+        email: !isSignedIn ? Yup.string()
             .email("נא להזין אימייל חוקי")
-            .required("שדה דוא\"ל נדרש"),
+            .required("שדה דוא\"ל נדרש") : null,
         firstname: Yup.string()
             .matches(/^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s]+$/, "רק אותיות")
             .min(3, "השם הפרטי חייב להיות באורך של 3 תווים לפחות")
@@ -45,32 +44,33 @@ const Form = props => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, {resetForm}) => {
-                onSubmit(values);
-                resetForm();
+                onSubmit(values, resetForm);
             }}
         >
             {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (
                 <React.Fragment>
                     <View style={styles.checkout_form}>
                         <Text style={styles.checkout_form_title}>פרטים אישיים</Text>
-                        <View style={styles.checkout_form_field}>
-                            <TextInput
-                                keyboardType="email-address"
-                                name="email"
-                                style={styles.input}
-                                inputStyle={styles.inputStyle}
-                                labelStyle={styles.labelStyle}
-                                placeholderStyle={styles.placeholderStyle}
-                                textErrorStyle={styles.textErrorStyle}
-                                label="כתובת אימייל"
-                                placeholderTextColor="#64686b"
-                                focusColor="#00699d"
-                                value={values.email}
-                                onChangeText={handleChange("email")}
-                                onBlur={handleBlur("email")}
-                            />
-                            {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-                        </View>
+                        {!isSignedIn && (
+                            <View style={styles.checkout_form_field}>
+                                <TextInput
+                                    keyboardType="email-address"
+                                    name="email"
+                                    style={styles.input}
+                                    inputStyle={styles.inputStyle}
+                                    labelStyle={styles.labelStyle}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    textErrorStyle={styles.textErrorStyle}
+                                    label="כתובת אימייל"
+                                    placeholderTextColor="#64686b"
+                                    focusColor="#00699d"
+                                    value={values.email}
+                                    onChangeText={handleChange("email")}
+                                    onBlur={handleBlur("email")}
+                                />
+                                {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                            </View>
+                        )}
                         <View style={styles.checkout_form_field}>
                             <TextInput
                                 keyboardType="default"
@@ -146,7 +146,7 @@ const Form = props => {
                         <View style={styles.checkout_form_field}>
                             <TextInput
                                 keyboardType="default"
-                                name="house"
+                                name="building"
                                 style={styles.input}
                                 inputStyle={styles.inputStyle}
                                 labelStyle={styles.labelStyle}
@@ -155,11 +155,11 @@ const Form = props => {
                                 label="מספר בניין"
                                 placeholderTextColor="#64686b"
                                 focusColor="#00699d"
-                                value={values.house}
-                                onChangeText={handleChange("house")}
-                                onBlur={handleBlur("house")}
+                                value={values.building}
+                                onChangeText={handleChange("building")}
+                                onBlur={handleBlur("building")}
                             />
-                            {touched.house && errors.house && <Text style={styles.errorText}>{errors.house}</Text>}
+                            {touched.building && errors.building && <Text style={styles.errorText}>{errors.building}</Text>}
                         </View>
                         <View style={styles.checkout_form_field}>
                             <TextInput
@@ -232,7 +232,7 @@ const Form = props => {
                         errors={errors}
                     />
                     <View style={styles.checkout_form_submit_container}>
-                        <TouchableOpacity style={styles.checkout_form_submit} onPress={() => handleSubmit()}>
+                        <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.checkout_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
                             <Text style={styles.checkout_form_submit_text}>הבא</Text>
                         </TouchableOpacity>
                     </View>
@@ -298,6 +298,9 @@ const styles = StyleSheet.create({
         color: "#fefefe",
         fontSize: 18,
         fontWeight: 600,
+    },
+    disabled: {
+        opacity: 0.5
     }
 })
 

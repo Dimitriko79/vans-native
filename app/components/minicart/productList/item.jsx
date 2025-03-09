@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     item_link: {
         width: 108,
         height: 108,
+        backgroundColor: "#ffffff",
     },
     item_image: {
         width: 108,

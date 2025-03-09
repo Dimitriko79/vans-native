@@ -33,3 +33,25 @@ export const GET_ITEM_COUNT_QUERY = gql`
     }
     ${CartTriggerFragment}
 `;
+
+export const MERGE_CARTS = gql`
+    mutation MergeCartsAfterSignIn(
+        $sourceCartId: String!
+        $destinationCartId: String!
+    ) {
+        mergeCarts(
+            source_cart_id: $sourceCartId
+            destination_cart_id: $destinationCartId
+        ) {
+            id
+        }
+    }
+`;
+
+export const GET_CUSTOMER_CART = gql`
+    query{
+        customerCart{
+            id
+        }
+    }
+`;

@@ -7,25 +7,25 @@ import {
 import {useCallback} from "react";
 import useCartProvider from "../../../context/cart/cartProvider";
 import {Alert} from "react-native";
-import useStoreContext from "../../../context/store/storeProvider";
+import useUserContext from "../../../context/user/userProvider";
 
-const useForm = ({user, handleStep, handleCustomerDetails}) => {
-    const {cartId} = useCartProvider();
-    const {storeConfig} = useStoreContext();
+const useForm = ({shippingCustomerDetails, handleStep, handleCustomerDetails}) => {
+    const {cartId, dispatch} = useCartProvider();
+    const {isSignedIn} = useUserContext();
 
     const initialValues = {
-        email: user?.email || '',
-        firstname: user?.firstname || '',
-        lastname: user?.lastname || '',
-        city: '',
-        street: '',
-        house: '',
-        apartment: '',
-        telephone: '',
+        email: '',
+        firstname: shippingCustomerDetails?.firstname || '',
+        lastname: shippingCustomerDetails?.lastname || '',
+        city: shippingCustomerDetails?.city || '',
+        street: shippingCustomerDetails?.street[0] || '',
+        building: shippingCustomerDetails?.building || '',
+        apartment: shippingCustomerDetails?.apartment || '',
+        telephone: shippingCustomerDetails?.telephone || '',
         joining_club: false,
         confirm_terms: false,
         receive_announcements: false,
-        delivery: ''
+        delivery: shippingCustomerDetails?.delivery || '',
     }
 
     const [
@@ -52,12 +52,12 @@ const useForm = ({user, handleStep, handleCustomerDetails}) => {
         }
     ] = useMutation(SET_CUSTOMER_BILLING_ADDRESSES_ON_CART);
 
-    const onSubmit = useCallback(async values => {
+    const onSubmit = useCallback(async (values, resetForm) => {
         if(!values) return;
         try {
             const address = {
                 city: values.city,
-                country_code: storeConfig?.default_display_currency_code || 'IL',
+                country_code: shippingCustomerDetails.country.code || 'IL',
                 firstname: values.firstname,
                 lastname: values.lastname,
                 street: values.street,
@@ -73,7 +73,23 @@ const useForm = ({user, handleStep, handleCustomerDetails}) => {
                         methodCode: values.delivery
                     }
             });
+            dispatch({
+                type: "SET_SHIPPING_CUSTOMER_DETAILS",
+                payload: {
+                    ...shippingCustomerDetails,
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    city: values.city,
+                    street: [
+                        values.street,
+                    ],
+                    building: values.building,
+                    apartment: values.apartment,
+                    telephone: values.telephone,
+                    delivery: values.delivery,
+                }});
             await handleCustomerDetails({...values});
+            await resetForm();
             await handleStep("SENDING");
         } catch (e) {
             Alert.alert(e.message)
@@ -82,8 +98,10 @@ const useForm = ({user, handleStep, handleCustomerDetails}) => {
     }, [customerBillingAddresses, customerShippingAddresses, customerShippingMethod]);
 
     return {
+        isSignedIn,
         initialValues,
-        onSubmit
+        onSubmit,
+        loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading,
     }
 }
 
