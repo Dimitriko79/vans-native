@@ -63,3 +63,11 @@ export const SET_CUSTOMER_PAYMENT_METHOD_ON_CART = gql`
     }
 `;
 
+export const IS_EMAIL_AVAILABLE = gql`
+    query ($email: String!){
+        isEmailAvailable(email: $email){
+            is_email_available
+        }
+    }
+`;
+

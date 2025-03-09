@@ -24,28 +24,3 @@ export const GET_NAVIGATION_MENU = gql`
         }
     }
 `;
-
-export const GET_CUSTOMER = gql`
-    query GetCustomerForLeftNav {
-        customer {
-            id
-            email
-            firstname
-            lastname
-            is_subscribed
-            gtm {
-                visitorId
-                visitorType
-            }
-        }
-    }
-`;
-
-export const GET_ROOT_CATEGORY_ID = gql`
-    query {
-        storeConfig {
-            code
-            root_category_id
-        }
-    }
-`;

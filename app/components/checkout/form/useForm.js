@@ -7,13 +7,15 @@ import {
 import {useCallback} from "react";
 import useCartProvider from "../../../context/cart/cartProvider";
 import {Alert} from "react-native";
+import useStoreContext from "../../../context/store/storeProvider";
 
-const useForm = ({handleStep, handleCustomerDetails}) => {
+const useForm = ({user, handleStep, handleCustomerDetails}) => {
     const {cartId} = useCartProvider();
+    const {storeConfig} = useStoreContext();
     const initialValues = {
-        email: '',
-        firstname: '',
-        lastname: '',
+        email: user?.email || '',
+        firstname: user?.firstname || '',
+        lastname: user?.lastname || '',
         city: '',
         street: '',
         house: '',
@@ -54,7 +56,7 @@ const useForm = ({handleStep, handleCustomerDetails}) => {
         try {
             const address = {
                 city: values.city,
-                country_code: "IL",
+                country_code: storeConfig?.default_display_currency_code || 'IL',
                 firstname: values.firstname,
                 lastname: values.lastname,
                 street: values.street,
@@ -66,8 +68,8 @@ const useForm = ({handleStep, handleCustomerDetails}) => {
                 variables:
                     {
                         cartId,
-                        carrierCode: "fisha_pickup",
-                        methodCode: "fisha_pickup"
+                        carrierCode: values.delivery,
+                        methodCode: values.delivery
                     }
             });
             await handleCustomerDetails({...values});

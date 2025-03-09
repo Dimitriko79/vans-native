@@ -1,15 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import {useLazyQuery, useQuery} from '@apollo/client';
-import {GET_NAVIGATION_MENU, GET_ROOT_CATEGORY_ID} from "./sideBarMenu.gql";
+import {GET_NAVIGATION_MENU} from "./sideBarMenu.gql";
 import {router} from "expo-router";
+import useStoreContext from "../../context/store/storeProvider";
 
 const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
-
-    const {data: getRootCategoryData } = useQuery(GET_ROOT_CATEGORY_ID, {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: "cache-first",
-        errorPolicy: "all"
-    });
+    const {storeConfig} = useStoreContext();
 
     const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
         fetchPolicy: 'cache-and-network',
@@ -20,10 +16,10 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen}) => {
     const [history, setHistory] = useState([]);
 
     const rootCategoryId = useMemo(() => {
-        if (getRootCategoryData) {
-            return getRootCategoryData.storeConfig.root_category_id;
+        if (storeConfig?.root_category_id) {
+            return storeConfig?.root_category_id;
         }
-    }, [getRootCategoryData]);
+    }, [storeConfig]);
 
     const [categoryId, setCategoryId] = useState(rootCategoryId);
 

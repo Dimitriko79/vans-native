@@ -7,19 +7,18 @@ import SideBarMenu from "./components/sideBarMenu/sideBarMenu";
 import React,{createContext, useEffect, useState} from "react";
 import {useFonts} from "expo-font";
 import {router, SplashScreen} from "expo-router";
-import {apolloClient, updateApolloClient} from "../servises/client";
 import '../index.css';
 import Footer from "./components/footer/footer";
 import {CartContextProvider} from "./context/cart/cartProvider";
+import {apolloClient} from "../servises/client";
+import {StoreContextProvider} from "./context/store/storeProvider";
+import {UserContextProvider} from "./context/user/userProvider";
 
 const { width } = Dimensions.get('window');
 SplashScreen.preventAutoHideAsync();
 
-const StoreContext = createContext();
-
 const RootLayout = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const [storeCode, setStoreCode] = useState('en');
     const translateX = new Animated.Value(-width);
 
     const [loaded, error] = useFonts({
@@ -62,11 +61,6 @@ const RootLayout = () => {
         }
     };
 
-    const changeStore = (newStore) => {
-        setStoreCode(newStore);
-        updateApolloClient(newStore);
-    };
-
     const handlePress = id => {
         if (router.pathname !== "/category") {
             router.push({ pathname: "/category", params: { ids: id } });
@@ -74,25 +68,27 @@ const RootLayout = () => {
     }
 
     return (
-        <StoreContext.Provider value={{ storeCode, changeStore }}>
-            <ApolloProvider client={apolloClient}>
-                <CartContextProvider>
-                    <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                        <Header onToggle={toggleSidebar}/>
-                        <SideBarMenu
-                            onToggle={toggleSidebar}
-                            isSidebarOpen={isSidebarOpen}
-                            onPress={handlePress}
-                            translateX={translateX}
-                        />
-                        <Main onPress={handlePress}>
-                            <Footer/>
-                        </Main>
-                    </SafeAreaView>
-                    <StatusBar barStyle="dark-content"/>
-                </CartContextProvider>
-            </ApolloProvider>
-        </StoreContext.Provider>
+        <ApolloProvider client={apolloClient}>
+            <UserContextProvider>
+                <StoreContextProvider>
+                    <CartContextProvider>
+                        <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
+                            <Header onToggle={toggleSidebar}/>
+                            <SideBarMenu
+                                onToggle={toggleSidebar}
+                                isSidebarOpen={isSidebarOpen}
+                                onPress={handlePress}
+                                translateX={translateX}
+                            />
+                            <Main onPress={handlePress}>
+                                <Footer/>
+                            </Main>
+                        </SafeAreaView>
+                        <StatusBar barStyle="dark-content"/>
+                    </CartContextProvider>
+                </StoreContextProvider>
+            </UserContextProvider>
+        </ApolloProvider>
     );
 };
 

@@ -1,19 +1,37 @@
-import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache, ApolloLink } from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const createApolloClient = (storeCode = 'he') => {
-    return new ApolloClient({
-        link: new HttpLink({
-            uri: 'https://vans-react.fisha.co.il/graphql',
+const authLink = new ApolloLink((operation, forward) => {
+    return new Promise(async (resolve) => {
+        const token = await AsyncStorage.getItem("sign-token");
+        console.log('token', token)
+        operation.setContext(({ headers = {} }) => ({
             headers: {
-                'Store': "he"
+                ...headers,
+                Authorization: token ? `Bearer ${token}` : "",
+                'Store': operation.getContext().storeCode || "he"
             }
-        }),
-        cache: new InMemoryCache()
+        }));
+
+        resolve(forward(operation));
+    });
+});
+
+const createApolloClient = (storeCode = "he") => {
+    const httpLink = new HttpLink({
+        uri: "https://vans-react.fisha.co.il/graphql",
+    });
+
+    return new ApolloClient({
+        link: ApolloLink.from([authLink, httpLink]),
+        cache: new InMemoryCache(),
+        defaultOptions: {
+            watchQuery: {
+                fetchPolicy: "cache-and-network",
+            },
+        },
+        connectToDevTools: true,
     });
 };
 
 export let apolloClient = createApolloClient();
-
-export const updateApolloClient = (newStoreCode) => {
-    apolloClient = createApolloClient(newStoreCode);
-};

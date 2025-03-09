@@ -2,6 +2,7 @@ import {useQuery} from "@apollo/client";
 import {GET_CMS_BLOCK} from "../header/header.gql";
 import {useMemo, useState} from "react";
 import useCartProvider from "../../context/cart/cartProvider";
+import useUserContext from "../../context/user/userProvider";
 
 export const CHECKOUT_STEP = {
     WELCOME: {id:1, title: 'עמוד תשלום'},
@@ -16,6 +17,7 @@ const DEFAULT_PRICE = {
 
 const useCheckout = () => {
     const { details } = useCartProvider();
+    const {user} = useUserContext();
 
     const [step, setStep] = useState("WELCOME");
     const [errorMessage, setErrorMessage] = useState([]);
@@ -47,6 +49,7 @@ const useCheckout = () => {
     }, [details]);
 
     return {
+        user,
         step,
         productList,
         totalPrice,

@@ -10,11 +10,12 @@ import {
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
 import {images} from "../../../constants";
+import useUserContext from "../../context/user/userProvider";
 
 const { width, height } = Dimensions.get('window');
 
 const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
-
+    const {isSignedIn, signOut} = useUserContext();
     const {
         history,
         setHistory,
@@ -24,8 +25,6 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
         handleChosenCategory,
         handlePress
     } = useSideBarMenu({onPress, onToggle, isSidebarOpen});
-
-
 
     return (
         <View style={styles.container}>
@@ -69,13 +68,24 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                             </TouchableOpacity>
                         );
                     }}
+                    contentContainerStyle={{gap: 15}}
                     ListFooterComponent={() => (
-                        <TouchableOpacity onPress={handlePress}>
-                            <View style={{ flexDirection: "row", alignItems: 'baseline', gap: 5, justifyContent: "flex-end" }}>
-                                <Text style={[styles.sidebarItem, styles.branch]}>התחברות</Text>
-                                <Image source={images.customer} style={{ width: 16, height: 16 }} />
-                            </View>
-                        </TouchableOpacity>
+                        <View style={{gap: 15}}>
+                            <TouchableOpacity onPress={handlePress}>
+                                <View style={{ flexDirection: "row", alignItems: 'baseline', gap: 5, justifyContent: "flex-end" }}>
+                                    <Text style={[styles.sidebarItem, styles.branch]}>{isSignedIn ? 'איזור אישי': 'התחברות'}</Text>
+                                    <Image source={images.customer} style={{ width: 16, height: 16 }} />
+                                </View>
+                            </TouchableOpacity>
+                            {isSignedIn && (
+                                <TouchableOpacity onPress={signOut}>
+                                    <View style={{ flexDirection: "row", alignItems: 'center', gap: 5, justifyContent: "flex-end" }}>
+                                        <Text style={[styles.sidebarItem]}>התנתק</Text>
+                                        <Image source={images.exit} style={{ width: 16, height: 18 }} />
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+                        </View>
                     )}
                 />
             </Animated.View>
@@ -107,7 +117,6 @@ const styles = StyleSheet.create({
     sidebarItem: {
         color: '#fff',
         fontSize: 18,
-        marginBottom: 15,
         textAlign: 'right',
     },
     branch: {
