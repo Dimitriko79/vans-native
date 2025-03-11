@@ -13,6 +13,7 @@ import {CartContextProvider} from "./context/cart/cartProvider";
 import {apolloClient} from "../servises/client";
 import {StoreContextProvider} from "./context/store/storeProvider";
 import {UserContextProvider} from "./context/user/userProvider";
+import {CheckoutContextProvider} from "./context/checkout/checkoutProvider";
 
 const { width } = Dimensions.get('window');
 SplashScreen.preventAutoHideAsync();
@@ -70,23 +71,25 @@ const RootLayout = () => {
     return (
         <ApolloProvider client={apolloClient}>
             <UserContextProvider>
-                <StoreContextProvider>
-                    <CartContextProvider>
-                        <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                            <Header onToggle={toggleSidebar}/>
-                            <SideBarMenu
-                                onToggle={toggleSidebar}
-                                isSidebarOpen={isSidebarOpen}
-                                onPress={handlePress}
-                                translateX={translateX}
-                            />
-                            <Main onPress={handlePress}>
-                                <Footer/>
-                            </Main>
-                        </SafeAreaView>
-                        <StatusBar barStyle="dark-content"/>
-                    </CartContextProvider>
-                </StoreContextProvider>
+                <CheckoutContextProvider>
+                    <StoreContextProvider>
+                        <CartContextProvider>
+                            <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
+                                <Header onToggle={toggleSidebar}/>
+                                <SideBarMenu
+                                    onToggle={toggleSidebar}
+                                    isSidebarOpen={isSidebarOpen}
+                                    onPress={handlePress}
+                                    translateX={translateX}
+                                />
+                                <Main onPress={handlePress}>
+                                    <Footer/>
+                                </Main>
+                            </SafeAreaView>
+                            <StatusBar barStyle="dark-content"/>
+                        </CartContextProvider>
+                    </StoreContextProvider>
+                </CheckoutContextProvider>
             </UserContextProvider>
         </ApolloProvider>
     );

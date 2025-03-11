@@ -1,4 +1,7 @@
 import {gql} from "@apollo/client";
+import {OrderConfirmationPageFragment} from "./orderConfirmationPageFragments.gql";
+import {CheckoutPageFragment} from "./checkoutPageFragments.gql";
+import {ItemsReviewFragment} from "./itemsReview/itemsReviewFragments.gql";
 
 export const SET_CUSTOMER_SHIPPING_ADDRESSES_ON_CART = gql`
     mutation SetShippingAddressForEstimate(
@@ -71,6 +74,15 @@ export const IS_EMAIL_AVAILABLE = gql`
     }
 `;
 
+export const SET_GUEST_EMAIL_ON_CART = gql`
+    mutation($cartId: String! $email: String!){
+        setGuestEmailOnCart(input: {cart_id: $cartId email: $email}){
+            cart{
+                id
+            }
+        }
+    }
+`;
 export const PLACE_ORDER = gql`
     mutation ($cartId: String!){
         placeOrder(input: {cart_id: $cartId}){
@@ -79,5 +91,27 @@ export const PLACE_ORDER = gql`
             }
         }
     }
+`;
+
+export const GET_ORDER_DETAILS = gql`
+    query getOrderDetails($cartId: String!) {
+        cart(cart_id: $cartId) {
+            id
+            ...OrderConfirmationPageFragment
+        }
+    }
+    ${OrderConfirmationPageFragment}
+`;
+
+export const GET_CHECKOUT_DETAILS = gql`
+    query getCheckoutDetails($cartId: String!) {
+        cart(cart_id: $cartId) {
+            id
+            ...CheckoutPageFragment
+            ...ItemsReviewFragment
+        }
+    }
+    ${CheckoutPageFragment}
+    ${ItemsReviewFragment}
 `;
 

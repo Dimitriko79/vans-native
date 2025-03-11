@@ -10,7 +10,7 @@ const UserContext = createContext(null);
 const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(userReducer, initialState);
+    const [state, dispatch, user] = useReducer(userReducer, initialState);
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
@@ -20,32 +20,29 @@ export const UserContextProvider = ({ children }) => {
         await AsyncStorage.setItem("sign-token", token);
     }
 
-    const loadUser = useCallback(async () => {
-        dispatch({type: 'FETCH_IS_FETCHING_USER', payload: true})
+    const getUserData = useCallback(async () => {
+        dispatch({type: 'IS_FETCHING_USER', payload: true})
         try {
              const token = AsyncStorage.getItem("sign-token");
 
             if (!token) {
                 await AsyncStorage.removeItem("sign-token");
-                dispatch({type: 'USER_DETAILS_SUCCESS', payload: null})
+                dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
-                Alert.alert('Signin false')
                 return;
             }
             const response = await fetchCustomerDetails();
 
             if (response?.data?.customer) {
                 const userData = response.data.customer;
-                dispatch({type: 'USER_DETAILS_SUCCESS', payload: userData})
+                dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: userData})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
-            } else {
-                await AsyncStorage.removeItem('sign-token');
-                dispatch({type: 'USER_DETAILS_SUCCESS', payload: null})
-                dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
             }
         } catch (error) {
             dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
-            dispatch({type: 'FETCH_USER_ERROR', payload: error});
+            dispatch({type: 'USER_ERROR', payload: error});
+        } finally {
+            dispatch({type: 'IS_FETCHING_USER', payload: false})
         }
     }, []);
 
@@ -54,7 +51,7 @@ export const UserContextProvider = ({ children }) => {
             const res = await revokeToken();
             if(res?.data?.revokeCustomerToken?.result){
                 await AsyncStorage.removeItem("sign-token");
-                dispatch({type: 'USER_DETAILS_SUCCESS', payload: null})
+                dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage"});
@@ -66,14 +63,20 @@ export const UserContextProvider = ({ children }) => {
         }
     };
 
-    const signIn = async credentinals => {
+    const signIn = async credentials => {
         try {
-            return await SignInCustomer({
+            const res = await SignInCustomer({
                 variables: {
-                    email: credentinals.email,
-                    password: credentinals.password,
+                    email: credentials.email,
+                    password: credentials.password,
                 }
             });
+            const token = res?.data?.generateCustomerToken.token || null;
+            if (token) {
+                await setToken(token);
+                await getUserData();
+            }
+            return !!token;
         } catch (e) {
             console.log(e);
             Alert.alert(e.message);
@@ -81,11 +84,11 @@ export const UserContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        loadUser();
+        getUserData();
     }, []);
 
     return (
-        <UserContext.Provider value={{...state, signIn, signOut, setToken, loadUser}}>
+        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData}}>
             {children}
         </UserContext.Provider>
     );

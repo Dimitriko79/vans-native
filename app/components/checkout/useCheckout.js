@@ -15,9 +15,8 @@ const DEFAULT_PRICE = {
 }
 
 const useCheckout = () => {
-    const { details } = useCartProvider();
-
-    const [isStepOneDone, setStepOneDone] = useState(false);
+    const { cart } = useCartProvider();
+   const [isStepOneDone, setStepOneDone] = useState(false);
     const [step, setStep] = useState("WELCOME");
     const [errorMessage, setErrorMessage] = useState([]);
     const [customerDetails, setCustomerDetails] = useState(null);
@@ -34,22 +33,22 @@ const useCheckout = () => {
     const cmsBlockData = data?.cmsBlocks?.items || [];
 
     const totalPrice = useMemo(() => {
-        if(details){
-            return details.prices.grand_total;
+        if(cart){
+            return cart.prices.grand_total;
         }
         return DEFAULT_PRICE;
-    }, [details]);
+    }, [cart]);
 
     const productList = useMemo(() => {
-        if(details){
-            return details.items;
+        if(cart){
+            return cart.items;
         }
         return [];
-    }, [details]);
+    }, [cart]);
 
     const shippingMethods = useMemo(() => {
-        if(details && details.shipping_addresses && details.shipping_addresses.length > 0) {
-            return details.shipping_addresses[0].available_shipping_methods;
+        if(cart && cart.shipping_addresses && cart.shipping_addresses.length > 0) {
+            return cart.shipping_addresses[0].available_shipping_methods;
         }
         return [{
             carrier_code: "fisha_pickup",
@@ -57,14 +56,14 @@ const useCheckout = () => {
             method_code: "fisha_pickup",
             method_title: "איסוף מסניף"
         }]
-    }, [details]);
+    }, [cart]);
 
     const paymentMethods = useMemo(() => {
-        if(details && details.available_payment_methods.length > 0) {
-            return details.available_payment_methods;
+        if(cart && cart.available_payment_methods.length > 0) {
+            return cart.available_payment_methods;
         }
         return [];
-    }, [details]);
+    }, [cart]);
 
     return {
         step,

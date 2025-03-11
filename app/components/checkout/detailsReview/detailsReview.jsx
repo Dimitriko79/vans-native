@@ -22,7 +22,7 @@ const DetailsReview = ({ details }) => {
                 <Text>{details.city}</Text>
             </View>
             <View style={styles.checkout_details_section}>
-                <Text>{country.full_name_locale}</Text>
+                <Text>{country?.full_name_locale}</Text>
             </View>
             <View style={styles.checkout_details_section}>
                 <Text>{details.telephone}</Text>

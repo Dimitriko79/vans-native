@@ -4,30 +4,30 @@ import {router} from "expo-router";
 
 const useMiniCart = props => {
     const {setIsOpen} = props;
-    const { details } = useCartProvider();
+    const { cart } = useCartProvider();
 
     const totalQuantity = useMemo(() => {
-        if (details) {
-            return details.total_quantity;
+        if (cart) {
+            return cart.total_quantity;
         }
         return 0;
-    }, [details]);
+    }, [cart]);
 
     const subTotal = useMemo(() => {
-        if (details) {
-            return details.prices?.subtotal_excluding_tax;
+        if (cart) {
+            return cart.prices?.subtotal_excluding_tax;
         }
         return {
             currency: "ILS",
             value: 0
         }
-    }, [details]);
+    }, [cart]);
 
     const productList = useMemo(() => {
-        if (details) {
-            return details.items;
+        if (cart) {
+            return cart.items;
         }
-    }, [details]);
+    }, [cart]);
 
     const closeMiniCart = useCallback(() => {
         setIsOpen(false);
@@ -52,7 +52,7 @@ const useMiniCart = props => {
         closeMiniCart,
         handleEditCart,
         handleProceedToCheckout,
-        loading: !!details,
+        loading: !!cart,
         productList,
         subTotal,
         totalQuantity,

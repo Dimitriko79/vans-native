@@ -10,7 +10,7 @@ const useCartProvider = () => useContext(CartContext);
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
     const [miniCartIsOpen, setMiniCartIsOpen] = useState(false);
-    const { cartId, isFetchingCart, shippingCustomerDetails } = state;
+    const { cartId, isFetchingCart } = state;
     const {isSignedIn} = useUserContext();
 
 
@@ -35,11 +35,10 @@ export const CartContextProvider = ({ children }) => {
                 errorPolicy: "all"
             });
             if (data?.cart) {
-                dispatch({ type: "SET_CART_DETAILS_SUCCESS", payload: data.cart });
-                dispatch({ type: "SET_SHIPPING_CUSTOMER_DETAILS", payload: data.cart.shipping_addresses[0]});
+                dispatch({ type: "SET_CART_DETAILS", payload: data.cart });
             }
         } catch (error) {
-            dispatch({ type: "FETCH_CART_ERROR", payload: error.message });
+            dispatch({ type: "CART_ERROR", payload: error.message });
         } finally {
             startFetchCart(false);
         }
@@ -53,12 +52,12 @@ export const CartContextProvider = ({ children }) => {
                 await getCartDetails(res.data.cartId);
             }
         } catch (error) {
-            dispatch({ type: "FETCH_CART_ERROR", payload: error.message });
+            dispatch({ type: "CART_ERROR", payload: error.message });
         }
     };
 
     const startFetchCart = (payload) => {
-        dispatch({ type: "FETCH_IS_FETCHING_CART", payload });
+        dispatch({ type: "IS_FETCHING_CART", payload });
     };
 
     const retrieveCartId = async () => {
@@ -78,7 +77,7 @@ export const CartContextProvider = ({ children }) => {
     }, [isFetchingCart, cartId]);
 
     return (
-        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen, shippingCustomerDetails }}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen}}>
             {children}
         </CartContext.Provider>
     );

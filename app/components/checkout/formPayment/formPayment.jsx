@@ -5,12 +5,13 @@ import PaymentsWrapper from "./paymentsWrapper";
 import React from "react";
 import {images} from "../../../../constants";
 
-const FormPayment = ({payments, handleStep}) => {
+const FormPayment = ({payments, handleStep, step}) => {
     const {
         selectedPayment,
         setSelectedPayment,
-        handleSubmit
-    } = useFormPayment({handleStep});
+        handlePlaceOrder,
+        loading
+    } = useFormPayment({handleStep, step});
 
     const methods = payments.map((payment, index) => {
         let image;
@@ -32,7 +33,7 @@ const FormPayment = ({payments, handleStep}) => {
             >
                 {payment.code === 'cashondelivery' ? (
                     <View style={styles.form_payment_container}>
-                        <TouchableOpacity activeOpacity={0.5} style={[styles.form_payment_submit]} onPress={handleSubmit}>
+                        <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.form_payment_submit, loading && styles.disabled]} onPress={handlePlaceOrder}>
                             <Text style={styles.form_payment_submit_text}>לסיום הזמנה</Text>
                         </TouchableOpacity>
                     </View>

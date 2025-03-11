@@ -6,8 +6,8 @@ import {router} from "expo-router";
 
 const useSignin = () => {
 
-    const {cartId, createCart, retrieveCartId, mergeCarts, startFetchCart} = useCartProvider();
-    const {signIn, setToken, loadUser,} = useUserContext();
+    const {cartId, retrieveCartId, mergeCarts, startFetchCart} = useCartProvider();
+    const {signIn} = useUserContext();
 
     const [errorMessage, setErrorMessage] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -24,9 +24,7 @@ const useSignin = () => {
             const sourceCartId = cartId;
             const res = await signIn(values);
 
-            const token = res?.data?.generateCustomerToken.token || null;
-            if (token){
-                await setToken(token);
+            if (res){
                 const destinationCartId = await retrieveCartId();
                 await mergeCarts({
                     variables: {
@@ -34,7 +32,6 @@ const useSignin = () => {
                         sourceCartId
                     }
                 });
-                await loadUser();
                 resetForm();
                 setLoading(false);
                 if (router.pathname !== "/homepage") {

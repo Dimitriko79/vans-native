@@ -3,17 +3,19 @@ import {
     IS_EMAIL_AVAILABLE,
     SET_CUSTOMER_BILLING_ADDRESSES_ON_CART,
     SET_CUSTOMER_SHIPPING_ADDRESSES_ON_CART,
-    SET_CUSTOMER_SHIPPING_METHOD_ON_CART
+    SET_CUSTOMER_SHIPPING_METHOD_ON_CART, SET_GUEST_EMAIL_ON_CART
 } from "../checkout.gql";
 import {useCallback, useEffect, useState} from "react";
 import useCartProvider from "../../../context/cart/cartProvider";
 import {Alert} from "react-native";
 import useUserContext from "../../../context/user/userProvider";
-import {router} from "expo-router";
+import useCheckoutProvider from "../../../context/checkout/checkoutProvider";
 
 const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => {
-    const {cartId, dispatch, retrieveCartId, mergeCarts, shippingCustomerDetails, createCart} = useCartProvider();
-    const {signIn, setToken, loadUser,} = useUserContext();
+    const {cartId, retrieveCartId, mergeCarts, createCart} = useCartProvider();
+    const {signIn} = useUserContext();
+    const {dispatch, shippingDetails} = useCheckoutProvider();
+
     const {isSignedIn} = useUserContext();
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [isEmailAvailable, setEmailAvailable] = useState(true);
@@ -58,6 +60,13 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
         }
     ] = useMutation(SET_CUSTOMER_BILLING_ADDRESSES_ON_CART);
 
+    const [setGuestEmailOnCart,
+        {
+            error: guestEmailOnCartError,
+            loading: guestEmailOnCartLoading
+        }
+    ] = useMutation(SET_GUEST_EMAIL_ON_CART);
+
     const [checkEmailAvailable, {error}] = useLazyQuery(IS_EMAIL_AVAILABLE);
 
     const onSubmit = useCallback(async (values, resetForm) => {
@@ -66,13 +75,16 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
         try {
             const address = {
                 city: values.city,
-                country_code: shippingCustomerDetails?.country?.code || 'IL',
+                country_code: 'IL',
                 firstname: values.firstname,
                 lastname: values.lastname,
                 street: values.street,
                 telephone: values.telephone,
             }
 
+            if(!isSignedIn){
+                await setGuestEmailOnCart({variables: {cartId, email: values.email}})
+            }
             await customerBillingAddresses({variables: {cartId, address: address}});
             await customerShippingAddresses({variables: {cartId, address: address}});
             await customerShippingMethod({
@@ -84,15 +96,14 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
                     }
             });
             dispatch({
-                type: "SET_SHIPPING_CUSTOMER_DETAILS",
+                type: "SET_SHIPPING_DETAILS",
                 payload: {
-                    ...shippingCustomerDetails,
+                    ...shippingDetails,
+                    email: values.email,
                     firstname: values.firstname,
                     lastname: values.lastname,
                     city: values.city,
-                    street: [
-                        values.street,
-                    ],
+                    street: values.street,
                     building: values.building,
                     apartment: values.apartment,
                     telephone: values.telephone,
@@ -109,7 +120,7 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
             Alert.alert(e.message)
         }
 
-    }, [customerBillingAddresses, customerShippingAddresses, customerShippingMethod, cartId]);
+    }, [customerBillingAddresses, customerShippingAddresses, customerShippingMethod, cartId, isSignedIn]);
 
     const handleEmailAvailable = async value => {
         try {
@@ -133,11 +144,8 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
             const sourceCartId = cartId;
             const res = await signIn(values);
 
-            const token = res?.data?.generateCustomerToken.token || null;
-            if (token){
-                await setToken(token);
+            if (res){
                 const destinationCartId = await retrieveCartId();
-                console.log('destinationCartId', destinationCartId)
                 await mergeCarts({
                     variables: {
                         destinationCartId,
@@ -145,7 +153,6 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
                     }
                 });
                 await createCart();
-                await loadUser();
                 setLoadingLogin(false);
             }
         } catch (e) {
@@ -156,34 +163,29 @@ const useFormDetails = ({handleStep, handleCustomerDetails, setStepOneDone}) => 
     }
 
     useEffect(() => {
-        if(shippingCustomerDetails){
-            setInitialValues({
-                ...initialValues,
-                firstname: shippingCustomerDetails?.firstname,
-                lastname: shippingCustomerDetails?.lastname || '',
-                city: shippingCustomerDetails?.city || '',
-                street: shippingCustomerDetails?.street[0] || '',
-                building: shippingCustomerDetails?.building || '',
-                apartment: shippingCustomerDetails?.apartment || '',
-                telephone: shippingCustomerDetails?.telephone || '',
-                joining_club: shippingCustomerDetails?.joining_club || false,
-                confirm_terms: shippingCustomerDetails?.confirm_terms || false,
-                receive_announcements: shippingCustomerDetails?.receive_announcements || false,
-                delivery: shippingCustomerDetails?.delivery || '',
-            })
-        }
-    }, [shippingCustomerDetails, loadingLogin]);
+        setInitialValues({
+            ...initialValues,
+            email: shippingDetails?.email || '',
+            firstname: shippingDetails?.firstname || '',
+            lastname: shippingDetails?.lastname || '',
+            city: shippingDetails?.city || '',
+            street: shippingDetails?.street || '',
+            building: shippingDetails?.building || '',
+            apartment: shippingDetails?.apartment || '',
+            telephone: shippingDetails?.telephone || ''
+        })
+    }, [shippingDetails, loadingLogin]);
 
     return {
         loadingLogin,
         isSignedIn,
         isEmailAvailable,
         initialValues,
-        customerDetails: shippingCustomerDetails,
+        customerDetails: shippingDetails,
         handleEmailAvailable,
         onSubmit,
         onLogin,
-        loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading,
+        loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading || guestEmailOnCartLoading,
     }
 }
 

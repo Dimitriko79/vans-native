@@ -20,10 +20,6 @@ export const CheckoutPageFragment = gql`
         firstname
         lastname
         postcode
-        region{
-          code
-          label
-        }
         street
         telephone
       }
@@ -58,10 +54,6 @@ export const CheckoutPageFragment = gql`
         firstname
         lastname
         postcode
-        region{
-          code
-          label
-        }
         street
         telephone
         selected_shipping_method{

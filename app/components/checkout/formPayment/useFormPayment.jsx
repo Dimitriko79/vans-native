@@ -1,25 +1,67 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {Alert} from "react-native";
-import {useMutation} from "@apollo/client";
-import {PLACE_ORDER, SET_CUSTOMER_PAYMENT_METHOD_ON_CART} from "../checkout.gql";
+import {useLazyQuery, useMutation, useQuery} from "@apollo/client";
+import {
+    GET_CHECKOUT_DETAILS,
+    GET_ORDER_DETAILS,
+    PLACE_ORDER,
+    SET_CUSTOMER_PAYMENT_METHOD_ON_CART
+} from "../checkout.gql";
 import useCartProvider from "../../../context/cart/cartProvider";
+import useCheckoutContext from "../../../context/checkout/checkoutProvider";
 
-const useFormPayment = ({handleStep}) => {
+
+const useFormPayment = ({handleStep, step}) => {
     const {cartId, createCart} = useCartProvider();
+    const {dispatch} = useCheckoutContext();
     const [selectedPayment, setSelectedPayment] = useState('');
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    const [placeOrderButtonClicked, setPlaceOrderButtonClicked] = useState(
+        false
+    );
 
     const [fetchCustomerPaymentMethod] = useMutation(SET_CUSTOMER_PAYMENT_METHOD_ON_CART);
-    const [fetchPlaceOrder] = useMutation(PLACE_ORDER);
-    const handleSubmit = async () => {
-        try {
-            const res = await fetchPlaceOrder({variables: {cartId}});
-            await createCart();
-            await handleStep("PAYMENT");
-        } catch (e) {
-            console.log(e);
-            Alert.alert(e.message);
+
+    const [
+        getOrderDetails,
+        { data: orderDetails, loading: orderDetailsLoading }
+    ] = useLazyQuery(GET_ORDER_DETAILS, {
+        fetchPolicy: 'no-cache'
+    });
+
+    const {
+        data: checkoutData,
+        error: checkoutDataError,
+        networkStatus: checkoutQueryNetworkStatus
+    } = useQuery(GET_CHECKOUT_DETAILS, {
+        skip: !cartId,
+        notifyOnNetworkStatusChange: true,
+        variables: {
+            cartId
         }
-    }
+    });
+
+    const cartItems = useMemo(() => {
+        return (checkoutData && checkoutData?.cart?.items) || [];
+    }, [checkoutData]);
+
+    const [placeOrder,
+        {
+            data: placeOrderData,
+            error: placeOrderError,
+            loading: placeOrderLoading
+        }
+    ] = useMutation(PLACE_ORDER);
+
+    const handlePlaceOrder = useCallback(async () => {
+       await getOrderDetails({
+            variables: {
+                cartId
+            }
+        });
+       setPlaceOrderButtonClicked(true);
+        setIsPlacingOrder(true);
+    }, [cartId, getOrderDetails]);
 
     const fetchPaymentMethod = async () => {
         try {
@@ -32,7 +74,7 @@ const useFormPayment = ({handleStep}) => {
             console.log('succsess payment')
         } catch (e) {
             console.log(e);
-            Alert.alert(e.message);
+            Alert.alert(`111, ${e.message}`);
         }
     }
 
@@ -42,10 +84,93 @@ const useFormPayment = ({handleStep}) => {
         }
     }, [selectedPayment]);
 
+    useEffect(() => {
+        async function placeOrderAndCleanup() {
+            try {
+
+                await placeOrder({
+                    variables: {
+                        cartId
+                    }
+                });
+                await createCart();
+            } catch (err) {
+                console.log(err);
+                Alert.alert(`222, ${e.message}`);
+                setPlaceOrderButtonClicked(false);
+            }
+        }
+
+        if (orderDetails && isPlacingOrder) {
+            setIsPlacingOrder(false);
+            placeOrderAndCleanup();
+        }
+    }, [
+        cartId,
+        createCart,
+        orderDetails,
+        placeOrder,
+        isPlacingOrder
+    ]);
+
+    useEffect(() => {
+        if (
+            placeOrderButtonClicked &&
+            orderDetails &&
+            orderDetails.cart
+        ) {
+            const shipping =
+                orderDetails.cart?.shipping_addresses &&
+                orderDetails.cart.shipping_addresses.reduce(
+                    (result, item) => {
+                        return [
+                            ...result,
+                            {
+                                ...item.selected_shipping_method
+                            }
+                        ];
+                    },
+                    []
+                );
+            const eventPayload = {
+                cart_id: cartId,
+                shippingDetails: shipping,
+                amount: orderDetails.cart.prices,
+                payment: orderDetails.cart.selected_payment_method,
+                products: orderDetails.cart.items
+            };
+            if (isPlacingOrder) {
+                dispatch({
+                    type: 'CHECKOUT_PLACE_ORDER_BUTTON_CLICKED',
+                    payload: eventPayload
+                });
+            } else if (placeOrderData && orderDetails?.cart.id === cartId) {
+                dispatch({
+                    type: 'ORDER_CONFIRMATION_PAGE_VIEW',
+                    payload: {
+                        order_number:
+                        placeOrderData.placeOrder.order.order_number,
+                        ...eventPayload
+                    }
+                });
+                handleStep('PAYMENT')
+            }
+        }
+    }, [
+        cartId,
+        orderDetails,
+        step,
+        cartItems,
+        dispatch,
+        placeOrderData,
+        isPlacingOrder,
+    ]);
+
     return {
         selectedPayment,
         setSelectedPayment,
-        handleSubmit
+        handlePlaceOrder,
+        loading: orderDetailsLoading || placeOrderLoading || placeOrderButtonClicked
     }
 }
 
