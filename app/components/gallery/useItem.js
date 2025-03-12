@@ -1,17 +1,21 @@
-import {router} from "expo-router";
+import { useMemo, useCallback } from "react";
+import { router } from "expo-router";
 
-const useItem = item => {
-    const { price_range } = item;
-    const { maximum_price } = price_range;
-    const {regular_price} = maximum_price;
+const useItem = (item = {}) => {
+    const price = useMemo(() => {
+        return item?.price_range?.maximum_price?.regular_price || { value: 0, currency: "ILS" };
+    }, [item]);
 
-    const handlePress = url_key => {
-        return  router.push({ pathname: "/product", params: { urlKey: url_key } })
-    }
+    const handlePress = useCallback((url_key) => {
+        if (url_key) {
+            router.push({ pathname: "/product", params: { urlKey: url_key } });
+        }
+    }, []);
+
     return {
-        price: regular_price,
+        price,
         handlePress
-    }
-}
+    };
+};
 
 export default useItem;
