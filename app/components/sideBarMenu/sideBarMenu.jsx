@@ -60,7 +60,7 @@ const SideBarMenu = ({
                 )}
                 <FlatList
                     data={Array.from(childCategories) || []}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item, index) => item.id || `footer-item-${index}`}
                     renderItem={({ item }) => {
                         const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
