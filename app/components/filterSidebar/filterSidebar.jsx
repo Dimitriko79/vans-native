@@ -1,71 +1,80 @@
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
-import React from "react";
+import React, { useMemo } from "react";
 import FilterBlock from "./filterBlock";
 
 const { width } = Dimensions.get("window");
 
-const FilterSidebar = props => {
-    const {filters, setCurrentFilter, currentFilter, isOpenFilter, onToggle } = props;
+const FilterSidebar = ({
+                           filters = [],
+                           setCurrentFilter = () => {},
+                           currentFilter = new Map(),
+                           isOpenFilter = false,
+                           onToggle = () => {}
+                       }) => {
+    if (!filters.length) return null;
 
-    if (!filters || !filters.length) return null;
+    const renderFilterBlock = useMemo(
+        () => ({ item }) => (
+            <FilterBlock blockItem={item} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} />
+        ),
+        [setCurrentFilter, currentFilter]
+    );
 
     return (
         <View style={styles.sidebar}>
-            <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => onToggle('filter')}
-                style={styles.trigger}>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => onToggle("filter")} style={styles.trigger}>
                 <Text style={styles.title}>סנן לפי</Text>
-                <Icon name={isOpenFilter ? "up" : "down"} color="#fff"/>
+                <Icon name={isOpenFilter ? "up" : "down"} color="#fff" />
             </TouchableOpacity>
             {isOpenFilter && (
-                <View style={[styles.filter]}>
+                <View style={styles.filter}>
                     <FlatList
                         data={filters}
                         keyExtractor={(item) => item.label}
-                        renderItem={({ item }) => (
-                            <FilterBlock blockItem={item} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter}/>
-                        )}
+                        renderItem={renderFilterBlock}
                         scrollEnabled={false}
                         nestedScrollEnabled={true}
                     />
                 </View>
             )}
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     sidebar: {
         position: "relative",
-        marginBottom: 20
+        marginBottom: 20,
     },
     trigger: {
-        display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: '#2b2b2b',
+        backgroundColor: "#2b2b2b",
         width: 130,
         paddingHorizontal: 8,
-    },
-    title: {
-        color: '#fff',
-        fontSize: 12,
-        fontWeight: "bold",
         paddingVertical: 8,
     },
+    title: {
+        color: "#fff",
+        fontSize: 12,
+        fontWeight: "bold",
+    },
     filter: {
-        position: 'absolute',
+        position: "absolute",
         right: 0,
         top: 40,
         width: width,
-        height: "auto",
         backgroundColor: "#f1f2ed",
         paddingBottom: 10,
         zIndex: 10,
+        elevation: 5,
+        shadowColor: "#000",
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
     },
-})
+});
 
 export default FilterSidebar;
