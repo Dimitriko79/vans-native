@@ -1,20 +1,25 @@
-import React from 'react';
-import { ScrollView } from 'react-native';
-import RenderHTML from 'react-native-render-html';
-import { useWindowDimensions } from 'react-native';
+import React, { useMemo } from "react";
+import { useWindowDimensions, View} from "react-native";
+import RenderHTML from "react-native-render-html";
 
-const RichContent = ({ html = '', styles = {} }) => {
+const RichContent = ({ html = "", customStyles = {} }) => {
     const { width } = useWindowDimensions();
 
+    const source = useMemo(() => ({ html }), [html]);
+
+    if (!html) return null;
+
     return (
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-            <RenderHTML
-                contentWidth={width}
-                source={{ html }}
-                tagsStyles={styles}
-            />
-        </ScrollView>
+        <View>
+            <RenderHTML contentWidth={width} source={source} tagsStyles={customStyles} />
+        </View>
     );
+};
+
+const styles = {
+    scrollContainer: {
+        paddingHorizontal: 16,
+    },
 };
 
 export default RichContent;
