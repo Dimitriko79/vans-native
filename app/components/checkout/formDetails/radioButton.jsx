@@ -1,47 +1,57 @@
-import {useState} from "react";
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { useState, useCallback } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Price from "../../price/price";
 
-const RadioButton = (props) => {
-    const { option, name, values, handleChange, index } = props;
-
-    const {id, label, price} = option;
+const RadioButton = ({
+                         option = { id: "", label: "לא זמין", price: { value: 0, currencyCode: "ILS" } },
+                         name = "",
+                         values = {},
+                         handleChange = () => {},
+                         index = 0
+                     }) => {
+    const { id, label, price } = option;
     const [focusedCheckbox, setFocusedCheckbox] = useState(null);
+
+    const handlePress = useCallback(() => {
+        handleChange(name, id);
+    }, [handleChange, name, id]);
 
     return (
         <TouchableOpacity
-            key={index}
+            key={id || index}
             style={[
                 styles.radioboxContainer,
                 focusedCheckbox === id && styles.radioboxFocused
             ]}
-            onPress={() => handleChange(name, id)}
+            onPress={handlePress}
             onFocus={() => setFocusedCheckbox(id)}
             onBlur={() => setFocusedCheckbox(null)}
             activeOpacity={0.8}
         >
-            <View style={[
-                styles.radiobox,
-                values[name] === id && styles.radioboxChecked
-            ]}>
-                {values[name] === id && <View style={styles.checkmark}/>}
+            <View
+                style={[
+                    styles.radiobox,
+                    values[name] === id && styles.radioboxChecked
+                ]}
+            >
+                {values[name] === id && <View style={styles.checkmark} />}
             </View>
             <View style={styles.radioboxPrice}>
                 <Price value={price.value} currencyCode={price.currencyCode} />
             </View>
             <Text style={styles.radioboxLabel}>{label}</Text>
         </TouchableOpacity>
-    )
-}
+    );
+};
 
-const styles= StyleSheet.create({
+const styles = StyleSheet.create({
     radioboxContainer: {
         flexDirection: "row",
-        alignItems: "flex-start",
+        alignItems: "center",
         justifyContent: "flex-start",
         direction: "rtl",
-        paddingVertical: 20,
-        paddingHorizontal: 40,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
         borderWidth: 1,
         borderColor: "transparent",
         borderRadius: 5,
@@ -71,16 +81,15 @@ const styles= StyleSheet.create({
         height: 10,
     },
     radioboxPrice: {
-      paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
     radioboxLabel: {
-        paddingHorizontal: 20,
+        flex: 1,
         textAlign: "left",
         fontSize: 14,
-        fontWeight: 600,
+        fontWeight: "600",
         color: "#333",
-        width: "90%"
     }
-})
+});
 
 export default RadioButton;

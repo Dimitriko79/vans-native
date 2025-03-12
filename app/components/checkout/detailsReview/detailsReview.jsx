@@ -1,35 +1,43 @@
-import {Text, View, StyleSheet} from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import useStoreContext from "../../../context/store/storeProvider";
 
-const DetailsReview = ({ details }) => {
-    const {country} = useStoreContext();
+const DetailsReview = ({ details = {} }) => {
+    const { country } = useStoreContext();
 
     return (
         <View style={styles.checkout_details}>
-            <View style={styles.checkout_details_section}>
-                <Text>{details.firstname}</Text>
-                <Text>&nbsp;</Text>
-                <Text>{details.lastname}</Text>
-            </View>
-            <View style={styles.checkout_details_section}>
-                <Text>{details.street}</Text>
-                <Text>{' ,'}</Text>
-                <Text>{details.building}</Text>
-                <Text>{' ,'}</Text>
-                <Text>{details.apartment}</Text>
-            </View>
-            <View style={styles.checkout_details_section}>
-                <Text>{details.city}</Text>
-            </View>
-            <View style={styles.checkout_details_section}>
-                <Text>{country?.full_name_locale}</Text>
-            </View>
-            <View style={styles.checkout_details_section}>
-                <Text>{details.telephone}</Text>
-            </View>
+            {details.firstname || details.lastname ? (
+                <View style={styles.checkout_details_section}>
+                    <Text>{details.firstname ?? ''} {details.lastname ?? ''}</Text>
+                </View>
+            ) : null}
+
+            {details.street || details.building || details.apartment ? (
+                <View style={styles.checkout_details_section}>
+                    <Text>{[details.street, details.building, details.apartment].filter(Boolean).join(', ')}</Text>
+                </View>
+            ) : null}
+
+            {details.city && (
+                <View style={styles.checkout_details_section}>
+                    <Text>{details.city}</Text>
+                </View>
+            )}
+
+            {country?.full_name_locale && (
+                <View style={styles.checkout_details_section}>
+                    <Text>{country.full_name_locale}</Text>
+                </View>
+            )}
+
+            {details.telephone && (
+                <View style={styles.checkout_details_section}>
+                    <Text>{details.telephone}</Text>
+                </View>
+            )}
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     checkout_details: {
@@ -39,8 +47,9 @@ const styles = StyleSheet.create({
     },
     checkout_details_section: {
         flexDirection: "row",
-        direction: "rtl"
+        direction: "rtl",
+        marginBottom: 5,
     },
-})
+});
 
 export default DetailsReview;

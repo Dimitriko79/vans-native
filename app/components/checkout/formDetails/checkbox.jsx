@@ -1,59 +1,54 @@
-import {TouchableOpacity, View, Text, StyleSheet} from "react-native";
-import React, {useState} from "react";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import React from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const Checkbox = props => {
-    const { option, values, handleChange, touched, errors } = props;
-    const {id, label} = option;
-    const [focusedCheckbox, setFocusedCheckbox] = useState(null);
+const Checkbox = ({
+                      option = { id: '', label: '' },
+                      values = {},
+                      handleChange = () => {},
+                      touched = {},
+                      errors = {}
+                  }) => {
+    const { id, label } = option;
 
     return (
-        <React.Fragment>
+        <View>
             <TouchableOpacity
-                key={id}
                 style={[
                     styles.checkboxContainer,
-                    focusedCheckbox === id && styles.checkboxFocused
+                    values[id] && styles.checkboxCheckedContainer
                 ]}
                 onPress={handleChange}
-                onFocus={() => setFocusedCheckbox(id)}
-                onBlur={() => setFocusedCheckbox(null)}
                 activeOpacity={0.8}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: values[id] }}
             >
-                <View style={[
-                    styles.checkbox,
-                    values[id] && styles.checkboxChecked
-                ]}>
-                    {values[id] && <Icon name="check" color="#d41921" size={10}/>}
-                </View>
                 <Text style={styles.checkboxLabel}>{label}</Text>
+                <View style={[styles.checkbox, values[id] && styles.checkboxChecked]}>
+                    {values[id] && <Icon name="check" color="#d41921" size={10} />}
+                </View>
             </TouchableOpacity>
-            {touched && touched[id] && errors && errors[id] && <Text style={styles.errorText}>{errors[id]}</Text>}
-        </React.Fragment>
-    )
-}
+            {touched?.[id] && errors?.[id] && <Text style={styles.errorText}>{errors[id]}</Text>}
+        </View>
+    );
+};
 
-const styles= StyleSheet.create({
+const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        direction: "rtl",
+        justifyContent: "flex-end",
+        alignItems: "center",
         paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: "transparent",
-        borderRadius: 5,
-        gap: 14
+        gap: 14,
     },
-    checkboxFocused: {
-        borderColor: "red",
+    checkboxCheckedContainer: {
+        borderColor: "#d41921",
     },
     checkbox: {
         width: 16,
         height: 16,
         borderWidth: 1,
         borderColor: "#64686b",
-        borderRadius: 0,
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
@@ -63,13 +58,16 @@ const styles= StyleSheet.create({
         backgroundColor: "#fff",
     },
     checkboxLabel: {
-        textAlign: "left",
         fontSize: 14,
-        fontWeight: 400,
         color: "#64686b",
-        width: "90%"
+        flexShrink: 1,
+        textAlign: "right"
     },
-    errorText: { fontSize: 13, textAlign: "right", color: "#d41921" },
-})
+    errorText: {
+        fontSize: 13,
+        color: "#d41921",
+        marginTop: 4,
+    },
+});
 
 export default Checkbox;
