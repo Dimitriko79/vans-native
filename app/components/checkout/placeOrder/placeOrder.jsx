@@ -147,7 +147,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#d41921",
         height: 36,
-        width: 250
+        width: 250,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
     },
     new_customer_success_button_primary_text: {
         color: "#fefefe",

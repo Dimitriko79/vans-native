@@ -12,22 +12,21 @@ const ShippingMethods = ({
                          }) => {
     if (!methods.length) return null;
 
-    const methodItems = useMemo(() =>
-            methods.map((method, index) => (
-                <RadioButton
-                    key={method.method_code || index}
-                    index={index}
-                    handleChange={setFieldValue}
-                    values={values}
-                    name="delivery"
-                    option={{
-                        id: method.method_code,
-                        price: { value: 0.00, currencyCode: "ILS" },
-                        label: method.method_title
-                    }}
-                />
-            )),
-        [methods, setFieldValue, values]);
+    const methodItems = methods.map((method, index) => (
+        <RadioButton
+            key={method.method_code || index}
+            index={index}
+            handleChange={setFieldValue}
+            values={values}
+            name="delivery"
+            option={{
+                id: method.method_code,
+                price: { value: 0.00, currencyCode: "ILS" },
+                label: method.method_title
+            }}
+        />
+
+    ));
 
     return (
         <View style={styles.checkout_form_delivery_method}>
