@@ -20,5 +20,7 @@ import warning from '../assets/images/warning.png';
 import exit from '../assets/images/exit.png';
 import buyMe from '../assets/images/buyMe.jpg';
 import payPal from '../assets/images/payPal.png';
+import vansMain from '../assets/images/vans-main.png';
+import listStar from '../assets/images/list-star.webp';
 
-export default {payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
+export default {listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
