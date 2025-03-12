@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import ModalSelector from "react-native-modal-selector";
 
-const ProductOptions = ({ configurableOptions, handleSelectionChange, setShowError, product }) => {
-  const [selectedAttribute, setSelectedAttribute] = useState('');
+const ProductOptions = ({
+                          configurableOptions = [],
+                          handleSelectionChange = () => {},
+                          setShowError = () => {},
+                          product = { variants: [] },
+                        }) => {
   const { variants } = product;
+  const [selectedOptions, setSelectedOptions] = useState({});
 
   const getStockStatusOfOption = (pattern) => {
     if (!variants || !variants.length) return 'OUT_OF_STOCK';
@@ -32,25 +37,24 @@ const ProductOptions = ({ configurableOptions, handleSelectionChange, setShowErr
 
           return items.length > 0 ? (
               <View key={option.attribute_code} style={styles.dropdown_container}>
-                <Text style={styles.label}>{option.label} <Text style={styles.label_required}>*</Text></Text>
+                <Text style={styles.label}>
+                  {option.label} <Text style={styles.label_required}>*</Text>
+                </Text>
                 <ModalSelector
                     data={items}
-                    initValue={`בחרו ${option.label}`}
-                    onChange={(option) => {
-                      handleSelectionChange(option.attribute_id, option.value);
-                      setSelectedAttribute(option.label);
+                    initValue={selectedOptions[option.attribute_id] || `בחרו ${option.label}`}
+                    onChange={(selectedOption) => {
+                      handleSelectionChange(selectedOption.attribute_id, selectedOption.value);
+                      setSelectedOptions((prev) => ({
+                        ...prev,
+                        [selectedOption.attribute_id]: selectedOption.label,
+                      }));
                       setShowError(false);
                     }}
-                    overlayStyle={{ flex: 1, padding: '5%', paddingTop: '15%', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.8)' }}
+                    overlayStyle={styles.overlay}
                     style={styles.modal}
                     contentContainerStyle={styles.modal_container}
-                >
-                  {selectedAttribute && (
-                      <View>
-                        <Text style={styles.modal_label}>{selectedAttribute}</Text>
-                      </View>
-                  )}
-                </ModalSelector>
+                />
               </View>
           ) : null;
         })}
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
-    textAlign: "right"
+    textAlign: "right",
   },
   label_required: {
     color: "#e02b27",
@@ -77,11 +81,18 @@ const styles = StyleSheet.create({
     borderColor: "#1c1c1c",
     padding: 10,
   },
+  overlay: {
+    flex: 1,
+    padding: '5%',
+    paddingTop: '15%',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
   modal_label: {
     flex: 1,
     textAlign: "center",
-    paddingVertical: 5
-  }
+    paddingVertical: 5,
+  },
 });
 
 export default ProductOptions;
