@@ -5,18 +5,26 @@ import {
     StyleSheet,
     Animated,
     TouchableOpacity,
-    Dimensions, FlatList, Image,
+    TouchableWithoutFeedback,
+    Dimensions,
+    FlatList,
+    Image
 } from 'react-native';
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
-import {images} from "../../../constants";
+import { images } from "../../../constants";
 import useUserContext from "../../context/user/userProvider";
 
 const { width, height } = Dimensions.get('window');
 
-const SideBarMenu = props => {
-    const {onPress, onToggle, translateX, isSidebarOpen} = props;
-    const {isSignedIn, signOut} = useUserContext();
+const SideBarMenu = ({
+                         onPress = () => {},
+                         onToggle = () => {},
+                         translateX = new Animated.Value(0),
+                         isSidebarOpen = false
+                     }) => {
+
+    const { isSignedIn, signOut } = useUserContext();
     const {
         history,
         setHistory,
@@ -26,23 +34,27 @@ const SideBarMenu = props => {
         handleChosenCategory,
         handlePress,
         handleSignOut
-    } = useSideBarMenu({onPress, onToggle, isSidebarOpen, signOut});
+    } = useSideBarMenu({ onPress, onToggle, isSidebarOpen, signOut });
 
     return (
         <View style={styles.container}>
+            {isSidebarOpen && (
+                <TouchableWithoutFeedback onPress={onToggle}>
+                    <View style={styles.overlay} />
+                </TouchableWithoutFeedback>
+            )}
+
             <Animated.View
                 style={[
                     styles.sidebar,
-                    { transform: [{ translateX: translateX }] },
+                    { transform: [{ translateX }] },
                 ]}
             >
                 {history.length >= 1 && (
                     <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
-                        <View style={{flexDirection: 'row', alignItems: 'center', gap: 5, justifyContent: "flex-end"}}>
-                            <Text style={styles.goBackText}>
-                                חזרה
-                            </Text>
-                            <Icon name="right" color="#fff"/>
+                        <View style={styles.row}>
+                            <Text style={styles.goBackText}>חזרה</Text>
+                            <Icon name="right" color="#fff" size={16} />
                         </View>
                     </TouchableOpacity>
                 )}
@@ -52,39 +64,32 @@ const SideBarMenu = props => {
                     renderItem={({ item }) => {
                         const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
-                            <View>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    onPress={() => handleChosenCategory(id)}
-                                >
-                                    <Text style={styles.sidebarItem}>{category.name}</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity activeOpacity={0.7} onPress={() => handleChosenCategory(id)}>
+                                <Text style={styles.sidebarItem}>{category.name}</Text>
+                            </TouchableOpacity>
                         ) : (
                             <TouchableOpacity onPress={() => {
                                 setHistory([...history, id]);
                                 setCategoryId(id);
                             }}>
-                                <View>
-                                    <Text style={[styles.sidebarItem, styles.branch]}>{category.name}</Text>
-                                </View>
+                                <Text style={[styles.sidebarItem, styles.branch]}>{category.name}</Text>
                             </TouchableOpacity>
                         );
                     }}
-                    contentContainerStyle={{gap: 15}}
+                    contentContainerStyle={styles.listContent}
                     ListFooterComponent={() => (
-                        <View style={{gap: 15}}>
-                            <TouchableOpacity  onPress={handlePress}>
-                                <View style={{ flexDirection: "row", alignItems: 'baseline', gap: 5, justifyContent: "flex-end" }}>
-                                    <Text style={[styles.sidebarItem, styles.branch]}>{isSignedIn ? 'איזור אישי': 'התחברות'}</Text>
-                                    <Image source={images.customer} style={{ width: 16, height: 16 }} />
+                        <View style={styles.footerContainer}>
+                            <TouchableOpacity onPress={handlePress}>
+                                <View style={styles.row}>
+                                    <Text style={[styles.sidebarItem, styles.branch]}>{isSignedIn ? 'איזור אישי' : 'התחברות'}</Text>
+                                    <Image source={images.customer} style={styles.icon} />
                                 </View>
                             </TouchableOpacity>
                             {isSignedIn && (
                                 <TouchableOpacity onPress={handleSignOut}>
-                                    <View style={{ flexDirection: "row", alignItems: 'center', gap: 5, justifyContent: "flex-end" }}>
+                                    <View style={styles.row}>
                                         <Text style={[styles.sidebarItem]}>התנתק</Text>
-                                        <Image source={images.exit} style={{ width: 16, height: 18 }} />
+                                        <Image source={images.exit} style={styles.icon} />
                                     </View>
                                 </TouchableOpacity>
                             )}
@@ -99,23 +104,34 @@ const SideBarMenu = props => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: width,
+        height: height,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 10,
     },
     sidebar: {
         position: 'absolute',
         top: 0,
         bottom: 0,
         left: 0,
-        width: width,
+        width: width * 0.8,
         height: height,
         backgroundColor: '#333',
         padding: 20,
         zIndex: 20,
-    },
-    sidebarTitle: {
-        color: '#fff',
-        fontSize: 20,
-        marginBottom: 20,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 6,
+        elevation: 8,
     },
     sidebarItem: {
         color: '#fff',
@@ -128,13 +144,30 @@ const styles = StyleSheet.create({
     goBackButton: {
         padding: 10,
         backgroundColor: '#555',
-        borderRadius: 5,
+        borderRadius: 8,
         marginBottom: 15,
     },
     goBackText: {
         color: '#fff',
         fontSize: 16,
         textAlign: "right",
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: "flex-end",
+        gap: 5,
+    },
+    listContent: {
+        gap: 15,
+    },
+    footerContainer: {
+        gap: 15,
+        marginTop: 20,
+    },
+    icon: {
+        width: 16,
+        height: 16,
     },
 });
 

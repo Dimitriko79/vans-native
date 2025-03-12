@@ -1,88 +1,85 @@
-import { useEffect, useMemo, useState } from 'react';
-import {useLazyQuery, useQuery} from '@apollo/client';
-import {GET_NAVIGATION_MENU} from "./sideBarMenu.gql";
-import {router} from "expo-router";
+import { useEffect, useState, useCallback } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { GET_NAVIGATION_MENU } from "./sideBarMenu.gql";
+import { router } from "expo-router";
 import useStoreContext from "../../context/store/storeProvider";
+import useCheckoutContext from "../../context/checkout/checkoutProvider";
 
-const useSideBarMenu = ({onPress, onToggle, isSidebarOpen, signOut}) => {
-    const {storeConfig} = useStoreContext();
+const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen, signOut }) => {
+    const { storeConfig } = useStoreContext();
+    const { dispatch } = useCheckoutContext();
+
+    const rootCategoryId = storeConfig?.root_category_id || null;
+
+    const [categoryId, setCategoryId] = useState(rootCategoryId);
+    const [history, setHistory] = useState([]);
 
     const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: "cache-first",
-        errorPolicy: "all"
+        errorPolicy: "all",
     });
 
-    const [history, setHistory] = useState([]);
-
-    const rootCategoryId = useMemo(() => {
-        if (storeConfig?.root_category_id) {
-            return storeConfig?.root_category_id;
-        }
-    }, [storeConfig]);
-
-    const [categoryId, setCategoryId] = useState(rootCategoryId);
-
-    const handleGoBack = () => {
-        const historyUpdated = [...history.slice(0, history.length - 1)];
-        if(historyUpdated.length >= 1) {
+    const handleGoBack = useCallback(() => {
+        const historyUpdated = history.slice(0, -1);
+        if (historyUpdated.length > 0) {
             setHistory(historyUpdated);
             setCategoryId(historyUpdated[historyUpdated.length - 1]);
         } else {
             setHistory([]);
             setCategoryId(rootCategoryId);
         }
-    };
+    }, [history, rootCategoryId]);
 
-    const handleChosenCategory = (categoryId) => {
+    const handleChosenCategory = useCallback((categoryId) => {
         onPress(categoryId);
         onToggle();
-    }
+    }, [onPress, onToggle]);
 
-    const rootCategory = data?.categoryList[0] || [];
-
-    const { children = [] } = rootCategory || {};
-
-    const childCategories = useMemo(() => {
-        const childCategories = new Map();
-
-        [...children]
-            .sort((a, b) => a.position - b.position)
-            .filter(child => Boolean(child.include_in_menu))
-            .forEach(category => {
-                const isLeaf = Number(category.children_count) === 0;
-                childCategories.set(category.id, { category, isLeaf });
-            });
-
-        return childCategories;
-    }, [children]);
-
-    const handlePress = url_key => {
+    const handlePress = useCallback(() => {
         router.push({ pathname: "/account" });
         onToggle();
-    }
+    }, [onToggle]);
 
-    const handleSignOut = async () => {
+    const handleSignOut = useCallback(async () => {
         await signOut();
+        dispatch({ type: 'REMOVE_CHECKOUT_DETAILS' });
         onToggle();
-    }
+    }, [signOut, dispatch, onToggle]);
 
     useEffect(() => {
         if (!isSidebarOpen) {
             setCategoryId(rootCategoryId);
             setHistory([]);
         }
-    }, [isSidebarOpen, rootCategoryId])
+    }, [isSidebarOpen, rootCategoryId]);
 
     useEffect(() => {
-        if(rootCategoryId && !categoryId) {
+        if (rootCategoryId && !categoryId) {
             setCategoryId(rootCategoryId);
         }
-    }, [rootCategoryId]);
+    }, [rootCategoryId, categoryId]);
 
     useEffect(() => {
-        fetchNavigation({variables: {id: categoryId}});
-    }, [categoryId])
+        if (categoryId) {
+            fetchNavigation({ variables: { id: categoryId } });
+        }
+    }, [categoryId, fetchNavigation]);
+
+    // Получаем дочерние категории
+    const rootCategory = data?.categoryList?.[0] || {};
+    const { children = [] } = rootCategory;
+
+    const childCategories = new Map();
+    children
+        .filter(child => child.include_in_menu)
+        .sort((a, b) => a.position - b.position)
+        .forEach(category => {
+            childCategories.set(category.id, {
+                category,
+                isLeaf: Number(category.children_count) === 0,
+            });
+        });
 
     return {
         data,
@@ -95,7 +92,7 @@ const useSideBarMenu = ({onPress, onToggle, isSidebarOpen, signOut}) => {
         handleSignOut,
         handlePress,
         loading,
-        error
+        error,
     };
 };
 
