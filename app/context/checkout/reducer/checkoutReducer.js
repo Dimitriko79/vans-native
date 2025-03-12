@@ -23,8 +23,12 @@ export const checkoutReducer = (state, action) => {
             case 'ORDER_CONFIRMATION_PAGE_VIEW':
                 return {
                     ...state,
-                    order_number: action.payload
+                    order_number: action.payload.order_number
                 };
+                case 'REMOVE_CHECKOUT_DETAILS':
+                    return {
+                        ...initialState,
+                    }
         default:
             return state;
     }
