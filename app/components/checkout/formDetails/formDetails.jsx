@@ -10,8 +10,12 @@ import ShippingMethods from "../shippingMethods/shippingMethods";
 import {CHECKOUT_STEP} from "../useCheckout";
 import DetailsReview from "../detailsReview/detailsReview";
 
-const FormDetails = props => {
-    const{shippingMethods, isStepOneDone, setStepOneDone, step} = props;
+const FormDetails = ({
+        shippingMethods = [],
+        isStepOneDone = false,
+        step = 1,
+        ...props
+    }) => {
 
     const {
         isSignedIn,
@@ -21,17 +25,18 @@ const FormDetails = props => {
         handleEmailAvailable,
         onSubmit,
         onLogin,
+        setStepOneDone,
         loading,
         loadingLogin
     } = useFormDetails(props);
 
     const validationSchema = Yup.object().shape({
-        email: !isSignedIn ? Yup.string()
+        email: isSignedIn ? Yup.mixed().notRequired() : Yup.string()
             .email("נא להזין אימייל חוקי")
-            .required("שדה דוא\"ל נדרש") : null,
-        password: !isEmailAvailable && !isSignedIn ? Yup.string()
+            .required("שדה דוא\"ל נדרש"),
+        password: isEmailAvailable || isSignedIn ? Yup.mixed().notRequired() : Yup.string()
             .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
-            .required("נדרשת סיסמה") : null,
+            .required("נדרשת סיסמה"),
         firstname: Yup.string()
             .matches(/^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s]+$/, "רק אותיות")
             .min(3, "השם הפרטי חייב להיות באורך של 3 תווים לפחות")
@@ -46,11 +51,11 @@ const FormDetails = props => {
             .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
             .required("שדה זה הוא חובה"),
         confirm_terms: Yup.boolean().oneOf([true], "עליך לקבל את תנאי השימוש"),
-        delivery: Yup.string().required()
+        delivery: Yup.string().required("יש לבחור שיטת משלוח"),
     });
 
     return (
-        <React.Fragment>
+        <>
             {CHECKOUT_STEP[step].id === 2 && (
                 <View>
                     <Text style={{textAlign: "right", fontSize: 24, fontWeight: 700}}>
@@ -76,7 +81,7 @@ const FormDetails = props => {
                         }}
                     >
                         {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (
-                            <React.Fragment>
+                            <>
                                 <View style={styles.checkout_form}>
                                     <Text style={styles.checkout_form_title}>פרטים אישיים</Text>
                                     {!isSignedIn && (
@@ -259,7 +264,6 @@ const FormDetails = props => {
                                     </View>
                                 </View>
                                 <View style={styles.checkout_form_shipping_method}>
-                                    <Text style={styles.checkout_form_shipping_method_title}>בחירת שיטת משלוח</Text>
                                     <View style={styles.checkout_form_shipping_method_checkboxes}>
                                         <Checkbox
                                             handleChange={() => setFieldValue('joining_club', !values['joining_club'])}
@@ -296,12 +300,12 @@ const FormDetails = props => {
                                         <Text style={styles.checkout_form_submit_text}>הבא</Text>
                                     </TouchableOpacity>
                                 </View>
-                            </React.Fragment>
+                            </>
                         )}
                     </Formik>
                 )
             }
-        </React.Fragment>
+        </>
     )
 }
 

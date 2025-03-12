@@ -1,6 +1,6 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
-import {Alert} from "react-native";
-import {useLazyQuery, useMutation, useQuery} from "@apollo/client";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert } from "react-native";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import {
     GET_CHECKOUT_DETAILS,
     GET_ORDER_DETAILS,
@@ -10,168 +10,106 @@ import {
 import useCartProvider from "../../../context/cart/cartProvider";
 import useCheckoutContext from "../../../context/checkout/checkoutProvider";
 
+const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
+    const { cartId, createCart } = useCartProvider();
+    const { dispatch } = useCheckoutContext();
 
-const useFormPayment = ({handleStep, step}) => {
-    const {cartId, createCart} = useCartProvider();
-    const {dispatch} = useCheckoutContext();
     const [selectedPayment, setSelectedPayment] = useState('');
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-    const [placeOrderButtonClicked, setPlaceOrderButtonClicked] = useState(
-        false
-    );
+    const [placeOrderButtonClicked, setPlaceOrderButtonClicked] = useState(false);
 
     const [fetchCustomerPaymentMethod] = useMutation(SET_CUSTOMER_PAYMENT_METHOD_ON_CART);
+    const [placeOrder, { data: placeOrderData, error: placeOrderError, loading: placeOrderLoading }] = useMutation(PLACE_ORDER);
 
-    const [
-        getOrderDetails,
-        { data: orderDetails, loading: orderDetailsLoading }
-    ] = useLazyQuery(GET_ORDER_DETAILS, {
+    const [getOrderDetails, { data: orderDetails, loading: orderDetailsLoading }] = useLazyQuery(GET_ORDER_DETAILS, {
         fetchPolicy: 'no-cache'
     });
 
-    const {
-        data: checkoutData,
-        error: checkoutDataError,
-        networkStatus: checkoutQueryNetworkStatus
-    } = useQuery(GET_CHECKOUT_DETAILS, {
+    const { data: checkoutData } = useQuery(GET_CHECKOUT_DETAILS, {
         skip: !cartId,
-        notifyOnNetworkStatusChange: true,
-        variables: {
-            cartId
-        }
+        variables: { cartId },
+        notifyOnNetworkStatusChange: true
     });
 
-    const cartItems = useMemo(() => {
-        return (checkoutData && checkoutData?.cart?.items) || [];
-    }, [checkoutData]);
-
-    const [placeOrder,
-        {
-            data: placeOrderData,
-            error: placeOrderError,
-            loading: placeOrderLoading
-        }
-    ] = useMutation(PLACE_ORDER);
+    const cartItems = useMemo(() => checkoutData?.cart?.items || [], [checkoutData]);
 
     const handlePlaceOrder = useCallback(async () => {
-       await getOrderDetails({
-            variables: {
-                cartId
-            }
-        });
-       setPlaceOrderButtonClicked(true);
-        setIsPlacingOrder(true);
-    }, [cartId, getOrderDetails]);
-
-    const fetchPaymentMethod = async () => {
+        if (!cartId) return;
         try {
-            await fetchCustomerPaymentMethod({
-                variables: {
-                    cartId,
-                    code: selectedPayment
-                }
-            })
-            console.log('succsess payment')
+            await getOrderDetails({ variables: { cartId } });
+            setPlaceOrderButtonClicked(true);
+            setIsPlacingOrder(true);
         } catch (e) {
             console.log(e);
-            Alert.alert(`111, ${e.message}`);
+            Alert.alert(e.message);
         }
-    }
+    }, [cartId, getOrderDetails]);
+
+    const fetchPaymentMethod = useCallback(async () => {
+        if (!cartId || !selectedPayment) return;
+        try {
+            await fetchCustomerPaymentMethod({
+                variables: { cartId, code: selectedPayment }
+            });
+        } catch (e) {
+            console.log(e);
+            Alert.alert(e.message);
+        }
+    }, [cartId, selectedPayment, fetchCustomerPaymentMethod]);
 
     useEffect(() => {
-        if (selectedPayment !== '') {
-           fetchPaymentMethod();
+        if (selectedPayment) {
+            fetchPaymentMethod();
         }
-    }, [selectedPayment]);
+    }, [selectedPayment, fetchPaymentMethod]);
 
     useEffect(() => {
-        async function placeOrderAndCleanup() {
+        const placeOrderAndCleanup = async () => {
+            if (!cartId) return;
             try {
-
-                await placeOrder({
-                    variables: {
-                        cartId
-                    }
-                });
+                await placeOrder({ variables: { cartId } });
                 await createCart();
-            } catch (err) {
-                console.log(err);
-                Alert.alert(`222, ${e.message}`);
+            } catch (e) {
+                console.log(e);
+                Alert.alert(e.message);
                 setPlaceOrderButtonClicked(false);
             }
-        }
+        };
 
         if (orderDetails && isPlacingOrder) {
             setIsPlacingOrder(false);
             placeOrderAndCleanup();
         }
-    }, [
-        cartId,
-        createCart,
-        orderDetails,
-        placeOrder,
-        isPlacingOrder
-    ]);
+    }, [cartId, createCart, orderDetails, placeOrder, isPlacingOrder]);
 
     useEffect(() => {
-        if (
-            placeOrderButtonClicked &&
-            orderDetails &&
-            orderDetails.cart
-        ) {
-            const shipping =
-                orderDetails.cart?.shipping_addresses &&
-                orderDetails.cart.shipping_addresses.reduce(
-                    (result, item) => {
-                        return [
-                            ...result,
-                            {
-                                ...item.selected_shipping_method
-                            }
-                        ];
-                    },
-                    []
-                );
+        if (placeOrderButtonClicked && orderDetails?.cart) {
+            const shipping = orderDetails.cart?.shipping_addresses?.map(item => item.selected_shipping_method) || [];
+
             const eventPayload = {
                 cart_id: cartId,
-                shippingDetails: shipping,
+                shipping,
                 amount: orderDetails.cart.prices,
                 payment: orderDetails.cart.selected_payment_method,
                 products: orderDetails.cart.items
             };
+
             if (isPlacingOrder) {
-                dispatch({
-                    type: 'CHECKOUT_PLACE_ORDER_BUTTON_CLICKED',
-                    payload: eventPayload
-                });
+                dispatch({ type: 'CHECKOUT_PLACE_ORDER_BUTTON_CLICKED', payload: eventPayload });
             } else if (placeOrderData && orderDetails?.cart.id === cartId) {
-                dispatch({
-                    type: 'ORDER_CONFIRMATION_PAGE_VIEW',
-                    payload: {
-                        order_number:
-                        placeOrderData.placeOrder.order.order_number,
-                        ...eventPayload
-                    }
-                });
-                handleStep('PAYMENT')
+                dispatch({ type: 'CHECKOUT_PLACE_ORDER_BUTTON_CLICKED', payload: eventPayload });
+                dispatch({ type: 'ORDER_CONFIRMATION_PAGE_VIEW', payload: { order_number: placeOrderData.placeOrder.order.order_number } });
+                handleStep('PAYMENT');
             }
         }
-    }, [
-        cartId,
-        orderDetails,
-        step,
-        cartItems,
-        dispatch,
-        placeOrderData,
-        isPlacingOrder,
-    ]);
+    }, [cartId, orderDetails, step, cartItems, dispatch, placeOrderData, isPlacingOrder]);
 
     return {
         selectedPayment,
         setSelectedPayment,
         handlePlaceOrder,
         loading: orderDetailsLoading || placeOrderLoading || placeOrderButtonClicked
-    }
-}
+    };
+};
 
 export default useFormPayment;

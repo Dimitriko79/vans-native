@@ -1,57 +1,63 @@
-import React from "react";
-import {Text, TouchableOpacity, View, StyleSheet, Image} from "react-native";
+import React, { useCallback } from "react";
+import { Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 
-const PaymentsWrapper = ({children, title, selected, onSelectedPayment, image}) => {
-
+const PaymentsWrapper = ({
+                             children = null,
+                             title = "אמצעי תשלום",
+                             selected = false,
+                             onSelectedPayment = () => {},
+                             image = null
+                         }) => {
+    const handleSelectPayment = useCallback(() => {
+        onSelectedPayment();
+    }, [onSelectedPayment]);
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => onSelectedPayment()} style={styles.payment_wrapper_trigger}>
-                <View style={[
-                    styles.radiobox,
-                    selected && styles.radioboxChecked
-                ]}>
-                    {selected && <View style={styles.checkmark}/>}
+            <TouchableOpacity onPress={handleSelectPayment} style={styles.payment_wrapper_trigger}>
+                <View style={[styles.radiobox, selected && styles.radioboxChecked]}>
+                    {selected && <View style={styles.checkmark} />}
                 </View>
                 <View style={styles.payment_wrapper_trigger_inner}>
-                    {image && <Image source={image} style={styles.payment_wrapper_trigger_image}/>}
+                    {image && <Image source={image} style={styles.payment_wrapper_trigger_image} />}
                     <Text style={styles.payment_wrapper_trigger_text}>{title}</Text>
                 </View>
             </TouchableOpacity>
             {selected && children}
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        paddingHorizontal: 20
+        borderBottomColor: "#ccc",
+        paddingHorizontal: 20,
     },
     payment_wrapper_trigger: {
         flexDirection: "row",
+        writingDirection: "rtl",
         direction: "rtl",
         justifyContent: "space-between",
         alignItems: "center",
         gap: 20,
-        height: 56
+        height: 56,
     },
     payment_wrapper_trigger_inner: {
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        gap: 10
+        gap: 10,
     },
     payment_wrapper_trigger_image: {
         height: 30,
-        width: 30
+        width: 30,
     },
     payment_wrapper_trigger_text: {
         flex: 1,
         textAlign: "left",
         fontSize: 16,
-        fontWeight: 700
+        fontWeight: "700",
     },
     radiobox: {
         width: 16,
@@ -65,7 +71,6 @@ const styles = StyleSheet.create({
     },
     radioboxChecked: {
         borderColor: "#d41921",
-        backgroundColor: "#fff",
     },
     checkmark: {
         backgroundColor: "#d41921",

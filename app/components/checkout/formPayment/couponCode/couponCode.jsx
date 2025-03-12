@@ -6,7 +6,7 @@ import useCouponCode from "./useCouponCode";
 import {TextInput} from "react-native-element-textinput";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const couponCode = (props) => {
+const couponCode = () => {
 
     const validationSchema = Yup.object().shape({
         code: Yup.string()
