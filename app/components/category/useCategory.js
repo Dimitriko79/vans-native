@@ -103,6 +103,7 @@ const useCategory = (ids) => {
         products,
         aggregations,
         sortFields,
+        description: categoryData?.description || null,
         loading: loading || productLoading || filterLoading,
         error,
         handlePress,

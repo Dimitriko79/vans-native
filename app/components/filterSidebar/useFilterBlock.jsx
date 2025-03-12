@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const useFilterBlock = ({setCurrentFilter, currentFilter}) => {
+const useFilterBlock = ({setCurrentFilter = () => {}, currentFilter = new Map()}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const onToggle = () => {

@@ -27,6 +27,7 @@ const Category = () => {
         products = [],
         aggregations = [],
         sortFields = [],
+        description,
         loading,
         error,
         handlePress,
@@ -40,29 +41,34 @@ const Category = () => {
 
     const clearFilters = useCallback(() => setCurrentFilter(new Map()), [setCurrentFilter]);
 
-    const content = useMemo(() => {
-        if (loading) {
-            return (
-                <View style={styles.loaderContainer}>
-                    <ActivityIndicator size="large" color="#d41921" />
-                </View>
-            );
-        }
-
-        if (error) {
-            return (
-                <View style={styles.loaderContainer}>
-                    <Text style={styles.errorText}>Error: Unable to load category data.</Text>
-                </View>
-            );
-        }
-
-        return (
+    let content;
+    if (loading) {
+        content = (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="#d41921" />
+            </View>
+        );
+    } else if (error) {
+        content = (
+            <View style={styles.loaderContainer}>
+                <Text style={styles.errorText}>Error: Unable to load category data.</Text>
+            </View>
+        );
+    } else if (!products.length) {
+        content = (
+            <View style={styles.noProductsContainer}>
+                <Text style={styles.noProductsText}>No products found(</Text>
+            </View>
+        )
+    } else {
+        content = (
             <View style={styles.container}>
                 <View style={styles.breadcrumbs}>
                     <Breadcrumbs categoryIds={ids} onPress={handlePress} />
                 </View>
-                <RichContent html={categoryData.description} />
+                {description ? (
+                    <RichContent html={description} />
+                ) : null}
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
@@ -86,8 +92,8 @@ const Category = () => {
                 </View>
                 <Gallery items={products} />
             </View>
-        );
-    }, [loading, error, categoryData, products, aggregations, sortFields, currentFilter, isOpenFilter, isOpenSort, onToggle, handlePress, clearFilters]);
+        )
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
@@ -97,6 +103,17 @@ const Category = () => {
 };
 
 const styles = StyleSheet.create({
+    noProductsContainer: {
+        height: height / 2,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    noProductsText: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#333",
+    },
     scrollView: {
         flexGrow: 1,
         justifyContent: "flex-start",
