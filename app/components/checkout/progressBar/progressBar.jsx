@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         direction: 'rtl',
-        marginTop: 40,
+        // marginTop: 40,
         marginBottom: 20,
     },
     step_wrapper:{

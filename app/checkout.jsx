@@ -81,7 +81,7 @@ const Checkout = () => {
                 <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
                 {CHECKOUT_STEP[step].id !== 3 && (
                     <>
-                        {cmsBlockData && cmsBlockData.length && cmsBlockData.map((item, index) =><View key={index}><RichContent html={item?.content || ''}/></View> )}
+                        {cmsBlockData && cmsBlockData.length && cmsBlockData.map((item, index) =><View key={index}><RichContent html={item?.content || null}/></View> )}
                         <ProgressBar step={step}/>
                         <ItemReview totalPrice={CHECKOUT_STEP[step].id !== 3 ? totalPrice : amount?.grand_total} productList={CHECKOUT_STEP[step].id !== 3 ? productList : products}/>
                     </>
