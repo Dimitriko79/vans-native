@@ -21,14 +21,14 @@ const Homepage = () => {
 
     if (loading) {
         content = (
-            <View style={{height: height}}>
-                <ActivityIndicator color style={{height: height / 1.4}}/>
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="#d41921" />
             </View>
         )
     } else if (error) {
         content = (
-            <View style={{height: height}}>
-                <Text style={{height: height / 1.4}}>Error</Text>
+            <View style={styles.loaderContainer}>
+                <Text style={styles.errorText}>Error: Unable to load homepage data.</Text>
             </View>
         )
     } else {
@@ -48,21 +48,34 @@ const Homepage = () => {
         )
     }
     return (
-        <ScrollView keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
             {content}
         </ScrollView>
     )
 };
 
 const styles = StyleSheet.create({
+    scrollView: {
+        flexGrow: 1,
+        justifyContent: "flex-start",
+        backgroundColor: "#fff",
+    },
     homepage: {
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "#fff",
-    }
+    },
+    loaderContainer: {
+        height: height,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    errorText: {
+        color: "#d41921",
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
 });
 
 export default Homepage;
