@@ -4,7 +4,7 @@ import Carousel from 'react-native-reanimated-carousel';
 
 const { width } = Dimensions.get('window');
 
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ images = [] }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const carouselRef = useRef(null);
 
