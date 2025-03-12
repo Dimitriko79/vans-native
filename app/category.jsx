@@ -1,27 +1,32 @@
-import {View, Text, StyleSheet, ActivityIndicator, Dimensions, TouchableOpacity, ScrollView} from "react-native";
-import {useLocalSearchParams} from "expo-router";
+import React, { useMemo, useCallback } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    ActivityIndicator,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView
+} from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import useCategory from "./components/category/useCategory";
 import Gallery from "./components/gallery/gallery";
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs";
 import FilterSidebar from "./components/filterSidebar/filterSidebar";
-import React from "react";
 import SortSideBar from "./components/sortSideBar/sortSideBar";
 import Icon from "react-native-vector-icons/AntDesign";
 import useDropdownSideBar from "./components/sortSideBar/useDropdownSideBar";
 import RichContent from "./components/richContent/richContent";
 
-
 const { height, width } = Dimensions.get("window");
 
 const Category = () => {
     const { ids } = useLocalSearchParams();
-
-    const talonProps = useCategory(ids);
     const {
-        categoryData,
-        products,
-        aggregations,
-        sortFields,
+        categoryData = { name: "", description: "" },
+        products = [],
+        aggregations = [],
+        sortFields = [],
         loading,
         error,
         handlePress,
@@ -29,74 +34,85 @@ const Category = () => {
         setCurrentFilter,
         isFetching, setIsFetching,
         sortProps
-    } = talonProps;
+    } = useCategory(ids);
 
-    const { isOpenFilter, isOpenSort, onToggle } = useDropdownSideBar({isFetching, setIsFetching});
+    const { isOpenFilter, isOpenSort, onToggle } = useDropdownSideBar({ isFetching, setIsFetching });
 
-    let content;
+    const clearFilters = useCallback(() => setCurrentFilter(new Map()), [setCurrentFilter]);
 
-    if (loading) {
-        content = (
-            <View style={{height: height}}>
-                <ActivityIndicator style={{height: height / 1.4}}/>
-            </View>
-        )
-    } else if (error) {
-        content = (
-            <View style={{height: height}}>
-                <Text style={{height: height / 1.4}}>Error</Text>
-            </View>
-        )
-    } else {
-        content = (
+    const content = useMemo(() => {
+        if (loading) {
+            return (
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator size="large" color="#d41921" />
+                </View>
+            );
+        }
+
+        if (error) {
+            return (
+                <View style={styles.loaderContainer}>
+                    <Text style={styles.errorText}>Error: Unable to load category data.</Text>
+                </View>
+            );
+        }
+
+        return (
             <View style={styles.container}>
                 <View style={styles.breadcrumbs}>
-                    <Breadcrumbs categoryIds={ids} onPress={handlePress}/>
+                    <Breadcrumbs categoryIds={ids} onPress={handlePress} />
                 </View>
-                <RichContent html={categoryData?.description || ''} />
+                <RichContent html={categoryData.description} />
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
-                        <FilterSidebar filters={aggregations} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} isOpenFilter={isOpenFilter} onToggle={onToggle}/>
-                        <SortSideBar sort={sortFields} sortProps={sortProps} isOpenSort={isOpenSort} onToggle={onToggle}/>
+                        <FilterSidebar
+                            filters={aggregations}
+                            setCurrentFilter={setCurrentFilter}
+                            currentFilter={currentFilter}
+                            isOpenFilter={isOpenFilter}
+                            onToggle={onToggle}
+                        />
+                        <SortSideBar sort={sortFields} sortProps={sortProps} isOpenSort={isOpenSort} onToggle={onToggle} />
                     </View>
-                    <View style={styles.choosen_section_bottom}>
-                        {currentFilter.size > 0 && (
-                            <View style={styles.filter_actions}>
-                                <TouchableOpacity style={styles.filter_action} onPress={() => setCurrentFilter(new Map())}>
-                                    <Icon name="close" size={10} color="#000"/>
-                                    <Text style={styles.filter_actions_text}>נקה הכל </Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    </View>
+                    {currentFilter.size > 0 && (
+                        <View style={styles.filter_actions}>
+                            <TouchableOpacity style={styles.filter_action} onPress={clearFilters}>
+                                <Icon name="close" size={10} color="#000" />
+                                <Text style={styles.filter_actions_text}>נקה הכל</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
-                <Gallery items={products}/>
+                <Gallery items={products} />
             </View>
-        )
-    }
+        );
+    }, [loading, error, categoryData, products, aggregations, sortFields, currentFilter, isOpenFilter, isOpenSort, onToggle, handlePress, clearFilters]);
 
     return (
-        <ScrollView keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
             {content}
         </ScrollView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
+    scrollView: {
+        flexGrow: 1,
+        justifyContent: "flex-start",
+        backgroundColor: "#f1f2ed",
+    },
     container: {
         flex: 1,
         position: "relative",
         backgroundColor: "#f1f2ed",
-
     },
     breadcrumbs: {
         width: width - 10,
-
     },
     category_name: {
         fontSize: 20,
-        fontWeight: 700,
+        fontWeight: "700",
         paddingRight: 10,
         textAlign: "right",
         marginBottom: 20,
@@ -110,31 +126,34 @@ const styles = StyleSheet.create({
         direction: "rtl",
         position: "relative",
     },
-    choosen_section_bottom:{
+    filter_actions: {
         flexDirection: "row",
         direction: "rtl",
-        position: "relative",
-    },
-    filter_actions: {
-        display: "flex",
-        flexDirection: "row",
-        width: width - 20,
-        backgroundColor: '#ffffff',
+        alignItems: "center",
+        backgroundColor: "#ffffff",
         paddingHorizontal: 10,
         paddingVertical: 10,
-        marginLeft: 10,
-        marginRight: 10
+        marginHorizontal: 10,
     },
     filter_action: {
-        display: "flex",
         flexDirection: "row",
         alignItems: "center",
     },
     filter_actions_text: {
         fontSize: 10,
-    }
+        marginLeft: 5,
+    },
+    loaderContainer: {
+        height: height,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    errorText: {
+        color: "#d41921",
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
 });
 
 export default Category;
-
-
