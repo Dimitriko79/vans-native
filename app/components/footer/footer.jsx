@@ -1,6 +1,6 @@
-import {View, Text, StyleSheet, Dimensions, FlatList, TouchableOpacity} from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList, Pressable } from "react-native";
 import useFooter from "./useFooter";
-import {useCallback, useState} from "react";
+import { useState } from "react";
 import { Link } from "expo-router";
 
 const { width } = Dimensions.get("window");
@@ -54,32 +54,31 @@ const Footer = () => {
 
     const parsedData = parseFooterHTML(cmsBlockData[0].content);
 
-    const toggleSection = useCallback((id) => {
+    const toggleSection = (id) => {
         setOpenSections((prev) => ({
             ...prev,
             [id]: !prev[id],
         }));
-    }, []);
+    };
 
     return (
         <View style={styles.footer}>
             {parsedData.map((item) => (
                 <View key={item.id} style={styles.footer_item}>
-                    <TouchableOpacity onPress={() => toggleSection(item.id)} activeOpacity={0.7}>
+                    <Pressable onPress={() => toggleSection(item.id)}>
                         <Text style={styles.footer_item_heading}>{item.heading}</Text>
-                    </TouchableOpacity>
-                    {item.subheading && <Text style={styles.footer_item_subheading}>{item.subheading}</Text>}
+                    </Pressable>
+                    {item.subheading ? <Text style={styles.footer_item_subheading}>{item.subheading}</Text> : null}
 
                     {openSections[item.id] && (
                         <FlatList
                             data={item.items}
                             keyExtractor={(item) => item.link}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity
-                                    onPress={() => router.push(item.link)}
+                                <Pressable
+                                    onPress={() => item.link}
                                     onPressIn={() => setHoveredLink(index)}
                                     onPressOut={() => setHoveredLink(null)}
-                                    activeOpacity={0.7}
                                 >
                                     <View style={styles.footer_item_link_wrapper}>
                                         <Link href={item.link}>
@@ -91,7 +90,7 @@ const Footer = () => {
                                             </Text>
                                         </Link>
                                     </View>
-                                </TouchableOpacity>
+                                </Pressable>
                             )}
                             contentContainerStyle={styles.footer_items}
                             scrollEnabled={false}
