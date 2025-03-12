@@ -24,6 +24,16 @@ export const OrderConfirmationPageFragment = gql`
                 method_title
             }
         }
+        billing_address {
+            firstname
+            lastname
+            street
+            city
+            postcode
+            country {
+                label
+            }
+        }
         selected_payment_method {
             purchase_order_number
             title
