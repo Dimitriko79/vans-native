@@ -1,49 +1,66 @@
-import {Alert} from "react-native";
-import {useState} from "react";
+import { useCallback, useState, useMemo } from "react";
 import useUserContext from "../../context/user/userProvider";
 import useCartProvider from "../../context/cart/cartProvider";
-import {router} from "expo-router";
+import { router } from "expo-router";
 
 const useSignin = () => {
-
-    const {cartId, retrieveCartId, mergeCarts, startFetchCart} = useCartProvider();
-    const {signIn} = useUserContext();
+    const { cartId, retrieveCartId, mergeCarts, startFetchCart } = useCartProvider();
+    const { signIn } = useUserContext();
 
     const [errorMessage, setErrorMessage] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const initialValues = {
+    const initialValues = useMemo(() => ({
         email: '',
         password: '',
         telephone: ''
-    }
+    }), []);
 
-    const onSubmit = async (values, type, resetForm) => {
+    const onSubmit = useCallback(async (values, type, resetForm) => {
+        if (loading) return;
+
         setLoading(true);
+        setErrorMessage([]);
+
         try {
             const sourceCartId = cartId;
             const res = await signIn(values);
 
-            if (res){
-                const destinationCartId = await retrieveCartId();
-                await mergeCarts({
-                    variables: {
-                        destinationCartId,
-                        sourceCartId
+            if (res) {
+                let destinationCartId;
+                try {
+                    destinationCartId = await retrieveCartId();
+                } catch (cartError) {
+                    setErrorMessage([cartError.message]);
+                }
+
+                if (sourceCartId && destinationCartId) {
+                    try {
+                        await mergeCarts({
+                            variables: {
+                                destinationCartId,
+                                sourceCartId
+                            }
+                        });
+                    } catch (mergeError) {
+                        console.error(mergeError);
+                        setErrorMessage([mergeError.message]);
                     }
-                });
+                }
+
                 resetForm();
                 setLoading(false);
+
                 if (router.pathname !== "/homepage") {
-                    router.push({ pathname: "/homepage"});
+                    router.push({ pathname: "/homepage" });
                 }
             }
         } catch (e) {
-            console.log(e);
-            Alert.alert(e.message);
+            console.error(e);
+            setErrorMessage([e.message]);
             setLoading(false);
         }
-    }
+    }, [loading, cartId, signIn, retrieveCartId, mergeCarts]);
 
     return {
         loading,
@@ -51,7 +68,7 @@ const useSignin = () => {
         onErrorMessage: setErrorMessage,
         initialValues,
         onSubmit
-    }
-}
+    };
+};
 
-export default useSignin
+export default useSignin;
