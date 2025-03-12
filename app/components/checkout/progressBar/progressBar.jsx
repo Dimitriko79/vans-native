@@ -4,7 +4,7 @@ import React from "react";
 
 const { width } = Dimensions.get("window");
 
-const ProgressBar = ({step}) => {
+const ProgressBar = ({ step = 1 }) => {
 
     return (
         <View style={styles.checkout_progress_bar}>
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         direction: 'rtl',
-        marginTop: 40
+        marginTop: 40,
+        marginBottom: 20,
     },
     step_wrapper:{
         width: width / 3,
