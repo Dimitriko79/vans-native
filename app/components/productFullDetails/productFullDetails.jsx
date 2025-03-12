@@ -1,4 +1,4 @@
-import {Dimensions, Image, Text, View, StyleSheet} from "react-native";
+import {Dimensions, Text, View, StyleSheet} from "react-native";
 import Price from "../price/price";
 import ProductOptions from "../product/ProductOptions";
 import SizeChart from "../product/SizeChart";
@@ -11,8 +11,7 @@ import ImageCarousel from "../carousel/imageCarousel";
 
 const { width } = Dimensions.get("window");
 
-const ProductFullDetails = ({ product }) => {
-
+const ProductFullDetails = ({ product = {} }) => {
     const {
         showError,
         setShowError,
@@ -22,29 +21,33 @@ const ProductFullDetails = ({ product }) => {
         calcPoints,
         isAddToCartDisabled,
         breadcrumbCategoryId,
-        mediaGalleryEntries,
+        mediaGalleryEntries = [],
         stateAddToCartButton
-    } = useProductFullDetails({product});
-
-    const handlePressCategory = id => {
-        return  router.push({ pathname: "/category", params: { ids: id } })
-    }
+    } = useProductFullDetails({ product });
 
     const images = mediaGalleryEntries.map(({ url, label }) => ({ url, label }));
 
     return (
         <View style={styles.product_top_details}>
             <View style={styles.breadcrumbs}>
-                <Breadcrumbs categoryIds={breadcrumbCategoryId} currentProduct={product.name} onPress={handlePressCategory}/>
+                <Breadcrumbs
+                    categoryIds={breadcrumbCategoryId}
+                    currentProduct={product.name || "Неизвестный товар"}
+                    onPress={id => router.push({ pathname: "/category", params: { ids: id } })}
+                />
             </View>
-            <Text style={styles.product_name}>{product.name}</Text>
+            <Text style={styles.product_name}>{product.name || "Название отсутствует"}</Text>
             <View style={styles.product_sku}>
                 <Text style={styles.product_attribute_label}>מק״ט: </Text>
                 <Text style={styles.product_attribute_value}>{`${product.sku} `}</Text>
             </View>
             <View style={styles.item_price_wrapper}>
                 <Text style={styles.item_price}>
-                    <Price value={product.price_range.maximum_price.regular_price.value} currencyCode={product.price_range.maximum_price.regular_price.currency} style={styles} />
+                    <Price
+                        value={product.price_range?.maximum_price?.regular_price?.value || 0}
+                        currencyCode={product.price_range?.maximum_price?.regular_price?.currency || "USD"}
+                        style={styles}
+                    />
                 </Text>
             </View>
             <Text style={styles.product_gender}>
@@ -53,22 +56,30 @@ const ProductFullDetails = ({ product }) => {
             </Text>
             <Text style={styles.membership_points}>
                 חברי VANS CLAB תוכלו לצבור
-                {calcPoints(product.price_range.maximum_price.regular_price.value)}
+                {calcPoints(product.price_range?.maximum_price?.regular_price?.value || 0)}
                 נקודות*
             </Text>
-            {/*<Image style={styles.item_image} source={{uri: product.image.url}} resizeMode="cover" />*/}
-            <ImageCarousel images={images}/>
+            <ImageCarousel images={images} />
             <Text style={styles.choose_color}>
                 <Text style={styles.product_attribute_label}>צבע:  </Text>
-                {product.color}
+                {product.color || "Не указан"}
             </Text>
-            <ProductOptions configurableOptions={product.configurable_options} handleSelectionChange={handleSelectionChange} setShowError={setShowError} product={product} />
+            <ProductOptions
+                configurableOptions={product.configurable_options || []}
+                handleSelectionChange={handleSelectionChange}
+                setShowError={setShowError}
+                product={product}
+            />
             {showError && <Text style={styles.showError}>יש לבחור מידה</Text>}
-            <SizeChart/>
-            <AddToCart onPress={handlePress} disabled={isAddToCartDisabled} stateAddToCartButton={stateAddToCartButton} />
+            <SizeChart />
+            <AddToCart
+                onPress={handlePress}
+                disabled={isAddToCartDisabled}
+                stateAddToCartButton={stateAddToCartButton}
+            />
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     product_top_details: {
