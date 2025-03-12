@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Dimensions, Text } from "react-native";
 import React, { useMemo } from "react";
 import formatImageUrl from "../../helpers/formatImageUrl";
 
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const Hero = ({ data = { link: "", image: "" } }) => {
     if (!data?.image || !data?.link) return null;
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
     hero_image: {
         width: screenWidth,
-        height: screenWidth * 0.5625,
+        height: screenHeight * 0.6,
         alignSelf: "center",
     },
     hero_link: {
@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#b82f36",
         width: 172,
         paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 0,
         elevation: 5,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
