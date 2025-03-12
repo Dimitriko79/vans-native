@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react";
 const useHomepage = () => {
     const { data, loading, error } = useQuery(GET_HOMEPAGE, {
         fetchPolicy: "network-only",
+        errorPolicy: "all"
     });
 
     const homepageData = useMemo(() => data || null, [data]);
