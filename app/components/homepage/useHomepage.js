@@ -1,25 +1,26 @@
-import {useQuery} from "@apollo/client";
-import {GET_HOMEPAGE} from "./homepage.gql";
-import {router} from "expo-router";
+import { useQuery } from "@apollo/client";
+import { GET_HOMEPAGE } from "./homepage.gql";
+import { router } from "expo-router";
+import { useCallback, useMemo } from "react";
 
 const useHomepage = () => {
+    const { data, loading, error } = useQuery(GET_HOMEPAGE, {
+        fetchPolicy: "network-only",
+    });
 
-    const {data, loading, error} = useQuery(GET_HOMEPAGE, {
-        fetchPolicy: 'cache-and-network',
-    })
+    const homepageData = useMemo(() => data || null, [data]);
 
-    const handlePress = id => {
-        return  router.push({ pathname: "/category", params: { ids: id } })
-    }
-
-    const homepageData = data || null;
+    const handlePress = useCallback(
+        (id) => router.push({ pathname: "/category", params: { ids: id } }),
+        []
+    );
 
     return {
         loading,
         error,
         homepageData,
-        handlePress
-    }
-}
+        handlePress,
+    };
+};
 
 export default useHomepage;
