@@ -1,21 +1,29 @@
-import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
+import React, { useCallback } from "react";
 
-const Error = ({errorMessage, onErrorMessage}) => {
+const Error = ({ errorMessage = [], onErrorMessage = () => {} }) => {
+    const handleClose = useCallback(() => {
+        onErrorMessage([]);
+    }, [onErrorMessage]);
 
-    if(!errorMessage.length)return null;
+    if (!errorMessage.length) return null;
 
     return (
         <View style={styles.error}>
             <View style={styles.error_messages}>
-                {errorMessage.map((message, index) => (<Text key={index} style={styles.error_messages_text}>{message}</Text>))}
+                {errorMessage.map((message, index) => (
+                    <Text key={index} style={styles.error_messages_text}>
+                        {message}
+                    </Text>
+                ))}
             </View>
-            <TouchableOpacity onPress={() => onErrorMessage([])} style={styles.error_icon}>
-                <Icon name="close" color="#fae5e5" size={24}/>
+            <TouchableOpacity onPress={handleClose} style={styles.error_icon}>
+                <Icon name="close" color="#fae5e5" size={20} />
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     error: {
@@ -28,24 +36,26 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         gap: 20,
         marginTop: 10,
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: 15,
+        borderRadius: 5,
     },
     error_icon: {
         backgroundColor: "#b30000",
         borderRadius: 12,
         height: 24,
         width: 24,
+        alignItems: "center",
+        justifyContent: "center",
     },
     error_messages: {
-      flexDirection: "column",
-        gap: 3
+        flexDirection: "column",
+        gap: 3,
     },
     error_messages_text: {
         fontSize: 13,
-        fontWeight: 400,
-        color: "#e02b27"
-    }
-})
+        fontWeight: "400",
+        color: "#e02b27",
+    },
+});
 
 export default Error;
