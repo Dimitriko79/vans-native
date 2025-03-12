@@ -4,9 +4,9 @@ import { useMemo} from "react";
 import {router} from "expo-router";
 
 const DELIMITER = '/';
-const { width  } = Dimensions.get("window");
 
-const Breadcrumbs = ({categoryIds, currentProduct, onPress}) => {
+const Breadcrumbs = ({ categoryIds = [], currentProduct = "", onPress = () => {} }) => {
+
     const {
         currentCategory,
         isLoading,
