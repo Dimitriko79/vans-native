@@ -41,7 +41,7 @@ const FilterBlock = ({
                 >
                     {isSelected && <Icon name="close" size={10} color="#000" />}
                     <Text style={isSelected ? styles.subcategory_name_checked : styles.subcategory_name}>
-                        {item.label} <Text style={styles.count}>{`(${item.count})`}</Text>
+                        {item.label} {!isSelected && <Text style={styles.count}>{`(${item.count})`}</Text>}
                     </Text>
                 </TouchableOpacity>
             );

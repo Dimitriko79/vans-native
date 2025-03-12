@@ -14,7 +14,8 @@ import useUserContext from "../../context/user/userProvider";
 
 const { width, height } = Dimensions.get('window');
 
-const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
+const SideBarMenu = props => {
+    const {onPress, onToggle, translateX, isSidebarOpen} = props;
     const {isSignedIn, signOut} = useUserContext();
     const {
         history,
@@ -47,6 +48,7 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                 )}
                 <FlatList
                     data={Array.from(childCategories) || []}
+                    keyExtractor={(item) => item.id}
                     renderItem={({ item }) => {
                         const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
@@ -72,7 +74,7 @@ const SideBarMenu = ({onPress, onToggle, translateX, isSidebarOpen}) => {
                     contentContainerStyle={{gap: 15}}
                     ListFooterComponent={() => (
                         <View style={{gap: 15}}>
-                            <TouchableOpacity onPress={handlePress}>
+                            <TouchableOpacity  onPress={handlePress}>
                                 <View style={{ flexDirection: "row", alignItems: 'baseline', gap: 5, justifyContent: "flex-end" }}>
                                     <Text style={[styles.sidebarItem, styles.branch]}>{isSignedIn ? 'איזור אישי': 'התחברות'}</Text>
                                     <Image source={images.customer} style={{ width: 16, height: 16 }} />
