@@ -92,9 +92,8 @@ const styles = StyleSheet.create({
     },
     placing_order: {
         flexDirection: "column",
-        backgroundColor: "#fff",
         paddingVertical: 20,
-        marginHorizontal: 25,
+        marginHorizontal: 0,
         marginBottom: 20
     },
     placing_order_title: {
@@ -106,7 +105,8 @@ const styles = StyleSheet.create({
     },
     placing_order_inner_total: {
         backgroundColor: "#ffffff",
-        marginTop: 15
+        marginTop: 15,
+        direction: "rtl"
     }
 });
 

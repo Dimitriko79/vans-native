@@ -61,7 +61,7 @@ const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
             </View>
 
             {!isCheckout && (
-                <TouchableOpacity onPress={confirmDeletionOfItem}>
+                <TouchableOpacity style={styles.item_content_remove} onPress={confirmDeletionOfItem}>
                     <Icon name="close" size={16} color="#000" />
                 </TouchableOpacity>
             )}
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         direction: "rtl",
         gap: 20,
-        alignItems: "center",
+        alignItems: "flex-start",
         paddingVertical: 10,
         borderBottomColor: "#DCDDD6",
         borderBottomWidth: 1,
