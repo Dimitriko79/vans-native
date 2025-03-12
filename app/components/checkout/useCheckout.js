@@ -9,6 +9,13 @@ export const CHECKOUT_STEP = {
     PAYMENT: {id: 3, title: null}
 };
 
+export const EXCLUSIVES = [
+  'עדכונים שוטפים לפני כולם',
+    'הטבת יום הולדת',
+    'צבירת ומימוש נק\' בכל קניה',
+    'נקודה=שקל'
+];
+
 const DEFAULT_PRICE = {
     value: 0.00,
     currency: 'ILS'
