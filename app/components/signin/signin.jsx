@@ -24,12 +24,11 @@ export const validationSchema = Yup.object().shape({
 const Signin = () => {
 
     const {
-        loading,
-        errorMessage,
-        onErrorMessage,
-        initialValues,
-        onSubmit,
-        handleResetForm
+        loading = false,
+        errorMessage = "",
+        onErrorMessage = () => {},
+        initialValues = { email: "", password: "", telephone: "" },
+        onSubmit = () => {},
     } = useSignin();
 
     return (
@@ -203,7 +202,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#d41921",
-        height: 52
+        borderRadius: 0,
+        paddingVertical: 15,
+        marginTop: 10,
+
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
     },
     sign_in_content_form_submit_text: {
         color: "#fefefe",
