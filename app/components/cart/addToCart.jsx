@@ -1,17 +1,28 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+
 const TEXT_BUTTON = {
   pending: 'הוספה לסל',
   addition: 'מוסיף...',
   added: 'הוסף'
-}
+};
 
-const AddToCart = ({onPress, disabled, stateAddToCartButton}) => {
-
+const AddToCart = ({
+                     onPress = () => {},
+                     disabled = false,
+                     stateAddToCartButton = 'pending'
+                   }) => {
   return (
-    <TouchableOpacity activeOpacity={0.5} disabled={disabled} style={[styles.button, disabled && styles.buttonDisabled]} onPress={onPress}>
-      <Text style={styles.buttonText}>{TEXT_BUTTON[stateAddToCartButton]}</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+          activeOpacity={0.7}
+          disabled={disabled}
+          style={[styles.button, disabled && styles.buttonDisabled]}
+          onPress={onPress}
+      >
+        <Text style={styles.buttonText}>
+          {TEXT_BUTTON[stateAddToCartButton] || TEXT_BUTTON.pending}
+        </Text>
+      </TouchableOpacity>
   );
 };
 
@@ -22,9 +33,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: "center",
     marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonDisabled: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   buttonText: {
     color: "#fff",
