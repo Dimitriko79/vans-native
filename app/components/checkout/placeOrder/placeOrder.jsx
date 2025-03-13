@@ -5,6 +5,8 @@ import ItemReview from "../itemsReview/itemsReview";
 import DetailsReview from "../detailsReview/detailsReview";
 import React from "react";
 import useCheckoutContext from "../../../context/checkout/checkoutProvider";
+import {router} from "expo-router";
+import useUserContext from "../../../context/user/userProvider";
 
 const { width } = Dimensions.get("window");
 
@@ -16,6 +18,12 @@ const PlaceOrder = () => {
         shipping,
         payment
     } = useCheckoutContext();
+    const {setView} = useUserContext();
+
+    const handleView = () => {
+        console.log(4444, "CREATE")
+        router.navigate({ pathname: "/account" });
+    }
 
     return (
         <React.Fragment>
@@ -41,7 +49,7 @@ const PlaceOrder = () => {
                     </View>
                 </View>
                 <View style={styles.new_customer_success_button}>
-                    <TouchableOpacity style={styles.new_customer_success_button_primary}>
+                    <TouchableOpacity style={styles.new_customer_success_button_primary} onPress={handleView}>
                         <Text style={styles.new_customer_success_button_primary_text}>Register</Text>
                     </TouchableOpacity>
                 </View>

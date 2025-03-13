@@ -17,13 +17,15 @@
       "backgroundColor": "#000000"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dimitrikoelad.vans-native"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dimitrikoelad.vans_native"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,8 +35,13 @@
         "origin": false
       },
       "eas": {
-        "projectId": "0858db13-aa2e-4aa3-8259-1673484dd5c1"
+        "projectId": "387592be-409a-4ea3-8c31-89cf3839d582"
       }
+    },
+    "owner": "dimitrikoelad",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/387592be-409a-4ea3-8c31-89cf3839d582"
     }
   }
 }
