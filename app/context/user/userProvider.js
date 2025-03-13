@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useContext, useEffect, useReducer} from "react";
+import React, {createContext, useCallback, useContext, useEffect, useReducer, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {initialState, userReducer} from "./reducer/userReducer";
 import {useLazyQuery, useMutation} from "@apollo/client";
@@ -11,6 +11,7 @@ const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
     const [state, dispatch, user] = useReducer(userReducer, initialState);
+    const [view, setView] = useState("SIGNIN");
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
@@ -55,6 +56,7 @@ export const UserContextProvider = ({ children }) => {
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage"});
+                    setView("SIGNIN");
                 }
             }
         } catch (e) {
@@ -88,7 +90,7 @@ export const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData}}>
+        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData, view, setView}}>
             {children}
         </UserContext.Provider>
     );

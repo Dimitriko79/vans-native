@@ -13,7 +13,6 @@ import {
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
 import { images } from "../../../constants";
-import useUserContext from "../../context/user/userProvider";
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,7 +23,6 @@ const SideBarMenu = ({
                          isSidebarOpen = false
                      }) => {
 
-    const { isSignedIn, signOut } = useUserContext();
     const {
         history,
         setHistory,
@@ -33,8 +31,9 @@ const SideBarMenu = ({
         handleGoBack,
         handleChosenCategory,
         handlePress,
-        handleSignOut
-    } = useSideBarMenu({ onPress, onToggle, isSidebarOpen, signOut });
+        handleSignOut,
+        isSignedIn, signOut
+    } = useSideBarMenu({ onPress, onToggle, isSidebarOpen });
 
     return (
         <View style={styles.container}>

@@ -4,10 +4,12 @@ import { GET_NAVIGATION_MENU } from "./sideBarMenu.gql";
 import { router } from "expo-router";
 import useStoreContext from "../../context/store/storeProvider";
 import useCheckoutContext from "../../context/checkout/checkoutProvider";
+import useUserContext from "../../context/user/userProvider";
 
-const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen, signOut }) => {
+const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
     const { storeConfig } = useStoreContext();
     const { dispatch } = useCheckoutContext();
+    const {isSignedIn, signOut, setView} = useUserContext();
 
     const rootCategoryId = storeConfig?.root_category_id || null;
 
@@ -38,6 +40,9 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen, signOut }) => {
 
     const handlePress = useCallback(() => {
         router.push({ pathname: "/account" });
+        if(!isSignedIn){
+            setView("SIGNIN");
+        }
         onToggle();
     }, [onToggle]);
 
@@ -91,6 +96,7 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen, signOut }) => {
         handleChosenCategory,
         handleSignOut,
         handlePress,
+        isSignedIn, signOut,
         loading,
         error,
     };

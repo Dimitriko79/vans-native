@@ -1,20 +1,24 @@
 import { View, Text, ScrollView } from "react-native";
-import { useState } from "react";
 import Signin from "./components/signin/signin";
+import useAccount, {ACCOUNT_VIEW} from "./components/account/useAccount";
+import CreateAccount from "./components/createAccount/createAccount";
+import PersonalArea from "./components/personalArea/PersonalArea";
 
 const Account = () => {
-    const [isUserSignIn, setUserSignIn] = useState(true);
+
+    const {
+        view,
+        setView
+    } = useAccount();
 
     let content;
 
-    if (isUserSignIn) {
-        content = <Signin />;
+    if (ACCOUNT_VIEW[view] === 1 ) {
+        content = <Signin handleView={setView}/>;
+    } else if (ACCOUNT_VIEW[view] === 2 ) {
+        content = <CreateAccount view={view} handleView={setView}/>;
     } else {
-        content = (
-            <View>
-                <Text>Sign Out</Text>
-            </View>
-        );
+        content = <PersonalArea />;
     }
 
     return (

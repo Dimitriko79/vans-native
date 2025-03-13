@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from "react";
+import {useCallback, useState, useMemo, useEffect} from "react";
 import useUserContext from "../../context/user/userProvider";
 import useCartProvider from "../../context/cart/cartProvider";
 import { router } from "expo-router";
@@ -10,7 +10,7 @@ export const JOIN_REWARDS = [
 
 const useSignin = () => {
     const { cartId, retrieveCartId, mergeCarts, startFetchCart } = useCartProvider();
-    const { signIn } = useUserContext();
+    const { signIn, setView } = useUserContext();
 
     const [errorMessage, setErrorMessage] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -47,9 +47,9 @@ const useSignin = () => {
                                 sourceCartId
                             }
                         });
-                    } catch (mergeError) {
-                        console.error(mergeError);
-                        setErrorMessage([mergeError.message]);
+                    } catch (e) {
+                        console.error(e);
+                        setErrorMessage([e.message]);
                     }
                 }
 
@@ -58,6 +58,7 @@ const useSignin = () => {
 
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage" });
+                    setView("ACCOUNT")
                 }
             }
         } catch (e) {

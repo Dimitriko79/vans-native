@@ -24,11 +24,11 @@ export const validationSchema = Yup.object().shape({
 
 const { width } = Dimensions.get('window');
 
-const Signin = () => {
+const Signin = ({handleView = () => {}}) => {
 
     const {
         loading = false,
-        errorMessage = "",
+        errorMessage = [],
         onErrorMessage = () => {},
         initialValues = { email: "", password: "", telephone: "" },
         onSubmit = () => {},
@@ -163,7 +163,7 @@ const Signin = () => {
                             </View>
                         ))}
                     </View>
-                    <TouchableOpacity activeOpacity={0.5} style={styles.create_account_button} onPress={() => {}}>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.create_account_button} onPress={() => handleView("CREATE")}>
                         <Text style={styles.create_account_button_text}>הצטרפו עכשיו!</Text>
                     </TouchableOpacity>
                 </View>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     inner: {
-        marginTop: 25,
+        marginTop: 10,
         marginBottom: 25,
         marginLeft: 25,
         marginRight: 25,
