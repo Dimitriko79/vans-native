@@ -22,5 +22,6 @@ import buyMe from '../assets/images/buyMe.jpg';
 import payPal from '../assets/images/payPal.png';
 import vansMain from '../assets/images/vans-main.png';
 import listStar from '../assets/images/list-star.webp';
+import vansJoin from '../assets/images/vans-join.jpg';
 
-export default {listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
+export default {vansJoin,listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };

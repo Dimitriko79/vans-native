@@ -3,6 +3,11 @@ import useUserContext from "../../context/user/userProvider";
 import useCartProvider from "../../context/cart/cartProvider";
 import { router } from "expo-router";
 
+export const JOIN_REWARDS = [
+    'בקרוב באתר הרשמה, מימוש וצבירת נקודות כחברי מועדון VANS',
+    'תדעו על שיתופי פעולה, השקות ומבצעים לפני כולם'
+]
+
 const useSignin = () => {
     const { cartId, retrieveCartId, mergeCarts, startFetchCart } = useCartProvider();
     const { signIn } = useUserContext();

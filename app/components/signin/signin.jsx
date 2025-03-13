@@ -1,11 +1,12 @@
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, Image} from "react-native";
 import Error from "../error/error";
 import React from "react";
 import {TextInput} from "react-native-element-textinput";
 import {Formik} from "formik";
-import useSignin from "./useSignin";
+import useSignin, {JOIN_REWARDS} from "./useSignin";
 import {validateMobilePhone} from "../../helpers/validationSchema";
 import * as Yup from "yup";
+import {images} from "../../../constants";
 
 export const validationSchemaOTP = Yup.object().shape({
     telephone: Yup.string()
@@ -20,6 +21,8 @@ export const validationSchema = Yup.object().shape({
         .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
         .required("נדרשת סיסמה"),
 });
+
+const { width } = Dimensions.get('window');
 
 const Signin = () => {
 
@@ -138,6 +141,33 @@ const Signin = () => {
                     </Formik>
                 </View>
             </View>
+            <View style={styles.create_account_spacer}>
+                <View style={styles.create_account_spacer_before}/>
+                <Text style={styles.create_account_spacer_text}>או</Text>
+                <View style={styles.create_account_spacer_after}/>
+            </View>
+            <View style={styles.create_account_wrapper}>
+                <View style={styles.create_account_inner}>
+                    <Image style={styles.create_account_image} source={images.vansJoin}/>
+                    <View style={styles.new_customer_success_join_us_content_list}>
+                        <Text style={styles.new_customer_success_join_us_content_text}>
+                            הצטרפו עוד היום ותיהנו מעדכונים שוטפים
+                        </Text>
+                        <Text style={styles.new_customer_success_join_us_content_text}>
+                            לפני כולם ומעקב אחרי הזמנות קיימות!
+                        </Text>
+                        {JOIN_REWARDS.map((item, index) => (
+                            <View key={index} style={styles.new_customer_success_join_us_content_list_item}>
+                                <Text style={styles.new_customer_success_join_us_content_list_item_text}>{item}</Text>
+                                <Image source={images.listStar}/>
+                            </View>
+                        ))}
+                    </View>
+                    <TouchableOpacity activeOpacity={0.5} style={styles.create_account_button} onPress={() => {}}>
+                        <Text style={styles.create_account_button_text}>הצטרפו עכשיו!</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     )
 }
@@ -147,7 +177,8 @@ const styles = StyleSheet.create({
         flex: 1,
         height: "auto",
         position: "relative",
-        backgroundColor: "#f1f2ed"
+        backgroundColor: "#f1f2ed",
+        paddingBottom: 10
     },
     inner: {
         marginTop: 25,
@@ -247,7 +278,105 @@ const styles = StyleSheet.create({
     },
     disabled: {
         opacity: 0.5
-    }
+    },
+    create_account_spacer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 25,
+        gap: 30
+    },
+    create_account_spacer_text: {
+        fontSize: 14,
+        fontWeight: 400,
+        color: '#2b2b2b',
+    },
+    create_account_spacer_after: {
+        backgroundColor: '#2b2b2b',
+        height: 1,
+        width: width * 0.15,
+        marginRight: 25
+    },
+    create_account_spacer_before: {
+        backgroundColor: '#2b2b2b',
+        height: 1,
+        width: width * 0.15,
+        marginLeft: 25,
+    },
+    create_account_wrapper: {
+        flex: 1,
+        width: width - 50,
+        height: (width - 50) * 1.8,
+        justifyContent: "center",
+        marginLeft: 25,
+        marginRight: 25,
+        marginTop: 50,
+        marginBottom: 10
+    },
+    create_account_inner: {
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        position: "relative"
+    },
+    create_account_image: {
+        width: "100%",
+        resizeMode: "cover",
+
+    },
+    new_customer_success_join_us_content_text: {
+        textAlign: "center",
+        width : "100%",
+        paddingHorizontal: 20,
+        fontSize: 18,
+        fontWeight: 500,
+    },
+    new_customer_success_join_us_content_list: {
+        flexDirection: 'column',
+        position: "absolute",
+        paddingHorizontal: 30,
+        top: "45%",
+        width: "100%",
+        alignItems: "flex-end",
+        gap: 10,
+    },
+    new_customer_success_join_us_content_list_item: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        gap: 12,
+        width: '45%',
+        marginTop: 16
+    },
+    new_customer_success_join_us_content_list_item_text: {
+        fontSize: 13,
+        fontWeight: 400,
+    },
+    create_account_button: {
+        position: "absolute",
+        bottom: 25,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#d41921",
+        borderRadius: 0,
+        paddingVertical: 15,
+        marginTop: 10,
+        marginLeft: 25,
+        marginRight: 25,
+        width: width - 100,
+
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    create_account_button_text: {
+        color: "#fefefe",
+        fontSize: 18,
+        fontWeight: 600,
+    },
 })
 
 export default Signin;
