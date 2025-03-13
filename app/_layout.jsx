@@ -48,15 +48,16 @@ const RootLayout = () => {
 
     const toggleSidebar = () => {
         if (isSidebarOpen) {
+            setSidebarOpen(false)
             Animated.timing(translateX, {
                 toValue: -width,
                 duration: 200,
                 useNativeDriver: true,
-            }).start(() => setSidebarOpen(false));
+            }).start();
         } else {
             Animated.timing(translateX, {
                 toValue: 0,
-                duration: 200,
+                duration:200,
                 useNativeDriver: true,
             }).start(() => setSidebarOpen(true));
         }
