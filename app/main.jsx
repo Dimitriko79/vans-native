@@ -1,11 +1,8 @@
-import {Dimensions, ScrollView, View} from "react-native";
+import { Animated } from "react-native";
 import { router, Slot } from "expo-router";
 import React, { useEffect, useState } from "react";
-import Footer from "./components/footer/footer";
 
-const { height } = Dimensions.get("window");
-
-const Main = ({children}) => {
+const Main = ({children, scrollY}) => {
     const [isRedirecting, setIsRedirecting] = useState(false);
 
     useEffect(() => {
@@ -16,10 +13,18 @@ const Main = ({children}) => {
     }, [isRedirecting]);
 
     return (
-        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow: 1}}>
+        <Animated.ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{flexGrow: 1}}
+            onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+        >
             <Slot />
             {children}
-        </ScrollView>
+        </Animated.ScrollView>
     );
 };
 

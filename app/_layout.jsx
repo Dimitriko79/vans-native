@@ -1,26 +1,26 @@
-import {Animated, Dimensions, SafeAreaView, StatusBar} from "react-native";
+import { Animated, Dimensions, SafeAreaView, StatusBar } from "react-native";
 import Header from "./components/header/header";
-import {ApolloProvider} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 
 import Main from "./main";
 import SideBarMenu from "./components/sideBarMenu/sideBarMenu";
-import React,{createContext, useEffect, useState} from "react";
-import {useFonts} from "expo-font";
-import {router, SplashScreen} from "expo-router";
-import '../index.css';
+import React, { useEffect, useRef, useState } from "react";
+import { useFonts } from "expo-font";
+import { router, SplashScreen } from "expo-router";
+import "../index.css";
 import Footer from "./components/footer/footer";
-import {CartContextProvider} from "./context/cart/cartProvider";
-import {apolloClient} from "../servises/client";
-import {StoreContextProvider} from "./context/store/storeProvider";
-import {UserContextProvider} from "./context/user/userProvider";
-import {CheckoutContextProvider} from "./context/checkout/checkoutProvider";
+import { CartContextProvider } from "./context/cart/cartProvider";
+import { apolloClient } from "../servises/client";
+import { StoreContextProvider } from "./context/store/storeProvider";
+import { UserContextProvider } from "./context/user/userProvider";
+import { CheckoutContextProvider } from "./context/checkout/checkoutProvider";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const translateX = new Animated.Value(-width);
+    const translateX = useRef(new Animated.Value(-width)).current;
 
     const [loaded, error] = useFonts({
         "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -40,34 +40,25 @@ const RootLayout = () => {
     });
 
     useEffect(() => {
-        if(error) throw error;
-        if(loaded) SplashScreen.hideAsync();
+        if (error) throw error;
+        if (loaded) SplashScreen.hideAsync();
     }, [loaded, error]);
 
-    if(!loaded && !error) return null;
-
     const toggleSidebar = () => {
-        if (isSidebarOpen) {
-            setSidebarOpen(false)
-            Animated.timing(translateX, {
-                toValue: -width,
-                duration: 200,
-                useNativeDriver: true,
-            }).start();
-        } else {
-            Animated.timing(translateX, {
-                toValue: 0,
-                duration:200,
-                useNativeDriver: true,
-            }).start(() => setSidebarOpen(true));
-        }
+        Animated.timing(translateX, {
+            toValue: isSidebarOpen ? -width : 0,
+            duration: 200,
+            useNativeDriver: false,
+        }).start(() => setSidebarOpen(!isSidebarOpen));
     };
 
-    const handlePress = id => {
+    const handlePress = (id) => {
         if (router.pathname !== "/category") {
             router.push({ pathname: "/category", params: { ids: id } });
         }
-    }
+    };
+
+    const scrollY = useRef(new Animated.Value(0)).current;
 
     return (
         <ApolloProvider client={apolloClient}>
@@ -76,18 +67,18 @@ const RootLayout = () => {
                     <StoreContextProvider>
                         <CartContextProvider>
                             <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                                <Header onToggle={toggleSidebar}/>
+                                <Header onToggle={toggleSidebar} scrollY={scrollY} />
                                 <SideBarMenu
                                     onToggle={toggleSidebar}
                                     isSidebarOpen={isSidebarOpen}
                                     onPress={handlePress}
                                     translateX={translateX}
                                 />
-                                <Main onPress={handlePress}>
-                                    <Footer/>
+                                <Main onPress={handlePress} scrollY={scrollY}>
+                                    <Footer />
                                 </Main>
                             </SafeAreaView>
-                            <StatusBar barStyle="dark-content"/>
+                            <StatusBar barStyle="dark-content" />
                         </CartContextProvider>
                     </StoreContextProvider>
                 </CheckoutContextProvider>

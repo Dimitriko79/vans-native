@@ -1,13 +1,13 @@
-import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, Text, Animated } from "react-native";
 import { images } from "../../../constants";
 import { router } from "expo-router";
 import HorizontalSlider from "./horizontalSlider/horizontalSlider";
-import React, { useCallback } from "react";
+import React, {useCallback} from "react";
 import useHeader from "./useHeader";
 import MiniCart from "../minicart/miniCart";
 import useUserContext from "../../context/user/userProvider";
 
-const Header = ({ onToggle = () => {} }) => {
+const Header = ({ onToggle = () => {}, scrollY }) => {
     const {
         cmsBlockData,
         itemCount,
@@ -26,34 +26,40 @@ const Header = ({ onToggle = () => {} }) => {
         router.navigate({ pathname: "/account" });
     }
 
+    const bannerHeight = scrollY.interpolate({
+        inputRange: [0, 50],
+        outputRange: [50, 0],
+        extrapolate: "clamp"
+    });
+
 
     return (
-        <View style={[styles.container, isSignedIn ? {height: 130} : {height: 100}]}>
-            <View style={styles.banner}>
+        <View style={styles.container}>
+            <Animated.View style={[styles.banner, { height: bannerHeight }]}>
                 {cmsBlockData && cmsBlockData.length > 0 && (
-                    <HorizontalSlider data={cmsBlockData[0]} />
+                    <HorizontalSlider data={cmsBlockData[0]}/>
                 )}
+            </Animated.View>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.button} onPress={onToggle}>
+                    <Image source={images.menu} style={styles.image} resizeMode="contain" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={() => {}}>
+                    <Image source={images.search} style={styles.image} resizeMode="contain" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>
+                    <Image source={images.cart} style={styles.image} resizeMode="contain" />
+                    {itemCount > 0 && <Text style={styles.count}>{itemCount}</Text>}
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.logoContainer} onPress={handleLogoPress}>
+                    <Image source={images.logo} style={styles.logo} resizeMode="contain" />
+                </TouchableOpacity>
+
+                <MiniCart isOpen={miniCartIsOpen} setIsOpen={setMiniCartIsOpen} />
             </View>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.button} onPress={onToggle}>
-                        <Image source={images.menu} style={styles.image} resizeMode="contain" />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.button} onPress={() => {}}>
-                        <Image source={images.search} style={styles.image} resizeMode="contain" />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>
-                        <Image source={images.cart} style={styles.image} resizeMode="contain" />
-                        {itemCount > 0 && <Text style={styles.count}>{itemCount}</Text>}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.logoContainer} onPress={handleLogoPress}>
-                        <Image source={images.logo} style={styles.logo} resizeMode="contain" />
-                    </TouchableOpacity>
-
-                    <MiniCart isOpen={miniCartIsOpen} setIsOpen={setMiniCartIsOpen} />
-                </View>
             {isSignedIn && (
                 <TouchableOpacity activeOpacity={1} style={styles.header_user_info} onPress={handleView}>
                     <View style={styles.header_user_info_inner}>
@@ -81,13 +87,12 @@ const styles = StyleSheet.create({
     },
     banner: {
         backgroundColor: "#000",
-        height: 50,
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 1,
+        overflow: "hidden",
     },
     header_wrapper: {
-        height: 80
+        height: 80,
     },
     header_user_info: {
       height: 30,
