@@ -21,7 +21,7 @@ const PlaceOrder = () => {
     const {setView} = useUserContext();
 
     const handleView = () => {
-        console.log(4444, "CREATE")
+        setView("CREATE");
         router.navigate({ pathname: "/account" });
     }
 

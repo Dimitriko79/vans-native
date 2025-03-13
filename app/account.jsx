@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import Signin from "./components/signin/signin";
 import useAccount, {ACCOUNT_VIEW} from "./components/account/useAccount";
 import CreateAccount from "./components/createAccount/createAccount";
