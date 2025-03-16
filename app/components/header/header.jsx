@@ -6,8 +6,9 @@ import React, {useCallback} from "react";
 import useHeader from "./useHeader";
 import MiniCart from "../minicart/miniCart";
 import useUserContext from "../../context/user/userProvider";
+import BurgerMenu from "../burgerMenu/burgerMenu";
 
-const Header = ({ onToggle = () => {}, scrollY }) => {
+const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
     const {
         cmsBlockData,
         itemCount,
@@ -41,12 +42,10 @@ const Header = ({ onToggle = () => {}, scrollY }) => {
                 )}
             </Animated.View>
             <View style={styles.header}>
-                <TouchableOpacity style={styles.button} onPress={onToggle}>
-                    <Image source={images.menu} style={styles.image} resizeMode="contain" />
-                </TouchableOpacity>
+                <BurgerMenu onPress={onToggle} isOpen={isSidebarOpen} />
 
                 <TouchableOpacity style={styles.button} onPress={() => {}}>
-                    <Image source={images.search} style={styles.image} resizeMode="contain" />
+                    <Image source={images.favorites} style={styles.image} resizeMode="contain" />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>

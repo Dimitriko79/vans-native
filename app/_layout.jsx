@@ -67,7 +67,7 @@ const RootLayout = () => {
                     <StoreContextProvider>
                         <CartContextProvider>
                             <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                                <Header onToggle={toggleSidebar} scrollY={scrollY} />
+                                <Header onToggle={toggleSidebar} scrollY={scrollY} isSidebarOpen={isSidebarOpen} />
                                 <SideBarMenu
                                     onToggle={toggleSidebar}
                                     isSidebarOpen={isSidebarOpen}
