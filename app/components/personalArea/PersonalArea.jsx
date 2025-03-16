@@ -1,17 +1,25 @@
-import {Text, View, StyleSheet, Dimensions, TouchableOpacity, Pressable} from "react-native";
+import {Text, View, StyleSheet, Pressable} from "react-native";
 import Svg, {Circle, G, Path} from "react-native-svg";
 import React, {useState} from "react";
 import {router} from "expo-router";
-
-const { width, height } = Dimensions.get("window");
+import useUserContext from "../../context/user/userProvider";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const PersonalArea = () => {
 
     const [hoveredLink, setHoveredLink] = useState(null);
-    console.log(111, hoveredLink)
+    const {isUserUpdate} = useUserContext();
     return (
         <View style={styles.container}>
             <View style={styles.personal_area}>
+                {isUserUpdate && (
+                    <View style={styles.update_customer_succsess}>
+                        <Text style={styles.update_customer_succsess_text}>שמרת את פרטי החשבון.</Text>
+                        <View style={styles.update_customer_succsess_icon}>
+                            <Icon name="check" color="#f1f2ed" size={20}/>
+                        </View>
+                    </View>
+                )}
                 <Pressable
                     style={[styles.personal_area_card, hoveredLink === 0 && {borderTopWidth: 2, borderTopColor: '#D10029'}]}
                     onPress={() => router.navigate("/customer")}
@@ -192,6 +200,25 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: "Heebo",
         fontWeight: 400,
+    },
+    update_customer_succsess: {
+        height: 42,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+        backgroundColor: '#e5efe5',
+        direction: "rtl"
+    },
+    update_customer_succsess_icon: {
+        height: 24,
+        width: 24,
+        backgroundColor: '#006400',
+        borderRadius: 12,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
     }
 })
 

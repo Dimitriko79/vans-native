@@ -6,10 +6,22 @@ import {TextInput} from "react-native-element-textinput";
 import Checkbox from "./components/checkout/formDetails/checkbox";
 import {Formik} from "formik";
 import useCustomer from "./components/customer/useCustomer";
+import Error from "./components/error/error";
 
 const { height } = Dimensions.get("window");
 
 const Customer = () => {
+
+    const {
+        user,
+        initialValues,
+        onSubmit,
+        loading,
+        isUpdateEmail, setUpdateEmail,
+        isUpdatePassword, setUpdatePassword,
+        errorMessage,
+        onErrorMessage
+    } = useCustomer();
 
     const validationSchema = Yup.object().shape({
         firstname: Yup.string()
@@ -25,23 +37,20 @@ const Customer = () => {
                 if (!value) return true;
                 return validateMobilePhone(value);
             }),
-        email: Yup.string()
+        email: !isUpdateEmail ? Yup.mixed().notRequired() : Yup.string()
             .email("נא להזין אימייל חוקי")
             .required("שדה דוא\"ל נדרש"),
-        password: Yup.string()
-            .min(8, "הסיסמה חייבת להיות באורך של לפחות 6 תווים"),
-        approve_password: Yup.string()
+        password: !isUpdatePassword ? Yup.mixed().notRequired() : Yup.string()
+            .min(8, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
+            .required("נדרשת סיסמה"),
+        approve_password: !isUpdatePassword ? Yup.mixed().notRequired() : Yup.string()
             .oneOf([Yup.ref('password')], "הסיסמאות חייבות להיות תואמות")
+            .required("אשר סיסמה נדרש")
     });
-
-    const {
-        initialValues,
-        onSubmit,
-        loading
-    } = useCustomer();
 
     return (
         <View style={styles.container}>
+            <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
             <View style={styles.customer}>
                 <Text style={styles.customer_title}>
                     פרטי חשבון
@@ -74,7 +83,6 @@ const Customer = () => {
                                         value={values.firstname}
                                         onChangeText={handleChange("firstname")}
                                         onBlur={handleBlur("firstname")}
-                                        onFocus={() => setOpenCalendar(false)}
                                     />
                                     {touched.firstname && errors.firstname && <Text style={styles.errorText}>{errors.firstname}</Text>}
                                 </View>
@@ -93,7 +101,6 @@ const Customer = () => {
                                         value={values.lastname}
                                         onChangeText={handleChange("lastname")}
                                         onBlur={handleBlur("lastname")}
-                                        onFocus={() => setOpenCalendar(false)}
                                     />
                                     {touched.lastname && errors.lastname && <Text style={styles.errorText}>{errors.lastname}</Text>}
                                 </View>
@@ -134,90 +141,103 @@ const Customer = () => {
                                     />
                                     {touched.telephone && errors.telephone && <Text style={styles.errorText}>{errors.telephone}</Text>}
                                 </View>
-                                <View style={styles.customer_form_field}>
-                                    <View style={styles.customer_form_field_checkboxes}>
-                                        <Checkbox
-                                            handleChange={() => setFieldValue('update_email', !values['update_email'])}
-                                            values={values}
-                                            option={{id: 'update_email', label: 'שנה כתובת דואר אלקטרוני'}}
-                                            touched={touched}
-                                            errors={errors}
-                                        />
-                                        <Checkbox
-                                            handleChange={() => setFieldValue('update_password', !values['update_password'])}
-                                            values={values}
-                                            option={{id: 'update_password', label: 'שינוי סיסמה'}}
-                                            touched={touched}
-                                            errors={errors}
-                                        />
-                                    </View>
-                                </View>
-                                {values.update_email && (
-                                    <View style={styles.customer_form_field}>
-                                        <TextInput
-                                            keyboardType="email-address"
-                                            name="email"
-                                            style={styles.input}
-                                            inputStyle={styles.inputStyle}
-                                            labelStyle={styles.labelStyle}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            textErrorStyle={styles.textErrorStyle}
-                                            label="דואר אלקטרוני"
-                                            placeholderTextColor="#64686b"
-                                            focusColor="#00699d"
-                                            value={values.email}
-                                            onChangeText={handleChange("email")}
-                                            onBlur={handleBlur("email")}
-                                        />
-                                        {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-                                    </View>
-                                )}
-                                {values.update_password && (
-                                    <>
-                                        <View style={styles.customer_form_field}>
-                                            <TextInput
-                                                keyboardType="default"
-                                                name="password"
-                                                style={styles.input}
-                                                inputStyle={styles.inputStyle}
-                                                labelStyle={styles.labelStyle}
-                                                placeholderStyle={styles.placeholderStyle}
-                                                textErrorStyle={styles.textErrorStyle}
-                                                label="סיסמה"
-                                                placeholderTextColor="#64686b"
-                                                focusColor="#00699d"
-                                                value={values.password}
-                                                onChangeText={handleChange("password")}
-                                                onBlur={handleBlur("password")}
-                                                secureTextEntry={true}
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                            />
-                                            {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-                                        </View>
-                                        <View style={styles.customer_form_field}>
-                                            <TextInput
-                                                keyboardType="default"
-                                                name="approve_password"
-                                                style={styles.input}
-                                                inputStyle={styles.inputStyle}
-                                                labelStyle={styles.labelStyle}
-                                                placeholderStyle={styles.placeholderStyle}
-                                                textErrorStyle={styles.textErrorStyle}
-                                                label="אשר סיסמה"
-                                                placeholderTextColor="#64686b"
-                                                focusColor="#00699d"
-                                                value={values.approve_password}
-                                                onChangeText={handleChange("approve_password")}
-                                                onBlur={handleBlur("approve_password")}
-                                                secureTextEntry={true}
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                            />
-                                            {touched.approve_password && errors.approve_password && <Text style={styles.errorText}>{errors.approve_password}</Text>}
-                                        </View>
-                                    </>
-                                )}
+                                {/*<View style={styles.customer_form_field}>*/}
+                                {/*    <View style={styles.customer_form_field_checkboxes}>*/}
+                                {/*        <Checkbox*/}
+                                {/*            handleChange={() => {*/}
+                                {/*                if(isUpdateEmail) {*/}
+                                {/*                    setFieldValue('email', user.email)*/}
+                                {/*                }*/}
+                                {/*                setUpdateEmail(!isUpdateEmail);*/}
+                                {/*                setFieldValue('update_email', !values['update_email']);*/}
+                                {/*            }}*/}
+                                {/*            values={values}*/}
+                                {/*            option={{id: 'update_email', label: 'שנה כתובת דואר אלקטרוני'}}*/}
+                                {/*            touched={touched}*/}
+                                {/*            errors={errors}*/}
+                                {/*        />*/}
+                                {/*        <Checkbox*/}
+                                {/*            handleChange={() => {*/}
+                                {/*                if(values.update_password) {*/}
+                                {/*                    setFieldValue('password', '');*/}
+                                {/*                    setFieldValue('approve_password', '')*/}
+                                {/*                }*/}
+                                {/*                setUpdatePassword(!values.update_password)*/}
+                                {/*                setFieldValue('update_password', !values['update_password']);*/}
+                                {/*            }}*/}
+                                {/*            values={values}*/}
+                                {/*            option={{id: 'update_password', label: 'שינוי סיסמה'}}*/}
+                                {/*            touched={touched}*/}
+                                {/*            errors={errors}*/}
+                                {/*        />*/}
+                                {/*    </View>*/}
+                                {/*</View>*/}
+                                {/*{isUpdateEmail && (*/}
+                                {/*    <View style={styles.customer_form_field}>*/}
+                                {/*        <TextInput*/}
+                                {/*            keyboardType="email-address"*/}
+                                {/*            name="email"*/}
+                                {/*            style={styles.input}*/}
+                                {/*            inputStyle={styles.inputStyle}*/}
+                                {/*            labelStyle={styles.labelStyle}*/}
+                                {/*            placeholderStyle={styles.placeholderStyle}*/}
+                                {/*            textErrorStyle={styles.textErrorStyle}*/}
+                                {/*            label="דואר אלקטרוני"*/}
+                                {/*            placeholderTextColor="#64686b"*/}
+                                {/*            focusColor="#00699d"*/}
+                                {/*            value={values.email}*/}
+                                {/*            onChangeText={handleChange("email")}*/}
+                                {/*            onBlur={handleBlur("email")}*/}
+                                {/*        />*/}
+                                {/*        {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}*/}
+                                {/*    </View>*/}
+                                {/*)}*/}
+                                {/*{isUpdatePassword && (*/}
+                                {/*    <>*/}
+                                {/*        <View style={styles.customer_form_field}>*/}
+                                {/*            <TextInput*/}
+                                {/*                keyboardType="default"*/}
+                                {/*                name="password"*/}
+                                {/*                style={styles.input}*/}
+                                {/*                inputStyle={styles.inputStyle}*/}
+                                {/*                labelStyle={styles.labelStyle}*/}
+                                {/*                placeholderStyle={styles.placeholderStyle}*/}
+                                {/*                textErrorStyle={styles.textErrorStyle}*/}
+                                {/*                label="סיסמה"*/}
+                                {/*                placeholderTextColor="#64686b"*/}
+                                {/*                focusColor="#00699d"*/}
+                                {/*                value={values.password}*/}
+                                {/*                onChangeText={handleChange("password")}*/}
+                                {/*                onBlur={handleBlur("password")}*/}
+                                {/*                secureTextEntry={true}*/}
+                                {/*                autoCapitalize="none"*/}
+                                {/*                autoCorrect={false}*/}
+                                {/*            />*/}
+                                {/*            {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}*/}
+                                {/*        </View>*/}
+                                {/*        <View style={styles.customer_form_field}>*/}
+                                {/*            <TextInput*/}
+                                {/*                keyboardType="default"*/}
+                                {/*                name="approve_password"*/}
+                                {/*                style={styles.input}*/}
+                                {/*                inputStyle={styles.inputStyle}*/}
+                                {/*                labelStyle={styles.labelStyle}*/}
+                                {/*                placeholderStyle={styles.placeholderStyle}*/}
+                                {/*                textErrorStyle={styles.textErrorStyle}*/}
+                                {/*                label="אשר סיסמה"*/}
+                                {/*                placeholderTextColor="#64686b"*/}
+                                {/*                focusColor="#00699d"*/}
+                                {/*                value={values.approve_password}*/}
+                                {/*                onChangeText={handleChange("approve_password")}*/}
+                                {/*                onBlur={handleBlur("approve_password")}*/}
+                                {/*                secureTextEntry={true}*/}
+                                {/*                autoCapitalize="none"*/}
+                                {/*                autoCorrect={false}*/}
+                                {/*            />*/}
+                                {/*            {touched.approve_password && errors.approve_password && <Text style={styles.errorText}>{errors.approve_password}</Text>}*/}
+                                {/*        </View>*/}
+                                {/*    </>*/}
+                                {/*)}*/}
                                 <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.customer_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
                                     <Text style={styles.customer_form_submit_text}>שמור</Text>
                                 </TouchableOpacity>
@@ -304,6 +324,9 @@ const styles = StyleSheet.create({
         color: "#fefefe",
         fontSize: 18,
         fontWeight: 600,
+    },
+    disabled: {
+        opacity: 0.5
     },
 })
 

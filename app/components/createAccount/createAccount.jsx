@@ -415,6 +415,9 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 400,
     },
+    disabled: {
+        opacity: 0.5
+    },
 })
 
 export default CreateAccount;

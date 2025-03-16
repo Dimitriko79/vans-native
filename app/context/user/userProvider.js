@@ -12,6 +12,7 @@ const useUserContext = () => useContext(UserContext);
 export const UserContextProvider = ({ children }) => {
     const [state, dispatch, user] = useReducer(userReducer, initialState);
     const [view, setView] = useState("SIGNIN");
+    const [isUserUpdate, setUserUpdate] = useState(false);
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
@@ -89,8 +90,16 @@ export const UserContextProvider = ({ children }) => {
         getUserData();
     }, []);
 
+    useEffect(() => {
+        if(isUserUpdate){
+            setTimeout(() => {
+                setUserUpdate(false);
+            }, 10000);
+        }
+    },[isUserUpdate])
+
     return (
-        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData, view, setView}}>
+        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData, view, setView, isUserUpdate, setUserUpdate}}>
             {children}
         </UserContext.Provider>
     );

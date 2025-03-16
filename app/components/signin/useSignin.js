@@ -54,11 +54,8 @@ const useSignin = () => {
                 }
 
                 resetForm();
-
-                if (router.pathname !== "/homepage") {
-                    router.push({ pathname: "/homepage" });
-                    setView("ACCOUNT")
-                }
+                router.push({ pathname: "/account" });
+                setView("ACCOUNT")
             }
         } catch (e) {
             console.error(e);
