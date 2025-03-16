@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         textAlign: 'center',
         paddingTop: 20,
-        fontFamily: 'Poppins-Bold'
     },
     sign_in_content_form: {
         flexDirection: "column",

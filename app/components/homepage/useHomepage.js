@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_HOMEPAGE } from "./homepage.gql";
 import { router } from "expo-router";
-import { useCallback, useMemo } from "react";
+import {useCallback, useMemo, useState} from "react";
 
 const useHomepage = () => {
     const { data, loading, error } = useQuery(GET_HOMEPAGE, {
@@ -16,11 +16,20 @@ const useHomepage = () => {
         []
     );
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        console.log('refreshing', refreshing)
+    }, [])
+
+
     return {
         loading,
         error,
         homepageData,
         handlePress,
+        onRefresh, refreshing
     };
 };
 

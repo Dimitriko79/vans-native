@@ -1,5 +1,5 @@
 import React from "react";
-import {View, StyleSheet, Text, ActivityIndicator, Dimensions, ScrollView} from "react-native";
+import {View, StyleSheet, Text, ActivityIndicator, Dimensions, ScrollView, RefreshControl} from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
 import ShopBy from "./components/shopBy/shopBy";
@@ -14,7 +14,8 @@ const Homepage = () => {
         loading,
         error,
         homepageData,
-        handlePress
+        handlePress,
+        onRefresh,refreshing
     } = useHomepage();
 
     let content = null;
@@ -48,7 +49,11 @@ const Homepage = () => {
         )
     }
     return (
-        <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
+        <ScrollView
+            contentContainerStyle={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
             {content}
         </ScrollView>
     )

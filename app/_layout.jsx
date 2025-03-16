@@ -23,20 +23,18 @@ const RootLayout = () => {
     const translateX = useRef(new Animated.Value(-width)).current;
 
     const [loaded, error] = useFonts({
-        "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
-        "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-        "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
-        "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
-        "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-        "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-        "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-        "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-        "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
-        "LibreFranklin-Bold": require("../assets/fonts/LibreFranklin-Bold.ttf"),
-        "LibreFranklin-Light": require("../assets/fonts/LibreFranklin-Light.ttf"),
-        "LibreFranklin-Medium": require("../assets/fonts/LibreFranklin-Medium.ttf"),
-        "LibreFranklin-Regular": require("../assets/fonts/LibreFranklin-Regular.ttf"),
-        "LibreFranklin-Thin": require("../assets/fonts/LibreFranklin-Thin.ttf"),
+        "Heebo-Black": require("../assets/fonts/Heebo/Heebo-Black.ttf"),
+        "Heebo-Bold": require("../assets/fonts/Heebo/Heebo-Bold.ttf"),
+        "Heebo-ExtraBold": require("../assets/fonts/Heebo/Heebo-ExtraBold.ttf"),
+        "Heebo-ExtraLight": require("../assets/fonts/Heebo/Heebo-ExtraLight.ttf"),
+        "Heebo-Medium": require("../assets/fonts/Heebo/Heebo-Medium.ttf"),
+        "Heebo-Regular": require("../assets/fonts/Heebo/Heebo-Regular.ttf"),
+        "Heebo-SemiBold": require("../assets/fonts/Heebo/Heebo-SemiBold.ttf"),
+        "Heebo-Thin": require("../assets/fonts/Heebo/Heebo-Thin.ttf"),
+        "Helvetica-Bold": require("../assets/fonts/HelveticaNeue/HelveticaNeue-Bold.otf"),
+        "Helvetica-Light": require("../assets/fonts/HelveticaNeue/HelveticaNeue-Light.otf"),
+        "Helvetica-Medium": require("../assets/fonts/HelveticaNeue/HelveticaNeue-Medium.otf"),
+        "Helvetica-Thin": require("../assets/fonts/HelveticaNeue/HelveticaNeue-Thin.otf"),
     });
 
     useEffect(() => {

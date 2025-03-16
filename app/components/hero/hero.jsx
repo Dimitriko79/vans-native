@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         textAlign: "center",
         textTransform: "uppercase",
-        fontWeight: "bold",
+        fontWeight: '700',
+        fontFamily : 'Helvetica Neue'
     },
 });
 

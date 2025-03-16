@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
     },
     news_title: {
         fontSize: 36,
-        letterSpacing: -1.5,
-        fontWeight: "bold",
+        fontFamily: 'Helvetica Neue',
+        fontWeight: "900",
     },
     news_card: {
         flex: 1,
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
     news_card_text: {
         color: "#000",
         fontSize: 16,
-        fontWeight: "bold",
+        fontWeight: "400",
+        fontFamily: 'Heebo',
         textAlign: "right",
         marginTop: 10,
     },
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontSize: 14,
         fontWeight: "bold",
+        fontFamily: 'Heebo',
         textTransform: "uppercase",
     },
 });

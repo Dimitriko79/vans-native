@@ -312,11 +312,9 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         textAlign: 'center',
         paddingTop: 20,
-        fontFamily: 'Poppins-Bold'
     },
     create_account_content_subtitle: {
         textAlign: "center",
-        fontFamily: 'Poppins-Regular',
         marginTop: -20
     },
     create_account_content_form: {

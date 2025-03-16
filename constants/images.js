@@ -24,4 +24,5 @@ import vansMain from '../assets/images/vans-main.png';
 import listStar from '../assets/images/list-star.webp';
 import vansJoin from '../assets/images/vans-join.jpg';
 import favorites from '../assets/images/heart.png';
-export default {favorites, vansJoin,listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
+import heartBlack from '../assets/images/heart_black.png';
+export default {heartBlack, favorites, vansJoin,listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };

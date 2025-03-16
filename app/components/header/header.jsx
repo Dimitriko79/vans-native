@@ -7,6 +7,7 @@ import useHeader from "./useHeader";
 import MiniCart from "../minicart/miniCart";
 import useUserContext from "../../context/user/userProvider";
 import BurgerMenu from "../burgerMenu/burgerMenu";
+import Svg, {Circle, Path} from "react-native-svg";
 
 const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
     const {
@@ -49,15 +50,23 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>
-                    <Image source={images.cart} style={styles.image} resizeMode="contain" />
+                    <Svg xmlns="http://www.w3.org/2000/svg" width="26.947" height="23.818" viewBox="0 0 26.947 23.818">
+                        <Path
+                            d="M8.682,15.789H23a.79.79,0,0,0,.759-.573L26.916,4.164a.789.789,0,0,0-.759-1.006H6.861L6.3.618A.79.79,0,0,0,5.526,0H.789a.789.789,0,0,0,0,1.579h4.1l2.85,12.827a2.368,2.368,0,0,0,.941,4.541H23a.789.789,0,1,0,0-1.579H8.684a.789.789,0,0,1,0-1.579ZM25.111,4.737,22.4,14.21H9.317L7.212,4.737Zm0,0"
+                            fill="#000303"></Path>
+                        <Circle cx="2.112" cy="2.112" r="2.112" transform="translate(8.45 19.594)"
+                                fill="#000303"></Circle>
+                        <Circle cx="2.112" cy="2.112" r="2.112" transform="translate(17.954 19.594)"
+                                fill="#000303"></Circle>
+                    </Svg>
                     {itemCount > 0 && <Text style={styles.count}>{itemCount}</Text>}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.logoContainer} onPress={handleLogoPress}>
-                    <Image source={images.logo} style={styles.logo} resizeMode="contain" />
+                    <Image source={images.logo} style={styles.logo} resizeMode="contain"/>
                 </TouchableOpacity>
 
-                <MiniCart isOpen={miniCartIsOpen} setIsOpen={setMiniCartIsOpen} />
+                <MiniCart isOpen={miniCartIsOpen} setIsOpen={setMiniCartIsOpen}/>
             </View>
             {isSignedIn && (
                 <TouchableOpacity activeOpacity={1} style={styles.header_user_info} onPress={handleView}>

@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     },
     shopby_title: {
         fontSize: 30,
-        fontWeight: "bold",
-        letterSpacing: -1.5,
+        fontWeight: "900",
+        fontFamily: "Helvetica Neue",
     },
     shopby_item: {
         width: width,
@@ -78,7 +78,9 @@ const styles = StyleSheet.create({
     },
     shopby_name: {
         fontSize: 28,
-        fontWeight: "bold",
+        fontWeight: "900",
+        fontFamily: "Helvetica Neue",
+        letterSpacing: 2,
         color: "#ffffff",
         textAlign: "center",
         textTransform: "uppercase",
@@ -90,7 +92,9 @@ const styles = StyleSheet.create({
     },
     shopby_link_name: {
         fontSize: 15,
-        fontWeight: "800",
+        fontWeight: "700",
+        fontFamily: "Helvetica Neue",
+        letterSpacing: 2,
         color: "#ffffff",
         textAlign: "center",
         textTransform: "uppercase",

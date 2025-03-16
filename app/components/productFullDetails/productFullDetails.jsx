@@ -95,16 +95,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "right",
         fontWeight: 700,
-        fontFamily: 'Poppins-Bold',
     },
     product_attribute_value: {
         fontSize: 16,
         textAlign: "right",
-        fontFamily: 'Poppins-Regular',
     },
     product_name: {
         fontSize: 24,
-        fontFamily: 'Poppins-Bold',
         fontWeight: 700,
         marginBottom: 20,
         textTransform: "uppercase",

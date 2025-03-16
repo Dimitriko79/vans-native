@@ -1,7 +1,8 @@
-import { Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable } from "react-native";
+import {Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable, Alert} from "react-native";
 import React, { useMemo } from "react";
 import useItem from "./useItem";
 import Price from "../price/price";
+import {images} from "../../../constants";
 
 const { width } = Dimensions.get("window");
 
@@ -20,11 +21,16 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
     return (
         <View style={styles.item}>
             <TouchableOpacity style={styles.item_link} onPress={handleLinkPress}>
-                <Image
-                    style={styles.item_image}
-                    source={{ uri: item?.image?.url || "" }}
-                    resizeMode="contain"
-                />
+                <View style={styles.item_image_wrapper}>
+                    <Image
+                        style={styles.item_image}
+                        source={{ uri: item?.image?.url || "" }}
+                        resizeMode="contain"
+                    />
+                    <TouchableOpacity style={styles.item_favorites} onPress={() => Alert.alert('click wishlist')}>
+                        <Image source={images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.item_text_wrapper}>
                     {item?.gamechanger && <Text style={styles.item_gamechanger}>{item.gamechanger}</Text>}
                     <Text style={styles.item_text}>{item?.name}</Text>
@@ -55,10 +61,26 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: width / 2 - 14,
     },
-    item_image: {
+    item_image_wrapper: {
         height: width / 2,
         width: "100%",
         backgroundColor: "#ffffff",
+        position: "relative",
+    },
+    item_image: {
+        height: width / 2,
+        width: "100%",
+
+    },
+    item_favorites: {
+        position: "absolute",
+        bottom: 16,
+        left: 10
+    },
+    item_favorites_image: {
+        width: 22,
+        height: 22,
+        resizeMode: "contain",
     },
     item_text_wrapper: {
         width: "100%",

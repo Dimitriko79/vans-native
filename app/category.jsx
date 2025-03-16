@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback } from "react";
 import {
     View,
     Text,
@@ -129,10 +129,11 @@ const styles = StyleSheet.create({
     },
     category_name: {
         fontSize: 20,
-        fontWeight: "700",
+        fontWeight: "900",
         paddingRight: 10,
         textAlign: "right",
         marginBottom: 20,
+        fontFamily: "Heebo"
     },
     choosen_section: {
         flexDirection: "column",

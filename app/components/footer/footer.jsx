@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Dimensions, FlatList, Pressable } from "react-n
 import useFooter from "./useFooter";
 import { useState } from "react";
 import { Link } from "expo-router";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const { width } = Dimensions.get("window");
 
@@ -65,8 +66,9 @@ const Footer = () => {
         <View style={styles.footer}>
             {parsedData.map((item) => (
                 <View key={item.id} style={styles.footer_item}>
-                    <Pressable onPress={() => toggleSection(item.id)}>
+                    <Pressable onPress={() => toggleSection(item.id)} style={styles.footer_item_heading_wrapper}>
                         <Text style={styles.footer_item_heading}>{item.heading}</Text>
+                        <Icon name={openSections[item.id] ? "minus" : "plus"} color="#ffffff" size={12} />
                     </Pressable>
                     {item.subheading ? <Text style={styles.footer_item_subheading}>{item.subheading}</Text> : null}
 
@@ -122,15 +124,23 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#333",
     },
+    footer_item_heading_wrapper: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        direction: "rtl",
+        alignItems: "center"
+    },
     footer_item_heading: {
         color: "#fff",
-        fontSize: 20,
-        fontWeight: "bold",
+        fontSize: 22,
+        fontWeight: "700",
+        fontFamily: "Heebo",
         textAlign: "right",
     },
     footer_item_subheading: {
         color: "#bbb",
-        fontSize: 14,
+        fontSize: 16,
+        fontFamily: "Heebo",
         marginBottom: 5,
     },
     footer_item_link_wrapper: {
@@ -138,9 +148,10 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     footer_item_link_text: {
-        color: "#fff",
-        fontSize: 12,
-        fontWeight: "bold",
+        color: "#ffffffcc",
+        fontSize: 15,
+        fontWeight: "400",
+        fontFamily: "Heebo",
         textAlign: "right",
     },
     footer_item_link_hover: {

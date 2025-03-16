@@ -59,15 +59,16 @@ const styles = StyleSheet.create({
     },
     shopnow_title: {
         fontSize: 36,
-        fontWeight: "bold",
-        letterSpacing: -1.5,
+        fontWeight: '900',
         textAlign: "center",
+        fontFamily : 'Helvetica Neue'
     },
     shopnow_description: {
         textAlign: "center",
         fontSize: 14,
         marginTop: 12,
         paddingHorizontal: 10,
+        fontFamily: 'Heebo'
     },
     shopNow_button: {
         width: 140,
@@ -85,8 +86,9 @@ const styles = StyleSheet.create({
     shopNow_button_text: {
         color: "#fff",
         fontSize: 14,
-        fontWeight: "bold",
+        fontWeight: '700',
         textTransform: "uppercase",
+        fontFamily: 'Helvetica Neue'
     }
 });
 

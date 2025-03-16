@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     popular_title: {
         textAlign: "center",
         fontSize: 26,
+        fontFamily: 'Helvetica Neue',
         letterSpacing: -1.5,
         fontWeight: "bold",
     },
@@ -112,14 +113,16 @@ const styles = StyleSheet.create({
     popular_product_text: {
         color: "#000",
         fontSize: 14,
-        fontWeight: "normal",
+        fontWeight: "400",
         textAlign: "center",
         marginBottom: 5,
+        fontFamily: 'Heebo'
     },
     popular_product_price: {
         color: "#000",
         fontSize: 12,
-        fontWeight: "bold",
+        fontWeight: "700",
+        fontFamily: 'Heebo',
         textAlign: "center",
     },
 });
