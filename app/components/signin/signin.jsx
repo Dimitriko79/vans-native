@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
         fontFamily: "Heebo",
         direction: "rtl",
     },
-    placeholderStyle: {fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400' },
+    placeholderStyle: {fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400', color: "#6a6a6a" },
     inputStyle: { fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400'  },
     labelStyle: {
         fontSize: 14,

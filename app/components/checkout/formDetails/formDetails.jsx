@@ -337,7 +337,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         direction: "rtl",
     },
-    inputStyle: { fontSize: 14, textAlign: "right" },
+    placeholderStyle: {fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400', color: "#6a6a6a" },
+    inputStyle: { fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400'  },
     labelStyle: {
         fontSize: 14,
         position: 'absolute',
@@ -345,9 +346,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 4,
         marginLeft: -4,
-    },
-    placeholderStyle: {
-        color: "#6a6a6a"
     },
     errorText: { fontSize: 13, textAlign: "right", color: "#d41921", marginTop: 5 },
     checkout_form_submit_container: {

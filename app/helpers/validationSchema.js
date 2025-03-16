@@ -17,9 +17,9 @@ export const validationSchema = Yup.object().shape({
         telephone: Yup.string()
             .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
             .required("שדה זה הוא חובה"),
-        // password: Yup.string()
-        //     .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
-        //     .required("נדרשת סיסמה"),
+        password: Yup.string()
+            .min(6, "הסיסמה חייבת להיות באורך של לפחות 6 תווים")
+            .required("נדרשת סיסמה"),
         confirm_terms: Yup.boolean().oneOf([true], "עליך לקבל את תנאי השימוש"),
 });
 
