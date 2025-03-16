@@ -46,7 +46,7 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
             <View style={styles.header}>
                 <BurgerMenu onPress={onToggle} isOpen={isSidebarOpen} />
 
-                <TouchableOpacity style={styles.button} onPress={() => {}}>
+                <TouchableOpacity style={styles.button} onPress={() => router.navigate("/wishlist")}>
                     <Image source={images.favorites} style={styles.image} resizeMode="contain" />
                     {wishlistItemCount > 0 && <Text style={styles.count}>{wishlistItemCount}</Text>}
                 </TouchableOpacity>
