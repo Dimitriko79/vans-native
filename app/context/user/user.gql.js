@@ -227,3 +227,17 @@ export const SIGN_IN = gql`
         }
     }
 `;
+
+export const GET_CUSTOMER_ORDERS = gql`
+    query{
+        customerOrders{
+            items{
+                created_at
+                grand_total
+                id
+                order_number
+                status
+            }
+        }
+    }
+`;

@@ -2,7 +2,7 @@ import React, {createContext, useCallback, useContext, useEffect, useReducer, us
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {initialState, userReducer} from "./reducer/userReducer";
 import {useLazyQuery, useMutation} from "@apollo/client";
-import {GET_CUSTOMER_DETAILS, REVOKE_CUSTOMER_TOKEN, SIGN_IN} from "./user.gql.js";
+import {GET_CUSTOMER_DETAILS, GET_CUSTOMER_ORDERS, REVOKE_CUSTOMER_TOKEN, SIGN_IN} from "./user.gql.js";
 import {Alert} from "react-native";
 import {router} from "expo-router";
 
@@ -15,6 +15,8 @@ export const UserContextProvider = ({ children }) => {
     const [isUserUpdate, setUserUpdate] = useState(false);
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
+    const [fetchCustomerOrders] = useLazyQuery(GET_CUSTOMER_ORDERS, {fetchPolicy: "network-only"});
+
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
     const [SignInCustomer] = useMutation(SIGN_IN);
 
@@ -40,6 +42,7 @@ export const UserContextProvider = ({ children }) => {
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: userData})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
             }
+            await getCustomerOrders();
         } catch (error) {
             dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
             dispatch({type: 'USER_ERROR', payload: error});
@@ -48,6 +51,18 @@ export const UserContextProvider = ({ children }) => {
         }
     }, []);
 
+    const getCustomerOrders = useCallback(async () => {
+        try {
+            const response = await fetchCustomerOrders();
+            if (response?.data?.customerOrders?.items) {
+                const userOrders = response.data.customerOrders.items;
+                dispatch({type: 'SET_CUSTOMER_ORDERS', payload: userOrders});
+            }
+        } catch (error) {
+
+        }
+    }, [])
+
     const signOut = async () => {
         try {
             const res = await revokeToken();
@@ -55,6 +70,7 @@ export const UserContextProvider = ({ children }) => {
                 await AsyncStorage.removeItem("sign-token");
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
+                dispatch({type: 'SET_CUSTOMER_ORDERS', payload: []});
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage"});
                     setView("SIGNIN");
@@ -99,7 +115,18 @@ export const UserContextProvider = ({ children }) => {
     },[isUserUpdate])
 
     return (
-        <UserContext.Provider value={{...state, signIn, signOut, setToken, getUserData, view, setView, isUserUpdate, setUserUpdate}}>
+        <UserContext.Provider value={{
+            ...state,
+            signIn,
+            signOut,
+            setToken,
+            getUserData,
+            getCustomerOrders,
+            view,
+            setView,
+            isUserUpdate,
+            setUserUpdate
+        }}>
             {children}
         </UserContext.Provider>
     );

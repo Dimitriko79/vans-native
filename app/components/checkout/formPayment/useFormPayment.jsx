@@ -9,10 +9,12 @@ import {
 } from "../checkout.gql";
 import useCartProvider from "../../../context/cart/cartProvider";
 import useCheckoutContext from "../../../context/checkout/checkoutProvider";
+import useUserContext from "../../../context/user/userProvider";
 
 const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
     const { cartId, createCart } = useCartProvider();
     const { dispatch } = useCheckoutContext();
+    const {getCustomerOrders} = useUserContext();
 
     const [selectedPayment, setSelectedPayment] = useState('');
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
@@ -69,6 +71,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
             try {
                 await placeOrder({ variables: { cartId } });
                 await createCart();
+                await getCustomerOrders();
             } catch (e) {
                 console.log(e);
                 Alert.alert(e.message);

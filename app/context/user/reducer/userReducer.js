@@ -2,7 +2,8 @@ export const initialState = {
     isSignedIn: false,
     user: null,
     isFetchingUser: false,
-    error: null
+    error: null,
+    orders: []
 };
 
 export const userReducer = (state, action) => {
@@ -13,6 +14,8 @@ export const userReducer = (state, action) => {
             return { ...state, isFetchingUser: action.payload, error: null };
         case 'SET_IS_SIGNED_IN':
             return { ...state, isSignedIn: action.payload};
+        case 'SET_CUSTOMER_ORDERS':
+            return { ...state, orders: action.payload};
         case 'USER_ERROR':
             return { ...state, error: action.payload };
         default:
