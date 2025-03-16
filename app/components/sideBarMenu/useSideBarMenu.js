@@ -42,6 +42,8 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
         router.push({ pathname: "/account" });
         if(!isSignedIn){
             setView("SIGNIN");
+        } else {
+            setView("ACCOUNT");
         }
         onToggle();
     }, [onToggle]);

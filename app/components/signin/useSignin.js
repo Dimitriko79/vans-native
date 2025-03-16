@@ -54,7 +54,6 @@ const useSignin = () => {
                 }
 
                 resetForm();
-                setLoading(false);
 
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage" });
@@ -64,6 +63,7 @@ const useSignin = () => {
         } catch (e) {
             console.error(e);
             setErrorMessage([e.message]);
+        } finally {
             setLoading(false);
         }
     }, [loading, cartId, signIn, retrieveCartId, mergeCarts]);

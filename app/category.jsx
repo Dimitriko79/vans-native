@@ -18,7 +18,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import useDropdownSideBar from "./components/sortSideBar/useDropdownSideBar";
 import RichContent from "./components/richContent/richContent";
 
-const { height, width } = Dimensions.get("window");
+
 
 const Category = () => {
     const { ids } = useLocalSearchParams();

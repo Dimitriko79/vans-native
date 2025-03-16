@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 700,
         textTransform: 'uppercase',
+        fontFamily: "Helvetica Neue",
         textAlign: 'center',
         paddingTop: 20,
     },
@@ -214,12 +215,14 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 1,
         borderColor: '#DDDDDD',
-        fontSize: 14,
+        fontFamily: "Heebo",
         direction: "rtl",
     },
-    inputStyle: { fontSize: 14, textAlign: "right" },
+    placeholderStyle: {fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400' },
+    inputStyle: { fontSize: 14, textAlign: "right", fontFamily: "Heebo", fontWeight: '400'  },
     labelStyle: {
         fontSize: 14,
+        fontFamily: "Heebo",
         position: 'absolute',
         top: -10,
         backgroundColor: 'white',
@@ -245,7 +248,8 @@ const styles = StyleSheet.create({
     sign_in_content_form_submit_text: {
         color: "#fefefe",
         fontSize: 18,
-        fontWeight: 600,
+        fontFamily: "Heebo",
+        fontWeight: 700,
     },
     sign_spacer: {
         flex: 1,
@@ -328,6 +332,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         width : "100%",
         paddingHorizontal: 20,
+        fontFamily: "Heebo",
         fontSize: 18,
         fontWeight: 500,
     },
@@ -344,11 +349,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         gap: 12,
-        width: '45%',
-        marginTop: 16
+        width: '55%',
     },
     new_customer_success_join_us_content_list_item_text: {
         fontSize: 13,
+        fontFamily: "Heebo",
         fontWeight: 400,
     },
     create_account_button: {
@@ -374,7 +379,8 @@ const styles = StyleSheet.create({
     create_account_button_text: {
         color: "#fefefe",
         fontSize: 18,
-        fontWeight: 600,
+        fontFamily: "Heebo",
+        fontWeight: 700,
     },
 })
 

@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
     },
     slider_item_link_text: {
         fontSize: 12,
-        fontWeight: "300",
+        fontFamily: "Heebo",
+        fontWeight: "400",
         color: "#fff",
     },
 });

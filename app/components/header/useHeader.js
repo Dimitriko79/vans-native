@@ -3,6 +3,7 @@ import { GET_CMS_BLOCK } from "./header.gql";
 import useCartTrigger from "./useCartTrigger";
 import { GET_ITEM_COUNT_QUERY } from "../cart/cart.gql";
 import { useMemo, useCallback } from "react";
+import useUserContext from "../../context/user/userProvider";
 
 const useHeader = () => {
     const { itemCount, miniCartIsOpen, setMiniCartIsOpen } = useCartTrigger({
@@ -10,6 +11,8 @@ const useHeader = () => {
             getItemCountQuery: GET_ITEM_COUNT_QUERY,
         },
     });
+
+    const {user} = useUserContext();
 
     const { data, loading, error } = useQuery(GET_CMS_BLOCK, {
         fetchPolicy: "cache-and-network",
@@ -29,6 +32,7 @@ const useHeader = () => {
         loading,
         error,
         itemCount: itemCount || 0,
+        wishlistItemCount: user?.wishlist?.items_count || 0,
         miniCartIsOpen: miniCartIsOpen ?? false,
         setMiniCartIsOpen: toggleMiniCart,
     };

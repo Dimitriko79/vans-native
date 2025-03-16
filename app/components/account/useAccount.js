@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import useUserContext from "../../context/user/userProvider";
 
 export const ACCOUNT_VIEW = {
