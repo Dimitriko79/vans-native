@@ -129,7 +129,7 @@ const PersonalArea = () => {
                         </Svg>
                     </View>
                     <View style={styles.personal_area_card_content}>
-                        <Text style={[styles.personal_area_card_content_title, hoveredLink === 3 && {color: '#D10029'}]}>ספר כתובות</Text>
+                        <Text style={[styles.personal_area_card_content_title, hoveredLink === 2 && {color: '#D10029'}]}>ספר כתובות</Text>
                         <Text style={styles.personal_area_card_content_subtitle}>שמור ונהל כתובות.</Text>
                     </View>
                 </Pressable>
