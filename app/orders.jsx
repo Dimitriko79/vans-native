@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        minHeight: height,
         backgroundColor: "#f1f2ed",
     },
     orders: {
@@ -206,7 +205,8 @@ const styles = StyleSheet.create({
     page_numbers: {
         flex: 1,
         flexDirection: "row",
-        gap: 8
+        justifyContent: "center",
+        gap: 3
     },
     page_number: {
         height: 40,
