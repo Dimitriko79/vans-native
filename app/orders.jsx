@@ -3,7 +3,7 @@ import useUserContext from "./context/user/userProvider";
 import React, { useMemo, useState } from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const Orders = () => {
     const { orders } = useUserContext();
@@ -124,6 +124,8 @@ const Orders = () => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        justifyContent: "center",
         minHeight: height,
         backgroundColor: "#f1f2ed",
     },
@@ -182,6 +184,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     pagination: {
+       width: width,
         direction: "rtl",
         flexDirection: "row",
         justifyContent: "space-between",
