@@ -189,7 +189,9 @@ const styles = StyleSheet.create({
         gap: 25
     },
     personal_area_card_content: {
-        direction: "ltr"
+        direction: "ltr",
+        flexDirection: "column",
+        justifyContent: "center",
     },
     personal_area_card_content_title: {
         textAlign: "right",
