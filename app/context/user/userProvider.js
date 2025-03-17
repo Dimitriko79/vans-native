@@ -18,7 +18,7 @@ export const UserContextProvider = ({ children }) => {
     const [fetchCustomerOrders] = useLazyQuery(GET_CUSTOMER_ORDERS, {fetchPolicy: "network-only"});
 
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
-    const [SignInCustomer] = useMutation(SIGN_IN);
+    const [signInCustomer] = useMutation(SIGN_IN);
 
     const setToken = async token => {
         await AsyncStorage.setItem("sign-token", token);
@@ -59,7 +59,8 @@ export const UserContextProvider = ({ children }) => {
                 dispatch({type: 'SET_CUSTOMER_ORDERS', payload: userOrders});
             }
         } catch (error) {
-
+            console.log(error)
+            Alert.alert(error.message);
         }
     }, [])
 
@@ -84,7 +85,7 @@ export const UserContextProvider = ({ children }) => {
 
     const signIn = async credentials => {
         try {
-            const res = await SignInCustomer({
+            const res = await signInCustomer({
                 variables: {
                     email: credentials.email,
                     password: credentials.password,

@@ -19,3 +19,12 @@ export const UPDATE_CUSTOMER_ADDRESS = gql`
         }
    }
 `;
+
+export const CHANGE_CUSTOMER_PASSWORD = gql`
+     mutation changeCustomerPassword($currentPassword: String! $newPassword: String!) {
+        changeCustomerPassword(currentPassword: $currentPassword newPassword: $newPassword){
+            firstname
+            lastname
+        }
+     }
+`;

@@ -1,8 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import useUserContext from "../../context/user/userProvider";
-import {Alert} from "react-native";
 import {useMutation} from "@apollo/client";
-import {UPDATE_CUSTOMER_ADDRESS, UPDATE_CUSTOMER_QUERY} from "./customer.gql";
+import {CHANGE_CUSTOMER_PASSWORD, UPDATE_CUSTOMER_ADDRESS, UPDATE_CUSTOMER_QUERY} from "./customer.gql";
 import {router} from "expo-router";
 
 const useCustomer = () => {
@@ -11,6 +10,7 @@ const useCustomer = () => {
 
     const defaultValues = {
         email: '',
+        current_password: '',
         password: '',
         firstname: '',
         lastname: '',
@@ -26,7 +26,9 @@ const useCustomer = () => {
     const [isUpdatePassword, setUpdatePassword] = useState(false);
 
     const [updateCustomer] = useMutation(UPDATE_CUSTOMER_QUERY);
+    const [changeCustomerPassword, {error}] = useMutation(CHANGE_CUSTOMER_PASSWORD);
     const [updateCustomerAddress] = useMutation(UPDATE_CUSTOMER_ADDRESS);
+
     const onSubmit = useCallback(async (values, resetForm) => {
         try {
             setLoading(true);
@@ -35,7 +37,7 @@ const useCustomer = () => {
                 lastname: values.lastname,
                 date_of_birth: values.date_birth
             }
-            if (isUpdateEmail) {
+            if (values.update_email) {
                 payload.email = values.email;
             } else {
                 delete payload.email;
@@ -55,6 +57,16 @@ const useCustomer = () => {
                 }
                 await updateCustomerAddress({variables: payload})
             }
+            if (values.update_password) {
+                payload = {
+                    currentPassword: values.current_password,
+                    newPassword: values.password
+                }
+                await changeCustomerPassword({variables: {currentPassword: payload.currentPassword, newPassword: payload.newPassword}});
+            } else {
+                delete payload.currentPassword;
+                delete payload.newPassword;
+            }
             await getUserData();
             setLoading(false);
             setUserUpdate(true);
@@ -64,7 +76,7 @@ const useCustomer = () => {
             setErrorMessage([e.message]);
             setLoading(false);
         }
-    }, [updateCustomer, getUserData]);
+    }, [updateCustomer, getUserData, changeCustomerPassword]);
 
     useEffect(() => {
         setInitialValues(prevState => ({
