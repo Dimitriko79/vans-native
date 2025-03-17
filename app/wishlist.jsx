@@ -5,7 +5,7 @@ import Item from "./components/wishlist/item";
 
 
 
-const { height, width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 const Wishlist = () => {
     const {items} = useWishlist();
