@@ -11,11 +11,4 @@ const Address = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        height: height,
-        backgroundColor: "#f1f2ed"
-    }
-})
-
 export default Address;

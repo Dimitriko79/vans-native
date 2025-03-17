@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     },
     personal_area_card: {
         backgroundColor: "#ffffff",
-        height: 110,
+        minHeight: 110,
         flexDirection: "row",
         direction: "rtl",
         justifyContent: "flex-start",
@@ -187,19 +187,21 @@ const styles = StyleSheet.create({
         gap: 25
     },
     personal_area_card_content: {
-        direction: "ltr"
+        direction: "rtl"
     },
     personal_area_card_content_title: {
-        textAlign: "right",
+        textAlign: "left",
         fontSize: 26,
         fontFamily: "Heebo",
         fontWeight: 700,
     },
     personal_area_card_content_subtitle: {
-        textAlign: "right",
+        textAlign: "left",
         fontSize: 14,
         fontFamily: "Heebo",
-        fontWeight: 400,
+        fontWeight: "400",
+        flexWrap: "wrap",
+        maxWidth: "90%",
     },
     update_customer_succsess: {
         height: 42,
