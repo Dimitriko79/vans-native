@@ -72,33 +72,35 @@ const Orders = () => {
             </View>
 
             <View style={styles.pagination}>
-                <TouchableOpacity
-                    style={[styles.page_button, currentPage === totalPages && styles.disabled_button]}
-                    onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                    disabled={currentPage === totalPages}
-                >
-                    <Icon name="right" size={20} color={currentPage === totalPages ? "#ccc" : "#000"} />
-                </TouchableOpacity>
+                <View style={styles.pagination_inner}>
+                    <TouchableOpacity
+                        style={[styles.page_button, currentPage === totalPages && styles.disabled_button]}
+                        onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                    >
+                        <Icon name="right" size={20} color={currentPage === totalPages ? "#ccc" : "#000"} />
+                    </TouchableOpacity>
 
-                <View style={styles.page_numbers}>
-                    {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-                        <TouchableOpacity
-                            key={page}
-                            style={[styles.page_number, currentPage === page && styles.active_page]}
-                            onPress={() => setCurrentPage(page)}
-                        >
-                            <Text style={[styles.page_number_text, currentPage === page && { color: "#000" }]}>{page}</Text>
-                        </TouchableOpacity>
-                    ))}
+                    <View style={styles.page_numbers}>
+                        {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
+                            <TouchableOpacity
+                                key={page}
+                                style={[styles.page_number, currentPage === page && styles.active_page]}
+                                onPress={() => setCurrentPage(page)}
+                            >
+                                <Text style={[styles.page_number_text, currentPage === page && { color: "#000" }]}>{page}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.page_button, currentPage === 1 && styles.disabled_button]}
+                        onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        <Icon name="left" size={20} color={currentPage === 1 ? "#ccc" : "#000"} />
+                    </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity
-                    style={[styles.page_button, currentPage === 1 && styles.disabled_button]}
-                    onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                    disabled={currentPage === 1}
-                >
-                    <Icon name="left" size={20} color={currentPage === 1 ? "#ccc" : "#000"} />
-                </TouchableOpacity>
             </View>
 
             <View style={styles.itemsPerPageContainer}>
@@ -184,13 +186,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     pagination: {
-       width: width,
+        width: width,
+        marginVertical: 20,
+        paddingHorizontal: 25,
+    },
+    pagination_inner: {
         direction: "rtl",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginVertical: 20,
-        paddingHorizontal: 25,
         gap: 10,
     },
     page_button: {
