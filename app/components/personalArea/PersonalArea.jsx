@@ -1,9 +1,11 @@
-import {Text, View, StyleSheet, Pressable} from "react-native";
+import {Text, View, StyleSheet, Pressable, Dimensions} from "react-native";
 import Svg, {Circle, G, Path} from "react-native-svg";
 import React, {useState} from "react";
 import {router} from "expo-router";
 import useUserContext from "../../context/user/userProvider";
 import Icon from "react-native-vector-icons/AntDesign";
+
+const { width } = Dimensions.get("window");
 
 const PersonalArea = () => {
 
@@ -176,32 +178,31 @@ const styles = StyleSheet.create({
     },
     personal_area_card: {
         backgroundColor: "#ffffff",
-        minHeight: 110,
+        height: 110,
         flexDirection: "row",
         direction: "rtl",
         justifyContent: "flex-start",
         alignItems: "center",
         borderTopWidth: 2,
         borderTopColor: "#ffffff",
-        padding: 25,
+        paddingHorizontal: 25,
         gap: 25
     },
     personal_area_card_content: {
-        direction: "rtl"
+        direction: "ltr"
     },
     personal_area_card_content_title: {
-        textAlign: "left",
+        textAlign: "right",
         fontSize: 26,
         fontFamily: "Heebo",
         fontWeight: 700,
     },
     personal_area_card_content_subtitle: {
-        textAlign: "left",
+        textAlign: "right",
         fontSize: 14,
         fontFamily: "Heebo",
-        fontWeight: "400",
-        flexWrap: "wrap",
-        maxWidth: "90%",
+        fontWeight: 400,
+        width: width / 1.8,
     },
     update_customer_succsess: {
         height: 42,
