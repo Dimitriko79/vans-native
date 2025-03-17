@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import useItem from "./useItem";
 import Price from "../price/price";
 import {images} from "../../../constants";
+import Svg, {G, Path} from "react-native-svg";
 
 const { width } = Dimensions.get("window");
 
@@ -27,8 +28,29 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
                         source={{ uri: item?.image?.url || "" }}
                         resizeMode="contain"
                     />
-                    <TouchableOpacity style={styles.item_favorites} onPress={() => Alert.alert('click wishlist')}>
-                        <Image source={images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>
+                    <TouchableOpacity style={styles.item_trash} onPress={() => Alert.alert('click trash')}>
+                        <Svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 13.207 14.563">
+                            <G transform="translate(-4 -2.5)">
+                                <Path
+                                    d="M4.5,9H16.707"
+                                    transform="translate(0 -3.287)"
+                                    fill="none"
+                                    stroke='#000000'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="1"
+                                />
+                                <Path
+                                    d="M16.994,5.713v9.494a1.356,1.356,0,0,1-1.356,1.356H8.856A1.356,1.356,0,0,1,7.5,15.207V5.713m2.035,0V4.356A1.356,1.356,0,0,1,10.891,3H13.6A1.356,1.356,0,0,1,14.96,4.356V5.713"
+                                    transform="translate(-1.644 0)"
+                                    fill="none"
+                                    stroke='#000000'
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="1"
+                                />
+                            </G>
+                        </Svg>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.item_text_wrapper}>
@@ -72,15 +94,10 @@ const styles = StyleSheet.create({
         width: "100%",
 
     },
-    item_favorites: {
+    item_trash: {
         position: "absolute",
-        bottom: 16,
+        top: 16,
         left: 10
-    },
-    item_favorites_image: {
-        width: 22,
-        height: 22,
-        resizeMode: "contain",
     },
     item_text_wrapper: {
         width: "100%",
