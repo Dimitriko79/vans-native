@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
         opacity: 0.5,
     },
     page_numbers: {
+        flex: 1,
         flexDirection: "row",
         gap: 8
     },
