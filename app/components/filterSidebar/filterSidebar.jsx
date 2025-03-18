@@ -16,7 +16,7 @@ const FilterSidebar = ({
 
     const renderFilterBlock = useMemo(
         () => ({ item }) => (
-            <FilterBlock blockItem={item} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} onToggle={onToggle} />
+            <FilterBlock blockItem={item} setCurrentFilter={setCurrentFilter} currentFilter={currentFilter} />
         ),
         [setCurrentFilter, currentFilter]
     );

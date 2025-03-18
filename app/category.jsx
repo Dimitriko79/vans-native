@@ -29,7 +29,6 @@ const Category = () => {
         aggregations = [],
         sortFields = [],
         description,
-        pageSize,
         loading,
         isLoadMore,
         error,
@@ -87,7 +86,7 @@ const Category = () => {
                         </View>
                     )}
                 </View>
-                <Gallery items={products} pageSize={pageSize}/>
+                <Gallery items={products}/>
                 {isLoadMore && <ActivityIndicator size={40} style={{marginBottom: 20}}/>}
             </View>
         )

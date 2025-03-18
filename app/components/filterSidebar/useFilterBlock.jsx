@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const useFilterBlock = ({setCurrentFilter = () => {}, currentFilter = new Map(), onToggleFilter = () => {}}) => {
+const useFilterBlock = ({setCurrentFilter = () => {}, currentFilter = new Map()}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const onToggle = () => {
@@ -28,7 +28,6 @@ const useFilterBlock = ({setCurrentFilter = () => {}, currentFilter = new Map(),
                     newFilter.delete(attr);
                 }
             }
-            onToggleFilter();
             return newFilter;
         });
     };

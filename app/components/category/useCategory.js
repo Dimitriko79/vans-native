@@ -97,7 +97,12 @@ const useCategory = (ids) => {
 
             if (res?.data?.products?.items.length) {
                 setProducts(prevState => {
-                    return [...prevState, ...res.data.products.items];
+                    if(currentPage === 1){
+                        return res.data.products.items;
+                    } else {
+                        return [...prevState, ...res.data.products.items];
+                    }
+
                     // const uniqueItems = Array.from(new Map([...prevState, ...newItems].map(item => [item.sku, item])).values());
                     // return newItems;
                 });
@@ -108,7 +113,7 @@ const useCategory = (ids) => {
             setIsFetching(true);
             setIsLoadMore(false);
         }
-    }, [transformedFilter, currentSort, currentPage, getProductsData]);
+    }, [transformedFilter, currentSort, currentFilter,currentPage, getProductsData]);
 
     useEffect(() => {
         if (isLoadMore && !productLoading) {
@@ -119,12 +124,11 @@ const useCategory = (ids) => {
             });
         }
     }, [isLoadMore]);
-
+    console.log(products.length)
     useEffect(() => {
-        if (!products.length || currentPage === 1) {
-            fetchProductData(1);
-        }
-    }, [currentFilter, currentSort]);
+        setCurrentPage(1);
+        fetchProductData(1);
+    }, [currentFilter, transformedFilter,  currentSort]);
 
     useEffect(() => {
         fetchData();
@@ -141,7 +145,6 @@ const useCategory = (ids) => {
         isLoadMore,
         error,
         handlePress,
-        pageSize,
         currentFilter,
         setCurrentFilter,
         isFetching,

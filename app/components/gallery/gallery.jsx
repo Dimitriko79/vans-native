@@ -4,13 +4,13 @@ import Item from "./item";
 
 const { height } = Dimensions.get("window");
 
-const Gallery = ({ items = [], pageSize = 1 }) => {
+const Gallery = ({ items = [] }) => {
 
     const flatListRef = useRef(null);
 
     const focusOnFirstItem = () => {
         if (flatListRef.current && items.length > 0) {
-            const firstItemIndex = Math.max(items.length - pageSize, 0); // Новый первый элемент страницы
+            const firstItemIndex = Math.max(items.length - 8, 0); // Новый первый элемент страницы
             console.log('firstItemIndex', firstItemIndex)
             // flatListRef.current.scrollToIndex({ index: firstItemIndex, animated: true });
         }
@@ -41,11 +41,11 @@ const Gallery = ({ items = [], pageSize = 1 }) => {
                 contentContainerStyle={styles.gallery}
                 scrollEnabled={true}
                 nestedScrollEnabled={false}
-                // getItemLayout={(data, index) => ({
-                //     length: 200, // Высота элемента (примерная)
-                //     offset: 200 * index, // Смещение элемента
-                //     index,
-                // })}
+                getItemLayout={(data, index) => ({
+                    length: 200,
+                    offset: 200 * index,
+                    index,
+                })}
             />
         </View>
     );

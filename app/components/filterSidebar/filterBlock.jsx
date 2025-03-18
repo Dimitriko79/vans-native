@@ -15,14 +15,13 @@ const FILTER_LABELS = {
 const { width } = Dimensions.get("window");
 
 const FilterBlock = ({
-                         onToggle: onToggleFilter = () => {},
                          blockItem = { label: "", attribute_code: "", options: [] },
                          setCurrentFilter = () => {},
                          currentFilter = new Map()
                      }) => {
     const { label, attribute_code, options } = blockItem;
 
-    const { isOpen, onToggle, handleFilter, checkedForSelected } = useFilterBlock({ setCurrentFilter, currentFilter, onToggleFilter });
+    const { isOpen, onToggle, handleFilter, checkedForSelected } = useFilterBlock({ setCurrentFilter, currentFilter});
 
     const handlePress = useCallback(
         (value, action) => {
