@@ -127,6 +127,7 @@ const Orders = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        minHeight: height,
         justifyContent: "center",
         backgroundColor: "#f1f2ed",
     },

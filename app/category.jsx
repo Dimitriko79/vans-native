@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        minHeight: height,
         position: "relative",
         backgroundColor: "#f1f2ed",
     },
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     loaderContainer: {
-        height: height,
+        minHeight: height,
         justifyContent: "center",
         alignItems: "center",
     },

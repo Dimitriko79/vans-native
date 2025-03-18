@@ -5,7 +5,7 @@ import {router} from "expo-router";
 import useUserContext from "../../context/user/userProvider";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const { width } = Dimensions.get("window");
+const { width,height } = Dimensions.get("window");
 
 const PersonalArea = () => {
 
@@ -166,6 +166,7 @@ const PersonalArea = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        minHeight: height,
         backgroundColor: "#f1f2ed",
     },
     personal_area: {

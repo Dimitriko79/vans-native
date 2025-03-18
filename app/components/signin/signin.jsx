@@ -8,6 +8,8 @@ import {validateMobilePhone} from "../../helpers/validationSchema";
 import * as Yup from "yup";
 import {images} from "../../../constants";
 
+const { height } = Dimensions.get("window");
+
 export const validationSchemaOTP = Yup.object().shape({
     telephone: Yup.string()
         .test("is-valid-phone", "מספר טלפון שגוי", validateMobilePhone)
@@ -175,7 +177,7 @@ const Signin = ({handleView = () => {}}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: "auto",
+        minHeight: height,
         position: "relative",
         backgroundColor: "#f1f2ed",
         paddingBottom: 10

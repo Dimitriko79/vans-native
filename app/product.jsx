@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        minHeight: height,
         padding: 10,
     },
     loaderContainer: {

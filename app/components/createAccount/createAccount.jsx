@@ -11,7 +11,7 @@ import Checkbox from "../checkout/formDetails/checkbox";
 import {images} from "../../../constants";
 import {JOIN_REWARDS} from "../signin/useSignin";
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const CreateAccount = props => {
 
@@ -291,6 +291,7 @@ const CreateAccount = props => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        minHeight: height,
         height: "auto",
         position: "relative",
         backgroundColor: "#f1f2ed",

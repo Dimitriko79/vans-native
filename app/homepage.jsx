@@ -67,11 +67,12 @@ const styles = StyleSheet.create({
     },
     homepage: {
         flex: 1,
+        minHeight: height,
         alignItems: "center",
         backgroundColor: "#fff",
     },
     loaderContainer: {
-        height: height,
+        minHeight: height,
         justifyContent: "center",
         alignItems: "center",
     },

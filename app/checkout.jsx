@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ScrollView, Dimensions} from "react-native";
 import useCheckout, {CHECKOUT_STEP} from "./components/checkout/useCheckout";
 import RichContent from "./components/richContent/richContent";
 import React, {useRef} from "react";
@@ -10,6 +10,7 @@ import FormPayment from "./components/checkout/formPayment/formPayment";
 import useCheckoutContext from "./context/checkout/checkoutProvider";
 import PlaceOrder from "./components/checkout/placeOrder/placeOrder";
 
+const { height } = Dimensions.get("window");
 const Checkout = () => {
 
     const {
@@ -94,6 +95,7 @@ const Checkout = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        minHeight: height,
         height: "auto",
         position: "relative",
         backgroundColor: "#f1f2ed",

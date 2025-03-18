@@ -277,7 +277,7 @@ const Customer = () => {
 
 const styles = StyleSheet.create({
     container: {
-        height: height,
+        minHeight: height,
         backgroundColor: "#f1f2ed"
     },
     customer: {
