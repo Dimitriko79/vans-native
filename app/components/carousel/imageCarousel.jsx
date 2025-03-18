@@ -6,6 +6,7 @@ const { width } = Dimensions.get('window');
 
 const ImageCarousel = ({ images = [] }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [imageLoaded, setImageLoaded] = useState(false);
     const carouselRef = useRef(null);
 
     const handlePress = (index) => {
@@ -27,7 +28,12 @@ const ImageCarousel = ({ images = [] }) => {
                 onSnapToItem={setActiveIndex}
                 renderItem={({ item }) => (
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" />
+                        <Image
+                            source={{ uri: item.url }}
+                            style={[styles.image, !imageLoaded && { opacity: 0 }]}
+                            resizeMode="cover"
+                            onLoad={() => setImageLoaded(true)}
+                        />
                     </View>
                 )}
             />
