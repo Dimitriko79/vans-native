@@ -1,5 +1,5 @@
 import {Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable, Alert} from "react-native";
-import React, { useMemo } from "react";
+import React, {useMemo, useState} from "react";
 import useItem from "./useItem";
 import Price from "../price/price";
 import {images} from "../../../constants";
@@ -8,6 +8,7 @@ const { width } = Dimensions.get("window");
 
 const GalleryItem = ({ item = {}, onClick = () => {} }) => {
     const { price, handlePress } = useItem(item);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const handleLinkPress = () => {
         handlePress(item?.url_key);
@@ -23,9 +24,10 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
             <TouchableOpacity style={styles.item_link} onPress={handleLinkPress}>
                 <View style={styles.item_image_wrapper}>
                     <Image
-                        style={styles.item_image}
+                        style={[styles.item_image,  !imageLoaded && { opacity: 0 }]}
                         source={{ uri: item?.image?.url || "" }}
                         resizeMode="contain"
+                        onLoad={() => setImageLoaded(true)}
                     />
                     <TouchableOpacity style={styles.item_favorites} onPress={() => Alert.alert('click wishlist')}>
                         <Image source={images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>

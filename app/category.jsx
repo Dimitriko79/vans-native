@@ -3,7 +3,6 @@ import {
     View,
     Text,
     StyleSheet,
-    ActivityIndicator,
     Dimensions,
     TouchableOpacity,
     ScrollView
@@ -17,6 +16,7 @@ import SortSideBar from "./components/sortSideBar/sortSideBar";
 import Icon from "react-native-vector-icons/AntDesign";
 import useDropdownSideBar from "./components/sortSideBar/useDropdownSideBar";
 import RichContent from "./components/richContent/richContent";
+import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
 
 const { height, width } = Dimensions.get("window");
 
@@ -45,7 +45,7 @@ const Category = () => {
     if (loading) {
         content = (
             <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color="#d41921" />
+                <LoadingIndicator/>
             </View>
         );
     } else if (error) {
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     loaderContainer: {
-        minHeight: height,
         justifyContent: "center",
         alignItems: "center",
     },

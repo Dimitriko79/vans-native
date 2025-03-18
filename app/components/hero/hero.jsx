@@ -1,11 +1,13 @@
 import { Link } from "expo-router";
 import { Image, View, StyleSheet, Dimensions, Text } from "react-native";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import formatImageUrl from "../../helpers/formatImageUrl";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
-const Hero = ({ data = { link: "", image: "" } }) => {
+const Hero = ({ data }) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
     if (!data?.image || !data?.link) return null;
 
     const imageUri = useMemo(() => formatImageUrl(data.image), [data.image]);
@@ -13,10 +15,12 @@ const Hero = ({ data = { link: "", image: "" } }) => {
     return (
         <View style={styles.hero}>
             <Image
-                style={styles.hero_image}
+                style={[styles.hero_image, !imageLoaded && { opacity: 0 }]}
                 source={{ uri: imageUri }}
                 resizeMode="cover"
+                onLoad={() => setImageLoaded(true)}
             />
+
             <Link href={data.link} style={styles.hero_link}>
                 <Text style={styles.hero_link_text}>Shop now</Text>
             </Link>
@@ -56,6 +60,14 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
         fontWeight: '700',
         fontFamily : 'Helvetica Neue'
+    },
+    loader: {
+        position: "absolute",
+        width: screenWidth,
+        height: screenHeight * 0.6,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fff",
     },
 });
 

@@ -3,7 +3,6 @@ import {
     View,
     Text,
     StyleSheet,
-    ActivityIndicator,
     Dimensions,
     ScrollView,
     SafeAreaView
@@ -11,6 +10,7 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import useProduct from "./components/product/useProduct";
 import ProductFullDetails from "./components/productFullDetails/productFullDetails";
+import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
 
 const { height } = Dimensions.get("window");
 
@@ -24,7 +24,7 @@ const Product = () => {
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color="#d41921" />
+                <LoadingIndicator/>
             </View>
         );
     }
@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
     loaderContainer: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
-        height: height,
+        alignItems: "center"
     },
     errorContainer: {
         flex: 1,
