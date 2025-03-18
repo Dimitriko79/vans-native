@@ -15,13 +15,14 @@ const FILTER_LABELS = {
 const { width } = Dimensions.get("window");
 
 const FilterBlock = ({
+                         onToggle: onToggleFilter = () => {},
                          blockItem = { label: "", attribute_code: "", options: [] },
                          setCurrentFilter = () => {},
                          currentFilter = new Map()
                      }) => {
     const { label, attribute_code, options } = blockItem;
 
-    const { isOpen, onToggle, handleFilter, checkedForSelected } = useFilterBlock({ setCurrentFilter, currentFilter });
+    const { isOpen, onToggle, handleFilter, checkedForSelected } = useFilterBlock({ setCurrentFilter, currentFilter, onToggleFilter });
 
     const handlePress = useCallback(
         (value, action) => {
@@ -36,7 +37,9 @@ const FilterBlock = ({
             const isSelected = checkedForSelected(attribute_code, item.value);
             return (
                 <TouchableOpacity
-                    onPress={() => handlePress(item.value, isSelected ? "remove" : "add")}
+                    onPress={() => {
+                        handlePress(item.value, isSelected ? "remove" : "add");
+                    }}
                     style={isSelected ? styles.subcategory_checked : {}}
                 >
                     {isSelected && <Icon name="close" size={10} color="#000" />}

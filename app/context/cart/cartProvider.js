@@ -3,6 +3,7 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {CREATE_CART_MUTATION, GET_CART_DETAILS, GET_CUSTOMER_CART, MERGE_CARTS} from "../../components/cart/cart.gql";
 import { cartReducer, initialState } from "./reducer/cartReducer";
 import useUserContext from "../user/userProvider";
+import {router} from "expo-router";
 
 const CartContext = createContext(null);
 const useCartProvider = () => useContext(CartContext);
@@ -76,8 +77,16 @@ export const CartContextProvider = ({ children }) => {
         }
     }, [isFetchingCart, cartId]);
 
+    const [isLoadMore, setIsLoadMore] = useState(false);
+
+    const loadMoreProducts = useCallback(() => {
+        if(router.pathname !== "/category"){
+            setIsLoadMore(true);
+        }
+    }, [isLoadMore])
+
     return (
-        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen}}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen, loadMoreProducts, isLoadMore, setIsLoadMore}}>
             {children}
         </CartContext.Provider>
     );

@@ -16,20 +16,11 @@ const useHomepage = () => {
         []
     );
 
-    const [refreshing, setRefreshing] = useState(false);
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        console.log('refreshing', refreshing)
-    }, [])
-
-
     return {
         loading,
         error,
         homepageData,
-        handlePress,
-        onRefresh, refreshing
+        handlePress
     };
 };
 

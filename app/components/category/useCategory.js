@@ -1,10 +1,10 @@
-import {useLazyQuery, useQuery} from "@apollo/client";
-import {router} from "expo-router";
-import {GET_CATEGORY, GET_PRODUCT_FILTERS_BY_CATEGORY, GET_PRODUCTS} from "./category.gql";
-import {useEffect, useMemo, useState} from "react";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { router } from "expo-router";
+import { GET_CATEGORY, GET_PRODUCT_FILTERS_BY_CATEGORY, GET_PRODUCTS } from "./category.gql";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useSort from "../sortSideBar/useSort";
 import DEFAULT_SORT_METHODS from "../../helpers/defaultSortMetods";
-
+import useCartProvider from "../../context/cart/cartProvider";
 
 const useCategory = (ids) => {
     const [currentFilter, setCurrentFilter] = useState(new Map());
@@ -12,91 +12,124 @@ const useCategory = (ids) => {
     const sortProps = useSort({ defaultSortMagento: null });
     const [currentSort, setSort] = sortProps;
     const [isFetchingFirst, setIsFetchingFirst] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 8;
+    const [products, setProducts] = useState([]);
+
+    const { isLoadMore, setIsLoadMore } = useCartProvider();
 
     const [runQuery, { loading, error, data }] = useLazyQuery(GET_CATEGORY, {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-first',
-        context: {
-            headers: { Store: "he" },
-        }
+        fetchPolicy: "cache-and-network",
+        nextFetchPolicy: "cache-first",
+        context: { headers: { Store: "he" } },
     });
 
     const { data: filterData, loading: filterLoading } = useQuery(
         GET_PRODUCT_FILTERS_BY_CATEGORY,
         {
-            fetchPolicy: 'cache-and-network',
-            variables: {categoryIdFilter: {eq: ids}},
-            skip: !ids
+            fetchPolicy: "cache-and-network",
+            variables: { categoryIdFilter: { eq: ids } },
+            skip: !ids,
         }
     );
 
-    const [getProductsData, { data: productData, loading: productLoading  }] = useLazyQuery(
+    const [getProductsData, { data: productData, loading: productLoading }] = useLazyQuery(
         GET_PRODUCTS,
         {
-            fetchPolicy: 'cache-and-network',
-            nextFetchPolicy: 'cache-first'
+            fetchPolicy: "cache-and-network",
+            nextFetchPolicy: "cache-first",
         }
     );
 
     const categoryData = data?.categoryList[0] || null;
-
-    const products = productData?.products?.items || [];
+    const productCount = categoryData?.product_count;
 
     const aggregations = useMemo(() => {
-        return filterData &&
-            filterData.products.aggregations &&
-            filterData.products.aggregations.length ? filterData.products.aggregations.filter(aggr => aggr.attribute_code !== "category_id") : []
+        return filterData?.products?.aggregations?.filter(aggr => aggr.attribute_code !== "category_id") || [];
     }, [filterData]);
 
     const sortFields = useMemo(() => {
-        return filterData &&
-        filterData.products.sort_fields ? filterData.products.sort_fields : null
+        return filterData?.products?.sort_fields || null;
     }, [filterData]);
 
+    const handlePress = (id) => {
+        router.push({ pathname: "/category", params: { ids: id } });
+    };
 
-
-    const handlePress = id => {
-        return  router.push({ pathname: "/category", params: { ids: id } })
-    }
-
-    const transformedFilter = Array.from(currentFilter.entries()).reduce((acc, [attribute_code, codes]) => {
-        if (attribute_code === "price") {
-            const [range] = codes;
-            const [from, to] = range.split("_");
-
-            acc[attribute_code] = {
-                from: from === "*" ? "" : from,
-                to: to === "*" ? "" : to,
-            };
-        } else {
-            acc[attribute_code] = codes.length === 1 ? { eq: codes[0] } : { in: codes };
-        }
-        return acc;
-    }, {category_id: {eq: ids}});
+    const transformedFilter = useMemo(() => {
+        return Array.from(currentFilter.entries()).reduce((acc, [attribute_code, codes]) => {
+            if (attribute_code === "price") {
+                const [range] = codes;
+                const [from, to] = range.split("_");
+                acc[attribute_code] = { from: from === "*" ? "" : from, to: to === "*" ? "" : to };
+            } else {
+                acc[attribute_code] = codes.length === 1 ? { eq: codes[0] } : { in: codes };
+            }
+            return acc;
+        }, { category_id: { eq: ids } });
+    }, [currentFilter, ids]);
 
     useEffect(() => {
-        if(isFetchingFirst && sortFields && sortFields.default){
+        if (isFetchingFirst && sortFields?.default) {
             setSort(DEFAULT_SORT_METHODS.get(sortFields.default));
         }
         setIsFetchingFirst(false);
     }, [sortFields, setIsFetchingFirst]);
 
     const fetchData = async () => {
-        const newFilter = transformedFilter;
-        const newSort = {[currentSort.value]: currentSort.sortDirection};
         try {
-            await runQuery({ variables: { ids: ids } });
-            await getProductsData({variables: {filter: newFilter, sort: newSort}});
+            await runQuery({ variables: { ids } });
         } catch (e) {
-            console.log(e)
+            console.error(e);
         } finally {
             setIsFetching(true);
         }
-    }
+    };
+
+    const fetchProductData = useCallback(async (page = currentPage) => {
+        const newFilter = transformedFilter;
+        const newSort = { [currentSort.value]: currentSort.sortDirection };
+
+        try {
+            const res = await getProductsData({
+                variables: { filter: newFilter, sort: newSort, pageSize: pageSize, currentPage: page },
+            });
+
+            if (res?.data?.products?.items.length) {
+                setProducts(prevState => {
+                    return [...prevState, ...res.data.products.items];
+                    // const uniqueItems = Array.from(new Map([...prevState, ...newItems].map(item => [item.sku, item])).values());
+                    // return newItems;
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsFetching(true);
+            setIsLoadMore(false);
+        }
+    }, [transformedFilter, currentSort, currentPage, getProductsData]);
+
+    useEffect(() => {
+        if (isLoadMore && !productLoading) {
+            setCurrentPage(prevPage => {
+                const nextPage = prevPage + 1;
+                fetchProductData(nextPage);
+                return nextPage;
+            });
+        }
+    }, [isLoadMore]);
+
+    useEffect(() => {
+        if (!products.length || currentPage === 1) {
+            fetchProductData(1);
+        }
+    }, [currentFilter, currentSort]);
 
     useEffect(() => {
         fetchData();
-    }, [ids, currentFilter, currentSort, getProductsData]);
+        fetchProductData(1);
+    }, [ids]);
 
     return {
         categoryData,
@@ -104,14 +137,17 @@ const useCategory = (ids) => {
         aggregations,
         sortFields,
         description: categoryData?.description || null,
-        loading: loading || productLoading || filterLoading,
+        loading: loading || filterLoading,
+        isLoadMore,
         error,
         handlePress,
+        pageSize,
         currentFilter,
         setCurrentFilter,
-        isFetching, setIsFetching,
-        sortProps
-    }
-}
+        isFetching,
+        setIsFetching,
+        sortProps,
+    };
+};
 
 export default useCategory;

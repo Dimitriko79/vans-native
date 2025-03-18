@@ -11,13 +11,14 @@ const useDropdownSideBar = ({ isFetching, setIsFetching }) => {
                 setIsOpenFilter(false);
                 return !prev;
             });
-        }
-
-        if (type === 'filter') {
+        } else if (type === 'filter') {
             setIsOpenFilter(prev => {
                 setIsOpenSort(false);
                 return !prev;
             });
+        } else {
+            setIsOpenFilter(false);
+            setIsOpenSort(false);
         }
     }, [isOpenFilter, isOpenSort, setIsOpenSort, setIsFetching]);
 

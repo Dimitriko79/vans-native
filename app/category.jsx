@@ -3,6 +3,7 @@ import {
     View,
     Text,
     StyleSheet,
+    ActivityIndicator,
     Dimensions,
     TouchableOpacity,
     ScrollView
@@ -28,7 +29,9 @@ const Category = () => {
         aggregations = [],
         sortFields = [],
         description,
+        pageSize,
         loading,
+        isLoadMore,
         error,
         handlePress,
         currentFilter,
@@ -54,12 +57,6 @@ const Category = () => {
                 <Text style={styles.errorText}>Error: Unable to load category data.</Text>
             </View>
         );
-    } else if (!products.length) {
-        content = (
-            <View style={styles.noProductsContainer}>
-                <Text style={styles.noProductsText}>No products found(</Text>
-            </View>
-        )
     } else {
         content = (
             <View style={styles.container}>
@@ -90,7 +87,8 @@ const Category = () => {
                         </View>
                     )}
                 </View>
-                <Gallery items={products} />
+                <Gallery items={products} pageSize={pageSize}/>
+                {isLoadMore && <ActivityIndicator size={40} style={{marginBottom: 20}}/>}
             </View>
         )
     };
@@ -103,17 +101,6 @@ const Category = () => {
 };
 
 const styles = StyleSheet.create({
-    noProductsContainer: {
-        height: height / 2,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    noProductsText: {
-        marginTop: 10,
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#333",
-    },
     scrollView: {
         flexGrow: 1,
         justifyContent: "flex-start",
@@ -121,7 +108,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        minHeight: height,
         position: "relative",
         backgroundColor: "#f1f2ed",
     },
@@ -163,6 +149,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     loaderContainer: {
+        height: height,
         justifyContent: "center",
         alignItems: "center",
     },

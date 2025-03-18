@@ -1,9 +1,11 @@
-import { Animated } from "react-native";
+import {Animated} from "react-native";
 import { router, Slot } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
+import useCartProvider from "./context/cart/cartProvider";
 
 const Main = ({children, scrollY}) => {
     const [isRedirecting, setIsRedirecting] = useState(false);
+    const {loadMoreProducts} = useCartProvider();
 
     useEffect(() => {
         if (!isRedirecting) {
@@ -12,17 +14,25 @@ const Main = ({children, scrollY}) => {
         }
     }, [isRedirecting]);
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+    };
+
     return (
         <Animated.ScrollView
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{flexGrow: 1}}
+            contentContainerStyle={{ flexGrow: 1 }}
             onScroll={Animated.event(
                 [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                { useNativeDriver: false }
+                { useNativeDriver: false, listener: (event) => {
+                        if (isCloseToBottom(event.nativeEvent)) {
+                            loadMoreProducts()
+                        }
+                    }}
             )}
             scrollEventThrottle={16}
         >
-            <Slot />
+        <Slot />
             {children}
         </Animated.ScrollView>
     );

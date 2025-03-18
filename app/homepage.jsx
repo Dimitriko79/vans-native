@@ -16,7 +16,6 @@ const Homepage = () => {
         error,
         homepageData,
         handlePress,
-        onRefresh,refreshing
     } = useHomepage();
 
     let content = null;
@@ -33,7 +32,7 @@ const Homepage = () => {
                 <Text style={styles.errorText}>Error: Unable to load homepage data.</Text>
             </View>
         )
-    } else {
+    } else if (homepageData) {
         content = (
             <View contentContainerStyle={styles.homepage}>
                 <Hero data={homepageData.getMainBannerData}/>
@@ -48,12 +47,14 @@ const Homepage = () => {
                 <PopularyProduct data={homepageData.getPopularProducts}/>
             </View>
         )
+    } else {
+        content = '';
     }
+
     return (
         <ScrollView
             contentContainerStyle={styles.scrollView}
             keyboardShouldPersistTaps="handled"
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
             {content}
         </ScrollView>
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     },
     homepage: {
         flex: 1,
-        minHeight: height,
         alignItems: "center",
         backgroundColor: "#fff",
     },
