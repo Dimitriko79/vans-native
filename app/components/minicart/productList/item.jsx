@@ -2,7 +2,7 @@ import { Image, Text, TouchableOpacity, View, StyleSheet, Modal, Pressable } fro
 import formatImageUrl from "../../../helpers/formatImageUrl";
 import Price from "../../price/price";
 import Icon from "react-native-vector-icons/AntDesign";
-import React, { useMemo, useCallback } from "react";
+import React, {useMemo, useCallback, useState} from "react";
 import useItem from "./useItem";
 
 const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
@@ -12,7 +12,7 @@ const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
         prices = {},
         quantity = 1
     } = item;
-
+    const [imageLoaded, setImageLoaded] = useState(false);
     const image = useMemo(() => product.thumbnail || product.image, [product]);
 
     const {
@@ -28,7 +28,12 @@ const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
         <View style={[styles.item, { opacity: loading ? 0.5 : 1 }]}>
             <TouchableOpacity onPress={() => onPress(product.url_key)} style={styles.item_link}>
                 {image?.url ? (
-                    <Image style={styles.item_image} resizeMode="cover" source={{ uri: formatImageUrl(image.url) }} />
+                    <Image
+                        style={[styles.item_image, !imageLoaded && { opacity: 0 }]}
+                        resizeMode="cover"
+                        source={{ uri: formatImageUrl(image.url) }}
+                        onLoad={() => setImageLoaded(true)}
+                    />
                 ) : (
                     <View style={styles.imagePlaceholder}>
                         <Text style={styles.imagePlaceholderText}>אין תמונה</Text>
