@@ -7,7 +7,7 @@ import {REMOVE_PRODUCT_FROM_WISHLIST} from "./wishlist.gql";
 const useWishlist = () => {
     const {user, getUserData} = useUserContext();
 
-    const [fetchRemoveProductFromWishlist] = useMutation(REMOVE_PRODUCT_FROM_WISHLIST);
+    const [fetchRemoveProductFromWishlist, {loading}] = useMutation(REMOVE_PRODUCT_FROM_WISHLIST);
 
     const handleWishlist = useCallback(async id => {
         try {
@@ -23,7 +23,8 @@ const useWishlist = () => {
 
     return {
         items,
-        handleWishlist
+        handleWishlist,
+        loading
     }
 
 }

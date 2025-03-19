@@ -1,11 +1,14 @@
-import { Dimensions, FlatList, StyleSheet, View, Text } from "react-native";
+import {Dimensions, FlatList, StyleSheet, View, Text, Modal} from "react-native";
 import React, { useMemo, useRef, useEffect } from "react";
 import Item from "./item";
+import useGallery from "./useGallery";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 
 const { height } = Dimensions.get("window");
 
 const Gallery = ({ items = [] }) => {
 
+    const {handleWishlistItem, loading} = useGallery();
     const flatListRef = useRef(null);
 
     const focusOnFirstItem = () => {
@@ -21,7 +24,7 @@ const Gallery = ({ items = [] }) => {
     }, [items.length]);
 
 
-    const renderItem = useMemo(() => ({ item }) => <Item item={item} />, []);
+    const renderItem = useMemo(() => ({ item }) => <Item item={item} onHandleWishlistItem={handleWishlistItem} />, []);
 
     if (!items.length)
         return (
@@ -32,6 +35,14 @@ const Gallery = ({ items = [] }) => {
 
     return (
         <View style={styles.category}>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <FlatList
                 ref={flatListRef}
                 data={items}
@@ -72,6 +83,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#333",
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 });
 
 export default Gallery;

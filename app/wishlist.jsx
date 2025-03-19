@@ -1,14 +1,15 @@
-import {Dimensions, FlatList, StyleSheet, Text, View} from "react-native";
+import {Dimensions, FlatList, Modal, StyleSheet, Text, View} from "react-native";
 import useWishlist from "./components/wishlist/useWishlist";
 import React, {useMemo} from "react";
 import Item from "./components/wishlist/item";
+import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
 
 
 
 const { height } = Dimensions.get("window");
 
 const Wishlist = () => {
-    const {items, handleWishlist} = useWishlist();
+    const {items, handleWishlist, loading} = useWishlist();
 
     const renderItem = useMemo(
         () => ({ item }) => <Item item={item} handleWishlist={handleWishlist}/>,
@@ -20,6 +21,14 @@ const Wishlist = () => {
             <View style={styles.wishlist}>
                 <Text style={styles.wishlist_title}>הרשימה שלי</Text>
             </View>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <View style={styles.wishlist_content}>
                 <FlatList
                     data={items}
@@ -55,6 +64,12 @@ const styles = StyleSheet.create({
     gallery: {
         paddingHorizontal: 4,
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 })
 
 export default Wishlist

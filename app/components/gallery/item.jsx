@@ -6,8 +6,13 @@ import {images} from "../../../constants";
 
 const { width } = Dimensions.get("window");
 
-const GalleryItem = ({ item = {}, onClick = () => {} }) => {
-    const { price, handlePress, handleWishlist, isSignedIn, isAddedToWishlist } = useItem(item);
+const GalleryItem = ({ item = {}, onHandleWishlistItem = () => {} }) => {
+    const {
+        price,
+        isSignedIn,
+        handlePress,
+        isAddedToWishlist
+    } = useItem(item);
     const [imageLoaded, setImageLoaded] = useState(false);
 
     const handleLinkPress = () => {
@@ -30,7 +35,7 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
                         onLoad={() => setImageLoaded(true)}
                     />
                     {isSignedIn && (
-                        <TouchableOpacity style={styles.item_favorites} disabled={isAddedToWishlist} onPress={() => handleWishlist(item)}>
+                        <TouchableOpacity style={styles.item_favorites} disabled={isAddedToWishlist} onPress={() => onHandleWishlistItem(item)}>
                             <Image source={isAddedToWishlist ? images.heartBlack : images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>
                         </TouchableOpacity>
                     )}
