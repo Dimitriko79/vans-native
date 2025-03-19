@@ -41,6 +41,7 @@ export const UserContextProvider = ({ children }) => {
                 const userData = response.data.customer;
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: userData})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
+                dispatch({type: 'SET_WISHLIST_ITEMS', payload: userData.wishlist});
             }
             await getCustomerOrders();
         } catch (error) {
@@ -62,7 +63,7 @@ export const UserContextProvider = ({ children }) => {
             console.log(error)
             Alert.alert(error.message);
         }
-    }, [])
+    }, []);
 
     const signOut = async () => {
         try {

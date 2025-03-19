@@ -1,4 +1,4 @@
-import {Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable, Alert} from "react-native";
+import {Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable} from "react-native";
 import React, {useMemo, useState} from "react";
 import useItem from "./useItem";
 import Price from "../price/price";
@@ -7,7 +7,7 @@ import {images} from "../../../constants";
 const { width } = Dimensions.get("window");
 
 const GalleryItem = ({ item = {}, onClick = () => {} }) => {
-    const { price, handlePress } = useItem(item);
+    const { price, handlePress, handleWishlist, isSignedIn, isAddedToWishlist } = useItem(item);
     const [imageLoaded, setImageLoaded] = useState(false);
 
     const handleLinkPress = () => {
@@ -29,9 +29,11 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
                         resizeMode="contain"
                         onLoad={() => setImageLoaded(true)}
                     />
-                    <TouchableOpacity style={styles.item_favorites} onPress={() => Alert.alert('click wishlist')}>
-                        <Image source={images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>
-                    </TouchableOpacity>
+                    {isSignedIn && (
+                        <TouchableOpacity style={styles.item_favorites} disabled={isAddedToWishlist} onPress={() => handleWishlist(item)}>
+                            <Image source={isAddedToWishlist ? images.heartBlack : images.favorites} resizeMode="contain" style={styles.item_favorites_image}/>
+                        </TouchableOpacity>
+                    )}
                 </View>
                 <View style={styles.item_text_wrapper}>
                     {item?.gamechanger && <Text style={styles.item_gamechanger}>{item.gamechanger}</Text>}

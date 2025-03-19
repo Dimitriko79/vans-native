@@ -2,16 +2,16 @@ import {Dimensions, Image, StyleSheet, Text, View, TouchableOpacity, Pressable, 
 import React, { useMemo } from "react";
 import useItem from "./useItem";
 import Price from "../price/price";
-import {images} from "../../../constants";
 import Svg, {G, Path} from "react-native-svg";
 
 const { width } = Dimensions.get("window");
 
-const GalleryItem = ({ item = {}, onClick = () => {} }) => {
+const GalleryItem = ({ item = {}, onClick = () => {}, handleWishlist = () => {} }) => {
     const { price, handlePress } = useItem(item);
+    const {product} = item;
 
     const handleLinkPress = () => {
-        handlePress(item?.url_key);
+        handlePress(product?.url_key);
     };
 
     const priceComponent = useMemo(
@@ -25,10 +25,10 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
                 <View style={styles.item_image_wrapper}>
                     <Image
                         style={styles.item_image}
-                        source={{ uri: item?.image?.url || "" }}
+                        source={{ uri: product?.image?.url || "" }}
                         resizeMode="contain"
                     />
-                    <TouchableOpacity style={styles.item_trash} onPress={() => Alert.alert('click trash')}>
+                    <TouchableOpacity style={styles.item_trash} onPress={() => handleWishlist(item.id)}>
                         <Svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 13.207 14.563">
                             <G transform="translate(-4 -2.5)">
                                 <Path
@@ -54,8 +54,8 @@ const GalleryItem = ({ item = {}, onClick = () => {} }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.item_text_wrapper}>
-                    {item?.gamechanger && <Text style={styles.item_gamechanger}>{item.gamechanger}</Text>}
-                    <Text style={styles.item_text}>{item?.name}</Text>
+                    {product?.gamechanger && <Text style={styles.item_gamechanger}>{product.gamechanger}</Text>}
+                    <Text style={styles.item_text}>{product?.name}</Text>
                 </View>
                 <View style={styles.item_price_wrapper}>
                     <Text style={styles.item_price}>{priceComponent}</Text>

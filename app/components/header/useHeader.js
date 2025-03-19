@@ -12,7 +12,7 @@ const useHeader = () => {
         },
     });
 
-    const {user} = useUserContext();
+    const {wishlist} = useUserContext();
 
     const { data, loading, error } = useQuery(GET_CMS_BLOCK, {
         fetchPolicy: "cache-and-network",
@@ -32,7 +32,7 @@ const useHeader = () => {
         loading,
         error,
         itemCount: itemCount || 0,
-        wishlistItemCount: user?.wishlist?.items_count || 0,
+        wishlistItemCount: wishlist?.items_count || 0,
         miniCartIsOpen: miniCartIsOpen ?? false,
         setMiniCartIsOpen: toggleMiniCart,
     };

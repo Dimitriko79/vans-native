@@ -8,10 +8,10 @@ import Item from "./components/wishlist/item";
 const { height } = Dimensions.get("window");
 
 const Wishlist = () => {
-    const {items} = useWishlist();
+    const {items, handleWishlist} = useWishlist();
 
     const renderItem = useMemo(
-        () => ({ item }) => <Item item={item.product} />,
+        () => ({ item }) => <Item item={item} handleWishlist={handleWishlist}/>,
         []
     );
 

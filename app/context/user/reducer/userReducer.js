@@ -3,7 +3,8 @@ export const initialState = {
     user: null,
     isFetchingUser: false,
     error: null,
-    orders: []
+    orders: [],
+    wishlist: []
 };
 
 export const userReducer = (state, action) => {
@@ -16,6 +17,8 @@ export const userReducer = (state, action) => {
             return { ...state, isSignedIn: action.payload};
         case 'SET_CUSTOMER_ORDERS':
             return { ...state, orders: action.payload};
+        case 'SET_WISHLIST_ITEMS':
+            return { ...state, wishlist: action.payload};
         case 'USER_ERROR':
             return { ...state, error: action.payload };
         default:
