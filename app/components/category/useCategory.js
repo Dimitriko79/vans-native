@@ -35,7 +35,7 @@ const useCategory = (ids) => {
         }
     );
 
-    const [getProductsData, { data: productData, loading: productLoading }] = useLazyQuery(
+    const [getProductsData, { loading: productLoading }] = useLazyQuery(
         GET_PRODUCTS,
         {
             fetchPolicy: "cache-and-network",
@@ -142,6 +142,7 @@ const useCategory = (ids) => {
         sortFields,
         description: categoryData?.description || null,
         loading: loading || filterLoading,
+        productLoading,
         isLoadMore,
         error,
         handlePress,

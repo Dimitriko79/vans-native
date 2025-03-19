@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
     Dimensions,
     TouchableOpacity,
-    ScrollView
+    ScrollView, Modal
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import useCategory from "./components/category/useCategory";
@@ -30,6 +30,7 @@ const Category = () => {
         sortFields = [],
         description,
         loading,
+        productLoading,
         isLoadMore,
         pageInfo,
         error,
@@ -66,6 +67,14 @@ const Category = () => {
                 {description ? (
                     <RichContent html={description} />
                 ) : null}
+                <Modal
+                    visible={!isLoadMore && productLoading}
+                    transparent={true}
+                    animationType="fade"
+                    statusBarTranslucent={true}
+                >
+                    <LoadingIndicator style={styles.loaderContainerOverlay}/>
+                </Modal>
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
@@ -159,6 +168,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 });
 
 export default Category;

@@ -1,11 +1,11 @@
 import { View, StyleSheet, useWindowDimensions, Image } from "react-native";
 import { images } from "../../../constants";
 
-const LoadingIndicator = () => {
+const LoadingIndicator = ({style = {}}) => {
     const { height, width } = useWindowDimensions();
 
     return (
-        <View style={[styles.container, { height: height - 150, width }]}>
+        <View style={[styles.container, { height: height - 150, width }, style]}>
             <View style={styles.inner}>
                 <Image source={images.loading} style={[styles.image, { width: width / 3, height: width / 3 }]} />
             </View>

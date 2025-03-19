@@ -55,13 +55,14 @@ const styles = StyleSheet.create({
     category: {
         flex: 1,
         marginTop: 30,
+        marginBottom: 30,
         position: "relative",
     },
     gallery: {
         paddingHorizontal: 4,
     },
     noProductsContainer: {
-        height: height / 2,
+        height: height,
         justifyContent: "center",
         alignItems: "center",
     },
