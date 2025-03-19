@@ -23,7 +23,7 @@ const Gallery = ({ items = [] }) => {
 
     const renderItem = useMemo(() => ({ item }) => <Item item={item} />, []);
 
-    if (!items.length)
+    if (items.length)
         return (
             <View style={styles.noProductsContainer}>
                 <Text style={styles.noProductsText}>No products found(</Text>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 4,
     },
     noProductsContainer: {
-        height: height,
+        height: height/2,
         justifyContent: "center",
         alignItems: "center",
     },
