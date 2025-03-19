@@ -5,7 +5,7 @@ import useCartProvider from "./context/cart/cartProvider";
 
 const Main = ({children, scrollY}) => {
     const [isRedirecting, setIsRedirecting] = useState(false);
-    const {loadMoreProducts} = useCartProvider();
+    const {setIsLoadMore} = useCartProvider();
 
     useEffect(() => {
         if (!isRedirecting) {
@@ -26,7 +26,9 @@ const Main = ({children, scrollY}) => {
                 [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                 { useNativeDriver: false, listener: (event) => {
                         if (isCloseToBottom(event.nativeEvent)) {
-                            loadMoreProducts()
+                            if(router.pathname !== "/category"){
+                                setIsLoadMore(true);
+                            }
                         }
                     }}
             )}

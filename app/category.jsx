@@ -31,6 +31,7 @@ const Category = () => {
         description,
         loading,
         isLoadMore,
+        pageInfo,
         error,
         handlePress,
         currentFilter,
@@ -44,7 +45,7 @@ const Category = () => {
     const clearFilters = useCallback(() => setCurrentFilter(new Map()), [setCurrentFilter]);
 
     let content;
-    if (loading) {
+    if (loading || !categoryData) {
         content = (
             <View style={styles.loaderContainer}>
                 <LoadingIndicator/>
@@ -87,7 +88,7 @@ const Category = () => {
                     )}
                 </View>
                 <Gallery items={products}/>
-                {isLoadMore && <ActivityIndicator size={40} style={{marginBottom: 20}}/>}
+                {isLoadMore && pageInfo.current_page < pageInfo.total_pages && <ActivityIndicator size={40} style={{marginBottom: 20}}/>}
             </View>
         )
     };

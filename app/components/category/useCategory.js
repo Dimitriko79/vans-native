@@ -12,10 +12,12 @@ const useCategory = (ids) => {
     const sortProps = useSort({ defaultSortMagento: null });
     const [currentSort, setSort] = sortProps;
     const [isFetchingFirst, setIsFetchingFirst] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 8;
+    const [pageInfo, setPageInfo] = useState({
+        current_page: 1,
+        page_size: 8,
+        total_pages: 1,
+    });
     const [products, setProducts] = useState([]);
-
     const { isLoadMore, setIsLoadMore } = useCartProvider();
 
     const [runQuery, { loading, error, data }] = useLazyQuery(GET_CATEGORY, {
@@ -42,7 +44,6 @@ const useCategory = (ids) => {
     );
 
     const categoryData = data?.categoryList[0] || null;
-    const productCount = categoryData?.product_count;
 
     const aggregations = useMemo(() => {
         return filterData?.products?.aggregations?.filter(aggr => aggr.attribute_code !== "category_id") || [];
@@ -86,47 +87,45 @@ const useCategory = (ids) => {
         }
     };
 
-    const fetchProductData = useCallback(async (page = currentPage) => {
+    const fetchProductData = useCallback(async (page) => {
         const newFilter = transformedFilter;
         const newSort = { [currentSort.value]: currentSort.sortDirection };
-
         try {
             const res = await getProductsData({
-                variables: { filter: newFilter, sort: newSort, pageSize: pageSize, currentPage: page },
+                variables: { filter: newFilter, sort: newSort, pageSize: pageInfo.page_size, currentPage: page },
             });
 
-            if (res?.data?.products?.items.length) {
-                setProducts(prevState => {
-                    if(currentPage === 1){
-                        return res.data.products.items;
-                    } else {
-                        return [...prevState, ...res.data.products.items];
-                    }
-
-                    // const uniqueItems = Array.from(new Map([...prevState, ...newItems].map(item => [item.sku, item])).values());
-                    // return newItems;
-                });
+            if (res?.data?.products) {
+                if(res?.data?.products?.items.length) {
+                    setProducts(prevState => {
+                        if(page === 1){
+                            return res.data.products.items;
+                        } else {
+                            return [...prevState, ...res.data.products.items];
+                        }
+                    });
+                }
+                if(res?.data?.products.page_info){
+                    setPageInfo(res.data.products.page_info)
+                }
             }
         } catch (e) {
             console.error(e);
-        } finally {
-            setIsFetching(true);
             setIsLoadMore(false);
+        } finally {
+            setIsLoadMore(false);
+            setIsFetching(true);
         }
-    }, [transformedFilter, currentSort, currentFilter,currentPage, getProductsData]);
+    }, [transformedFilter, currentSort, currentFilter, getProductsData, setIsLoadMore]);
 
     useEffect(() => {
-        if (isLoadMore && !productLoading) {
-            setCurrentPage(prevPage => {
-                const nextPage = prevPage + 1;
-                fetchProductData(nextPage);
-                return nextPage;
-            });
+        if (isLoadMore && !productLoading && pageInfo.current_page < pageInfo.total_pages) {
+            fetchProductData(pageInfo.current_page + 1);
         }
     }, [isLoadMore]);
-    console.log(products.length)
+
+
     useEffect(() => {
-        setCurrentPage(1);
         fetchProductData(1);
     }, [currentFilter, transformedFilter,  currentSort]);
 
@@ -138,6 +137,7 @@ const useCategory = (ids) => {
     return {
         categoryData,
         products,
+        pageInfo,
         aggregations,
         sortFields,
         description: categoryData?.description || null,

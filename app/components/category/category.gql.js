@@ -22,6 +22,11 @@ query getCategory ($ids: String!){
 export const GET_PRODUCTS = gql`
 query getProducts ($filter: ProductAttributeFilterInput!, $sort: ProductAttributeSortInput, $pageSize: Int, $currentPage: Int) {
   products(filter: $filter, sort: $sort,  pageSize: $pageSize, currentPage: $currentPage){
+      page_info {
+        current_page
+        page_size
+        total_pages
+      }
       items{
         activity
         attribute_set_id

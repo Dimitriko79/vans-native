@@ -10,7 +10,7 @@ const Gallery = ({ items = [] }) => {
 
     const focusOnFirstItem = () => {
         if (flatListRef.current && items.length > 0) {
-            const firstItemIndex = Math.max(items.length - 8, 0); // Новый первый элемент страницы
+            const firstItemIndex = Math.max(items.length - 8, 0);
             console.log('firstItemIndex', firstItemIndex)
             // flatListRef.current.scrollToIndex({ index: firstItemIndex, animated: true });
         }
@@ -39,7 +39,7 @@ const Gallery = ({ items = [] }) => {
                 numColumns={2}
                 renderItem={renderItem}
                 contentContainerStyle={styles.gallery}
-                scrollEnabled={true}
+                scrollEnabled={false}
                 nestedScrollEnabled={false}
                 getItemLayout={(data, index) => ({
                     length: 200,

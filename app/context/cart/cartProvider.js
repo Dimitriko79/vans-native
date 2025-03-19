@@ -79,14 +79,8 @@ export const CartContextProvider = ({ children }) => {
 
     const [isLoadMore, setIsLoadMore] = useState(false);
 
-    const loadMoreProducts = useCallback(() => {
-        if(router.pathname !== "/category"){
-            setIsLoadMore(true);
-        }
-    }, [isLoadMore])
-
     return (
-        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen, loadMoreProducts, isLoadMore, setIsLoadMore}}>
+        <CartContext.Provider value={{ ...state, dispatch, getCartDetails, createCart, startFetchCart, retrieveCartId, mergeCarts, miniCartIsOpen, setMiniCartIsOpen, isLoadMore, setIsLoadMore}}>
             {children}
         </CartContext.Provider>
     );
