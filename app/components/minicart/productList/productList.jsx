@@ -2,10 +2,10 @@ import { FlatList, StyleSheet, View, Text } from "react-native";
 import React, { useCallback } from "react";
 import Item from "./item";
 
-const ProductList = ({ products = [], onPress = () => {}, isCheckout = false }) => {
+const ProductList = ({ products = [], onPress = () => {}, isShowRemove = false }) => {
     const renderProductItem = useCallback(({ item }) => (
-        <Item item={item} isCheckout={isCheckout} onPress={onPress} />
-    ), [isCheckout]);
+        <Item item={item} isShowRemove={isShowRemove} onPress={onPress} />
+    ), [isShowRemove]);
 
     return products?.length > 0 ? (
         <FlatList
@@ -14,7 +14,7 @@ const ProductList = ({ products = [], onPress = () => {}, isCheckout = false }) 
             numColumns={1}
             renderItem={renderProductItem}
             contentContainerStyle={styles.product_list}
-            scrollEnabled={!isCheckout}
+            scrollEnabled={isShowRemove}
             nestedScrollEnabled={false}
         />
     ) : (

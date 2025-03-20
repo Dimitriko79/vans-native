@@ -6,7 +6,9 @@ import React, { useMemo } from "react";
 const ItemReview = ({
                         totalPrice = { value: 0.00, currency: "ILS" },
                         productList = [],
-                        isPlacingOrder = false
+                        isPlacingOrder = false,
+                        isCustomerOrders = false,
+                        isShowRemove = false
                     }) => {
     const totalPriceFormatted = useMemo(() => ({
         value: totalPrice?.value || 0,
@@ -16,11 +18,11 @@ const ItemReview = ({
     return (
         <View style={isPlacingOrder ? styles.placing_order : styles.items_review}>
             <Text style={isPlacingOrder ? styles.placing_order_title : styles.items_review_title}>
-                סיכום הזמנה
+                {isCustomerOrders ? 'פריטים שהוזמנו' : 'סיכום הזמנה'}
             </Text>
 
             <View style={styles.items_review_items}>
-                <ProductList products={productList} isCheckout={true} />
+                <ProductList products={productList} isShowRemove={isShowRemove}/>
             </View>
 
             <View style={styles.placing_order_inner_total}>

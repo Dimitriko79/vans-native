@@ -45,7 +45,7 @@ const MiniCart = ({ isOpen, setIsOpen }) => {
                                     <Text style={styles.minicart_title_title}>עגלת קניות</Text>
                                 </View>
                                 <View style={styles.minicart_items_wrapper}>
-                                    <ProductList products={productList} onPress={handlePress}/>
+                                    <ProductList products={productList} onPress={handlePress} isShowRemove={true}/>
                                 </View>
                                 <View style={styles.minicart_total_prices}>
                                     <Price value={subTotal.value} currencyCode={subTotal.currency} style={styles} />

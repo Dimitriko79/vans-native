@@ -5,12 +5,13 @@ import Icon from "react-native-vector-icons/AntDesign";
 import React, {useMemo, useCallback, useState} from "react";
 import useItem from "./useItem";
 
-const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
+const Item = ({ item = {}, onPress = () => {}, isShowRemove = false }) => {
     const {
         product = {},
         configurable_options = [],
         prices = {},
-        quantity = 1
+        quantity = 1,
+        price = 0,
     } = item;
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useMemo(() => product.thumbnail || product.image, [product]);
@@ -56,7 +57,7 @@ const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
                 )}
 
                 <Text style={styles.item_content_price}>
-                    <Price value={prices?.price?.value || 0} currencyCode={prices?.price?.currency || "ILS"} />
+                    <Price value={prices?.price?.value || price || 0} currencyCode={prices?.price?.currency || "ILS"} />
                 </Text>
 
                 <View style={styles.item_content_quantity}>
@@ -65,7 +66,7 @@ const Item = ({ item = {}, onPress = () => {}, isCheckout = false }) => {
                 </View>
             </View>
 
-            {!isCheckout && (
+            {isShowRemove && (
                 <TouchableOpacity style={styles.item_content_remove} onPress={confirmDeletionOfItem}>
                     <Icon name="close" size={16} color="#000" />
                 </TouchableOpacity>
