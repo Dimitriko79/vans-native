@@ -7,6 +7,7 @@ import Checkbox from "./components/checkout/formDetails/checkbox";
 import {Formik} from "formik";
 import useCustomer from "./components/customer/useCustomer";
 import Error from "./components/error/error";
+import NavigationTabs from "./components/tabs/navigationTabs";
 
 const { height } = Dimensions.get("window");
 
@@ -53,6 +54,7 @@ const Customer = () => {
 
     return (
         <View style={styles.container}>
+            <NavigationTabs/>
             <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
             <View style={styles.customer}>
                 <Text style={styles.customer_title}>

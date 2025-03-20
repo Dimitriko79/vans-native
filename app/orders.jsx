@@ -3,6 +3,7 @@ import React, {useMemo} from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 import Order from "./components/orders/order";
 import useOrders from "./components/orders/useOrders";
+import NavigationTabs from "./components/tabs/navigationTabs";
 
 const { height, width } = Dimensions.get("window");
 
@@ -126,7 +127,12 @@ const Orders = () => {
        }
    }, [currentOrder, orders, startPage, endPage])
 
-    return content;
+    return (
+        <>
+            <NavigationTabs/>
+            {content}
+        </>
+    );
 };
 
 const styles = StyleSheet.create({

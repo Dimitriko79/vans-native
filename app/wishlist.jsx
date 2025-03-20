@@ -3,6 +3,7 @@ import useWishlist from "./components/wishlist/useWishlist";
 import React, {useMemo} from "react";
 import Item from "./components/wishlist/item";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
+import NavigationTabs from "./components/tabs/navigationTabs";
 
 
 
@@ -18,6 +19,7 @@ const Wishlist = () => {
 
     return (
         <View style={styles.container}>
+            <NavigationTabs/>
             <View style={styles.wishlist}>
                 <Text style={styles.wishlist_title}>הרשימה שלי</Text>
             </View>
