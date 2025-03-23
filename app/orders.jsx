@@ -23,7 +23,7 @@ const Orders = () => {
        if (currentOrder) {
            return (
                <View style={styles.container}>
-                   <Order order={currentOrder}/>
+                   <Order order={currentOrder} onOrder={onOrder}/>
                </View>
            )
        } else {
@@ -36,7 +36,7 @@ const Orders = () => {
                    <View style={styles.orders_content}>
                        <FlatList
                            data={orders}
-                           keyExtractor={(item) => String(item.id)}
+                           keyExtractor={(item) => String(item.order_number)}
                            numColumns={1}
                            renderItem={({ item }) => (
                                <View style={styles.order_item}>
@@ -129,7 +129,7 @@ const Orders = () => {
 
     return (
         <>
-            <NavigationTabs/>
+            {/*<NavigationTabs/>*/}
             {content}
         </>
     );

@@ -102,8 +102,11 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 20,
         fontSize: 24,
+        fontFamily: 'Heebo',
         fontWeight: "700",
-        textAlign: "right"
+        textAlign: "right",
+        borderBottomWidth: 1,
+        borderBottomColor: "#e4e4e4",
     },
     placing_order_inner_total: {
         backgroundColor: "#ffffff",

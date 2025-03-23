@@ -237,6 +237,38 @@ export const GET_CUSTOMER_ORDERS = gql`
                 status
                 grand_total
                 created_at
+                payment_method
+                shipping_method
+                shipping_address{
+                    city
+                    company
+                    fax
+                    firstname
+                    lastname
+                    middlename
+                    postcode
+                    prefix
+                    region
+                    street
+                    suffix
+                    telephone
+                    vat_id
+                }
+                billing_address {
+                    city
+                    company
+                    fax
+                    firstname
+                    lastname
+                    middlename
+                    postcode
+                    prefix
+                    region
+                    street
+                    suffix
+                    telephone
+                    vat_id
+                }
                 products{
                     price
                     product_name

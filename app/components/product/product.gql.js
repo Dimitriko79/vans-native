@@ -6,6 +6,8 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
             items {
                 activity
                 attribute_set_id
+                color_val
+                gender_filter_val
                 ... on ConfigurableProduct {
                     configurable_options {
                         attribute_id
@@ -22,6 +24,8 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
                       name
                       sku
                       stock_status
+                      color_val
+                      gender_filter_val
                       media_gallery{
                     label
                     url

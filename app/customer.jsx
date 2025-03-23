@@ -54,7 +54,7 @@ const Customer = () => {
 
     return (
         <View style={styles.container}>
-            <NavigationTabs/>
+            {/*<NavigationTabs/>*/}
             <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
             <View style={styles.customer}>
                 <Text style={styles.customer_title}>

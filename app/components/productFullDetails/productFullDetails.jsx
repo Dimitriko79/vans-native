@@ -52,7 +52,7 @@ const ProductFullDetails = ({ product = {} }) => {
             </View>
             <Text style={styles.product_gender}>
                 <Text style={styles.product_attribute_label}>מגדר:  </Text>
-                נשים
+                {product.gender_filter_val}
             </Text>
             <Text style={styles.membership_points}>
                 חברי VANS CLAB תוכלו לצבור
@@ -62,7 +62,7 @@ const ProductFullDetails = ({ product = {} }) => {
             <ImageCarousel images={images} />
             <Text style={styles.choose_color}>
                 <Text style={styles.product_attribute_label}>צבע:  </Text>
-                {product.color || "Не указан"}
+                {product.color_val}
             </Text>
             <ProductOptions
                 configurableOptions={product.configurable_options || []}
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     },
     choose_color: {
         paddingTop: 20,
+        paddingBottom: 10,
         marginTop: 20,
         borderTopWidth: 1,
         borderTopColor: '#ccc',

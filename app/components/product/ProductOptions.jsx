@@ -33,7 +33,7 @@ const ProductOptions = ({
                 attribute_id: option.attribute_id,
                 stock_status: getStockStatusOfOption(value.value_index),
               }))
-              .filter(item => item.stock_status !== 'OUT_OF_STOCK');
+              // .filter(item => item.stock_status !== 'OUT_OF_STOCK');
 
           return items.length > 0 ? (
               <View key={option.attribute_code} style={styles.dropdown_container}>

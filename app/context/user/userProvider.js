@@ -15,7 +15,7 @@ export const UserContextProvider = ({ children }) => {
     const [isUserUpdate, setUserUpdate] = useState(false);
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
-    const [fetchCustomerOrders] = useLazyQuery(GET_CUSTOMER_ORDERS, {fetchPolicy: "network-only"});
+    const [fetchCustomerOrders, {error}] = useLazyQuery(GET_CUSTOMER_ORDERS, {fetchPolicy: "network-only"});
 
     const [revokeToken] = useMutation(REVOKE_CUSTOMER_TOKEN);
     const [signInCustomer] = useMutation(SIGN_IN);

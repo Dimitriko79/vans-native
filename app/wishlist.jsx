@@ -19,7 +19,7 @@ const Wishlist = () => {
 
     return (
         <View style={styles.container}>
-            <NavigationTabs/>
+            {/*<NavigationTabs/>*/}
             <View style={styles.wishlist}>
                 <Text style={styles.wishlist_title}>הרשימה שלי</Text>
             </View>
