@@ -73,6 +73,7 @@ export const UserContextProvider = ({ children }) => {
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 dispatch({type: 'SET_CUSTOMER_ORDERS', payload: []});
+                dispatch({type: 'SET_WISHLIST_ITEMS', payload: []});
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage"});
                     setView("SIGNIN");
