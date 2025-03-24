@@ -1,15 +1,17 @@
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import useSocial from "./useSocial";
 
-const Social = ({product = null}) => {
+const Social = props => {
+    const {handleWishlistItem, onShare } = useSocial(props);
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.social} onPress={() => {}}>
+            <TouchableOpacity style={styles.social} onPress={handleWishlistItem}>
                 <Icon name='heart' size={16} color='#589bc6'/>
                 <Text style={styles.social_text}>הוספה למועדפים</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.social} onPress={() => {}}>
+            <TouchableOpacity style={styles.social} onPress={onShare}>
                 <Icon name='share-alt' size={16} color='#589bc6'/>
                 <Text style={styles.social_text}>שתף זאת</Text>
             </TouchableOpacity>
