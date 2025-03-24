@@ -120,8 +120,8 @@ const Orders = () => {
                         <View style={styles.pagination_inner}>
                             <TouchableOpacity
                                 style={[
-                                    styles.page_button,
-                                    currentPage === totalPages && styles.disabled_button,
+                                    styles.pagination_page_arrow,
+                                    currentPage === totalPages && styles.pagination_page_arrow_disabled,
                                 ]}
                                 onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                                 disabled={currentPage === totalPages}
@@ -133,7 +133,7 @@ const Orders = () => {
                                 />
                             </TouchableOpacity>
 
-                            <View style={styles.page_numbers}>
+                            <View style={styles.pagination_page_numbers}>
                                 {Array.from(
                                     { length: endPage - startPage + 1 },
                                     (_, i) => startPage + i
@@ -141,14 +141,14 @@ const Orders = () => {
                                     <TouchableOpacity
                                         key={page}
                                         style={[
-                                            styles.page_number,
-                                            currentPage === page && styles.active_page,
+                                            styles.pagination_page_number,
+                                            currentPage === page && styles.pagination_page_active,
                                         ]}
                                         onPress={() => setCurrentPage(page)}
                                     >
                                         <Text
                                             style={[
-                                                styles.page_number_text,
+                                                styles.pagination_page_number_text,
                                                 currentPage === page && { color: "#000" },
                                             ]}
                                         >
@@ -160,8 +160,8 @@ const Orders = () => {
 
                             <TouchableOpacity
                                 style={[
-                                    styles.page_button,
-                                    currentPage === 1 && styles.disabled_button,
+                                    styles.pagination_page_arrow,
+                                    currentPage === 1 && styles.pagination_page_arrow_disabled,
                                 ]}
                                 onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                                 disabled={currentPage === 1}
@@ -175,22 +175,22 @@ const Orders = () => {
                         </View>
                     </View>
 
-                    <View style={[styles.itemsPerPageContainer, !orders.length && { display: "none" }]}>
-                        <Text style={styles.itemsPerPageText}>הצגה:</Text>
+                    <View style={[styles.pagination_items_per_page_container, !orders.length && { display: "none" }]}>
+                        <Text style={styles.pagination_items_per_page_name}>הצגה:</Text>
 
-                        <View style={styles.dropdownWrapper}>
+                        <View style={styles.pagination_dropdown_wrapper}>
                             <TouchableOpacity
                                 activeOpacity={1}
-                                style={styles.itemsPerPageButtonCurrent}
+                                style={styles.pagination_dropdown_button_current}
                                 onPress={toggleDropdown}
                             >
-                                <Text style={styles.itemsPerPageButtonTextCurrent}>{itemsPerPage}</Text>
+                                <Text>{itemsPerPage}</Text>
                             </TouchableOpacity>
 
                             {isShowOptions && (
                                 <Animated.View
                                     style={[
-                                        styles.dropdownAnimated,
+                                        styles.pagination_dropdown_animated,
                                         {
                                             transform: [
                                                 {
@@ -208,8 +208,8 @@ const Orders = () => {
                                         <TouchableOpacity
                                             key={num}
                                             style={[
-                                                styles.dropdownItem,
-                                                itemsPerPage === num && styles.activeDropdownItem,
+                                                styles.pagination_dropdown_item,
+                                                itemsPerPage === num && styles.pagination_dropdown_item_active,
                                             ]}
                                             onPress={() => {
                                                 setItemsPerPage(num);
@@ -217,7 +217,7 @@ const Orders = () => {
                                                 toggleDropdown();
                                             }}
                                         >
-                                            <Text style={styles.dropdownItemText}>{num}</Text>
+                                            <Text style={styles.pagination_dropdown_item_text}>{num}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </Animated.View>
@@ -304,23 +304,23 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 10,
     },
-    page_button: {
+    pagination_page_arrow: {
         padding: 10,
         backgroundColor: "#e7e7e7",
         borderRadius: 4,
     },
-    page_numbers: {
+    pagination_page_numbers: {
         flexDirection: "row",
         justifyContent: "center",
         gap: 3,
     },
-    page_number: {
+    pagination_page_number: {
         height: 40,
         width: 40,
         justifyContent: "center",
         alignItems: "center",
     },
-    active_page: {
+    pagination_page_active: {
         borderRadius: 4,
         borderWidth: 1,
         borderColor: "#858585",
@@ -330,12 +330,12 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    page_number_text: {
+    pagination_page_number_text: {
         fontSize: 14,
         fontWeight: "bold",
         color: "#000",
     },
-    itemsPerPageContainer: {
+    pagination_items_per_page_container: {
         flexDirection: "row",
         direction: "rtl",
         alignItems: "center",
@@ -345,12 +345,17 @@ const styles = StyleSheet.create({
         marginBottom: 40,
         gap: 16,
     },
-    itemsPerPageText: {
+    pagination_dropdown_wrapper: {
+        position: "relative",
+        flexDirection: "row-reverse",
+        alignItems: "center",
+    },
+    pagination_items_per_page_name: {
         fontSize: 16,
         fontWeight: "bold",
         marginRight: 10,
     },
-    itemsPerPageButtonCurrent: {
+    pagination_dropdown_button_current: {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#ffffff",
@@ -360,12 +365,8 @@ const styles = StyleSheet.create({
         height: 40,
         width: 40,
     },
-    dropdownWrapper: {
-        position: "relative",
-        flexDirection: "row-reverse",
-        alignItems: "center",
-    },
-    dropdownAnimated: {
+
+    pagination_dropdown_animated: {
         position: "absolute",
         right: 50,
         top: 0,
@@ -376,24 +377,18 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         paddingHorizontal: 4,
         paddingVertical: 3,
-        zIndex: 999,
-        // elevation: 6,
-        // shadowColor: "#000",
-        // shadowOffset: { width: 0, height: 4 },
-        // shadowOpacity: 0.2,
-        // shadowRadius: 4,
     },
-    dropdownItem: {
+    pagination_dropdown_item: {
         paddingVertical: 8,
         paddingHorizontal: 12,
         minWidth: 40,
     },
-    dropdownItemText: {
+    pagination_dropdown_item_text: {
         fontSize: 14,
         color: "#333",
         textAlign: "center",
     },
-    activeDropdownItem: {
+    pagination_dropdown_item_active: {
         backgroundColor: "#e5e5e5",
         borderRadius: 4,
     },

@@ -1,21 +1,17 @@
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import React from "react";
 import ItemReview from "../checkout/itemsReview/itemsReview";
 import useStoreContext from "../../context/store/storeProvider";
 import Icon from "react-native-vector-icons/AntDesign";
-import {router} from "expo-router";
-
-const { height, width } = Dimensions.get("window");
 
 const Order = ({ order, onOrder }) => {
     const {payment_method, shipping_method, shipping_address, billing_address} = order;
     const {country} = useStoreContext();
-
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => onOrder(null)} style={styles.goBackButton}>
-                <View style={styles.row}>
-                    <Text style={styles.goBackText}>חזרה</Text>
+            <TouchableOpacity onPress={() => onOrder(null)} style={styles.go_back_button}>
+                <View style={styles.go_back_wrapper}>
+                    <Text style={styles.go_back_text}>חזרה</Text>
                     <Icon name="right" color="#fff" size={16} />
                 </View>
             </TouchableOpacity>
@@ -106,19 +102,19 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         textAlign: "right",
     },
-    goBackButton: {
+    go_back_button: {
         padding: 10,
         backgroundColor: '#555',
         borderRadius: 8,
         marginTop: 15,
         marginBottom: 15,
     },
-    goBackText: {
+    go_back_text: {
         color: '#fff',
         fontSize: 16,
         textAlign: "right",
     },
-    row: {
+    go_back_wrapper: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "flex-end",

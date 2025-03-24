@@ -7,12 +7,10 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     Dimensions,
-    FlatList,
-    Image
+    FlatList
 } from 'react-native';
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
-import { images } from "../../../constants";
 import Svg, {G, Path} from "react-native-svg";
 
 const { width, height } = Dimensions.get('window');
@@ -51,9 +49,9 @@ const SideBarMenu = ({
                 ]}
             >
                 {history.length >= 1 && (
-                    <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
-                        <View style={styles.row}>
-                            <Text style={styles.goBackText}>חזרה</Text>
+                    <TouchableOpacity onPress={handleGoBack} style={styles.go_back_button}>
+                        <View style={styles.sidebar_wrapper}>
+                            <Text style={styles.go_back_text}>חזרה</Text>
                             <Icon name="right" color="#fff" size={16} />
                         </View>
                     </TouchableOpacity>
@@ -65,23 +63,23 @@ const SideBarMenu = ({
                         const [id, { category, isLeaf }] = item;
                         return isLeaf ? (
                             <TouchableOpacity activeOpacity={0.7} onPress={() => handleChosenCategory(id)}>
-                                <Text style={styles.sidebarItem}>{category.name}</Text>
+                                <Text style={styles.sidebar_item_text}>{category.name}</Text>
                             </TouchableOpacity>
                         ) : (
                             <TouchableOpacity onPress={() => {
                                 setHistory([...history, id]);
                                 setCategoryId(id);
                             }}>
-                                <Text style={[styles.sidebarItem, styles.branch]}>{category.name}</Text>
+                                <Text style={[styles.sidebar_item_text, styles.sidebar_item_branch]}>{category.name}</Text>
                             </TouchableOpacity>
                         );
                     }}
-                    contentContainerStyle={styles.listContent}
+                    contentContainerStyle={styles.sidebar_content_container}
                     ListFooterComponent={() => (
-                        <View style={styles.footerContainer}>
+                        <View style={styles.sidebar_list_footer_component}>
                             <TouchableOpacity onPress={handlePress}>
-                                <View style={styles.row}>
-                                    <Text style={[styles.sidebarItem, styles.branch]}>{isSignedIn ? 'איזור אישי' : 'התחברות'}</Text>
+                                <View style={styles.sidebar_wrapper}>
+                                    <Text style={[styles.sidebar_item_text, styles.sidebar_item_branch]}>{isSignedIn ? 'איזור אישי' : 'התחברות'}</Text>
                                     <Svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          viewBox="0 0 33.414 33.414">
                                         <G transform="translate(0)">
@@ -94,8 +92,8 @@ const SideBarMenu = ({
                             </TouchableOpacity>
                             {isSignedIn && (
                                 <TouchableOpacity onPress={handleSignOut}>
-                                    <View style={styles.row}>
-                                        <Text style={[styles.sidebarItem]}>התנתק</Text>
+                                    <View style={styles.sidebar_wrapper}>
+                                        <Text style={[styles.sidebar_item_text]}>התנתק</Text>
                                         <Svg width={16} height={16} viewBox="0 0 256 256">
                                             <G transform="translate(1.406 1.406) scale(2.81 2.81)">
                                                 <Path
@@ -159,36 +157,37 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 8,
     },
-    sidebarItem: {
+    sidebar_item_text: {
         color: '#fff',
         fontSize: 18,
         fontFamily: "Heebo",
         textAlign: 'right',
     },
-    branch: {
+    sidebar_item_branch: {
         fontWeight: "bold",
     },
-    goBackButton: {
+    go_back_button: {
         padding: 10,
         backgroundColor: '#555',
         borderRadius: 8,
+        marginTop: 15,
         marginBottom: 15,
     },
-    goBackText: {
+    go_back_text: {
         color: '#fff',
         fontSize: 16,
         textAlign: "right",
     },
-    row: {
+    sidebar_wrapper: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "flex-end",
         gap: 5,
     },
-    listContent: {
+    sidebar_content_container: {
         gap: 15,
     },
-    footerContainer: {
+    sidebar_list_footer_component: {
         gap: 15,
     },
     icon: {
