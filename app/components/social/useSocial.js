@@ -26,7 +26,7 @@ const useSocial = ({product = null}) => {
 
     const onShare = async () => {
         const shareMessage = `${base_url}${product.url_key}${product.url_suffix}`
-        const url = `whatsapp://send?text=${encodeURIComponent(shareMessage)}`;
+        const url = `https://api.whatsapp.com/send?text=${shareMessage}`;
         const supported = await Linking.canOpenURL(url);
 
         if (supported) {
