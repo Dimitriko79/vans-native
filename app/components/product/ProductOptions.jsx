@@ -33,9 +33,9 @@ const ProductOptions = ({
                 attribute_id: option.attribute_id,
                 stock_status: getStockStatusOfOption(value.value_index),
               }))
-              // .filter(item => item.stock_status !== 'OUT_OF_STOCK');
+              .filter(item => item.stock_status !== 'OUT_OF_STOCK');
 
-          return items.length > 0 ? (
+          return !items.length ? (
               <View key={option.attribute_code} style={styles.dropdown_container}>
                 <Text style={styles.label}>
                   {option.label} <Text style={styles.label_required}>*</Text>
@@ -56,7 +56,9 @@ const ProductOptions = ({
                     contentContainerStyle={styles.modal_container}
                 />
               </View>
-          ) : null;
+          ) : (
+              <Text style={{textAlign: 'right', marginBottom: 10, fontSize: 16, fontWeight: '700'}}>אזל מהמלאי</Text>
+          );
         })}
       </View>
   );
