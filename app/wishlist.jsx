@@ -1,9 +1,9 @@
-import {Dimensions, FlatList, Modal, StyleSheet, Text, View} from "react-native";
+import {Dimensions, FlatList, Image, Modal, StyleSheet, Text, View} from "react-native";
 import useWishlist from "./components/wishlist/useWishlist";
 import React, {useMemo} from "react";
 import Item from "./components/wishlist/item";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
-import NavigationTabs from "./components/tabs/navigationTabs";
+import {images} from "../constants";
 
 
 
@@ -16,6 +16,21 @@ const Wishlist = () => {
         () => ({ item }) => <Item item={item} handleWishlist={handleWishlist}/>,
         []
     );
+
+    if (!items.length){
+        return (
+            <View style={styles.container}>
+                <View style={styles.wishlist}>
+                    <View style={styles.checkout_form_delivery_method_error}>
+                        <Text style={styles.checkout_form_delivery_method_error_text}>
+                            אין לך פריטים ב Wish List.
+                        </Text>
+                        <Image style={styles.checkout_form_delivery_method_error_image} source={images.warning} />
+                    </View>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -71,6 +86,26 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         justifyContent: "center",
         alignItems: "center",
+    },
+    checkout_form_delivery_method_error: {
+        backgroundColor: "#fdf0d5",
+        flexDirection: "row",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        gap: 15,
+        direction: "rtl"
+    },
+    checkout_form_delivery_method_error_text: {
+        fontSize: 13,
+        color: "#6f4400",
+        width: "80%",
+        textAlign: "left",
+    },
+    checkout_form_delivery_method_error_image: {
+        width: 24,
+        height: 24,
     }
 })
 
