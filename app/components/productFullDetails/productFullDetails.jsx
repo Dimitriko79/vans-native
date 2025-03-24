@@ -8,10 +8,13 @@ import {router} from "expo-router";
 import Breadcrumbs from "../breadcrumbs/breadcrumbs";
 import React from "react";
 import ImageCarousel from "../carousel/imageCarousel";
+import Social from "../social/social";
+import ProductInfo from "../productInfo/productInfo";
+import PopularyProduct from "../popularyProduct/popularyProduct";
 
 const { width } = Dimensions.get("window");
 
-const ProductFullDetails = ({ product = {} }) => {
+const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
     const {
         showError,
         setShowError,
@@ -77,6 +80,9 @@ const ProductFullDetails = ({ product = {} }) => {
                 disabled={isAddToCartDisabled}
                 stateAddToCartButton={stateAddToCartButton}
             />
+            <Social product={product} />
+            <ProductInfo product={product}/>
+            <PopularyProduct data={popularProducts}/>
         </View>
     );
 };

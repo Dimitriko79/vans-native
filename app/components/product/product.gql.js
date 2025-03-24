@@ -207,3 +207,17 @@ export const GET_PRODUCT_DETAIL_QUERY = gql`
         }
     }
 `;
+
+export const GET_POPULAR_PRODUCTS = gql`
+query getPopularProducts{
+  getPopularProducts {
+    title
+    popular_products {
+        title
+        image
+        url
+        price
+    }
+  }
+}
+`;

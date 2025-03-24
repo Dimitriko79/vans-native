@@ -19,7 +19,7 @@ const Product = () => {
 
     const talonProps = useProduct(urlKey);
 
-    const { productData, loading, error } = talonProps;
+    const { productData, popularProducts, loading, error } = talonProps;
 
     if (loading) {
         return (
@@ -44,7 +44,7 @@ const Product = () => {
                 keyboardShouldPersistTaps="handled"
             >
                 <View style={styles.container}>
-                    <ProductFullDetails product={productData} />
+                    <ProductFullDetails product={productData} popularProducts={popularProducts} />
                 </View>
             </ScrollView>
         </SafeAreaView>

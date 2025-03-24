@@ -44,7 +44,7 @@ const Homepage = () => {
                     data={homepageData.getShopByData}
                     handlePress={handlePress}
                 />
-                <PopularyProduct data={homepageData.getPopularProducts}/>
+                <PopularyProduct data={homepageData.getPopularProducts} isHomepage={true}/>
             </View>
         )
     } else {

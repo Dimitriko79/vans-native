@@ -5,14 +5,14 @@ import React, { useMemo } from "react";
 
 const { width } = Dimensions.get("window");
 
-const PopularProduct = ({ data = { title: "", popular_products: [] } }) => {
+const PopularProduct = ({ data = { title: "", popular_products: [] }, isHomepage = false }) => {
     if (!data?.popular_products?.length) return null;
 
     const { title, popular_products } = data;
     const products = useMemo(() => popular_products, [popular_products]);
 
     return (
-        <View style={styles.popular}>
+        <View style={[styles.popular, isHomepage && {marginTop: 40, marginHorizontal: 10}]}>
             <View style={styles.popular_title_wrapper}>
                 <Text style={styles.popular_title_before} />
                 <Text style={styles.popular_title}>{title}</Text>
@@ -49,10 +49,8 @@ const styles = StyleSheet.create({
     popular: {
         flex: 1,
         backgroundColor: "#f1f2ed",
-        marginTop: 40,
         marginBottom: 10,
         paddingBottom: 40,
-        marginHorizontal: 10,
     },
     popular_title_wrapper: {
         flexDirection: "row",
