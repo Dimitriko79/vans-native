@@ -9,12 +9,6 @@ const Order = ({ order, onOrder }) => {
     const {country} = useStoreContext();
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => onOrder(null)} style={styles.go_back_button}>
-                <View style={styles.go_back_wrapper}>
-                    <Text style={styles.go_back_text}>חזרה</Text>
-                    <Icon name="right" color="#fff" size={16} />
-                </View>
-            </TouchableOpacity>
             <ItemReview totalPrice={{ value: order.grand_total, currency: "ILS" }} productList={order.products} isPlacingOrder={true} isCustomerOrders={true} isShowRemove={false}/>
             <View style={styles.order_delivery}>
                 <Text style={styles.order_delivery_title}>פרטי ההזמנה</Text>
@@ -53,6 +47,12 @@ const Order = ({ order, onOrder }) => {
                             <Text style={styles.order_delivery_content_section_item}>{payment_method}</Text>
                         </View>
                     </View>
+                    <TouchableOpacity
+                        style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20}}
+                        onPress={() => onOrder(null)}
+                    >
+                        <Text style={{color: '#006bb4', fontWeight: '400', fontSize: 16, fontFamily: 'Heebo'}}>תחזור</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
