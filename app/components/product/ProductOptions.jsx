@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import ModalSelector from "react-native-modal-selector";
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
+import { Animated, Easing } from 'react-native';
+import Icon from "react-native-vector-icons/AntDesign";
 
 const ProductOptions = ({
                           configurableOptions = [],
@@ -10,6 +11,27 @@ const ProductOptions = ({
                         }) => {
   const { variants } = product;
   const [selectedOptions, setSelectedOptions] = useState({});
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  const toggleDropdown = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 200,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 150,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }).start(() => setIsOpen(false));
+    }
+  };
 
   const getStockStatusOfOption = (pattern) => {
     if (!variants || !variants.length) return 'OUT_OF_STOCK';
@@ -40,21 +62,53 @@ const ProductOptions = ({
                 <Text style={styles.label}>
                   {option.label} <Text style={styles.label_required}>*</Text>
                 </Text>
-                <ModalSelector
-                    data={items}
-                    initValue={selectedOptions[option.attribute_id] || `בחרו ${option.label}`}
-                    onChange={(selectedOption) => {
-                      handleSelectionChange(selectedOption.attribute_id, selectedOption.value);
-                      setSelectedOptions((prev) => ({
-                        ...prev,
-                        [selectedOption.attribute_id]: selectedOption.label,
-                      }));
-                      setShowError(false);
-                    }}
-                    overlayStyle={styles.overlay}
-                    style={styles.modal}
-                    contentContainerStyle={styles.modal_container}
-                />
+                <View style={styles.options}>
+                  <TouchableOpacity activeOpacity={1} style={styles.options_trigger} onPress={toggleDropdown}>
+                    <Text style={[styles.options_trigger_text]}>
+                      {selectedOptions[option.attribute_id] || `בחרו ${option.label}`}
+                    </Text>
+                    <Icon name={isOpen ? "up" : "down"} color="#000" size={16}/>
+                  </TouchableOpacity>
+                  {isOpen && (
+                      <Animated.View style={[styles.options_container, { opacity: fadeAnim }]}>
+                        <ScrollView>
+                          {items.map((option, index) => (
+                              <TouchableOpacity
+                                  key={index}
+                                  activeOpacity={1}
+                                  onPress={() => {
+                                    toggleDropdown();
+                                    handleSelectionChange(option.attribute_id, option.value);
+                                    setSelectedOptions((prev) => ({
+                                      ...prev,
+                                      [option.attribute_id]: option.label,
+                                    }));
+                                    setShowError(false);
+                                  }}
+                                  style={styles.options_item}
+                              >
+                                <Text style={styles.options_item_text}>{option.label}</Text>
+                              </TouchableOpacity>
+                          ))}
+                        </ScrollView>
+                      </Animated.View>
+                  )}
+                </View>
+                {/*<ModalSelector*/}
+                {/*    data={items}*/}
+                {/*    initValue={selectedOptions[option.attribute_id] || `בחרו ${option.label}`}*/}
+                {/*    onChange={(selectedOption) => {*/}
+                {/*      handleSelectionChange(selectedOption.attribute_id, selectedOption.value);*/}
+                {/*      setSelectedOptions((prev) => ({*/}
+                {/*        ...prev,*/}
+                {/*        [selectedOption.attribute_id]: selectedOption.label,*/}
+                {/*      }));*/}
+                {/*      setShowError(false);*/}
+                {/*    }}*/}
+                {/*    overlayStyle={styles.overlay}*/}
+                {/*    style={styles.modal}*/}
+                {/*    contentContainerStyle={styles.modal_container}*/}
+                {/*/>*/}
               </View>
           ) : (
               <Text style={{textAlign: 'right', marginBottom: 10, fontSize: 16, fontWeight: '700'}}>אזל מהמלאי</Text>
@@ -76,6 +130,48 @@ const styles = StyleSheet.create({
   },
   label_required: {
     color: "#e02b27",
+  },
+  options: {
+    position: "relative",
+    marginTop: 10
+  },
+  options_trigger: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    direction: 'rtl'
+  },
+  options_trigger_text: {
+    fontSize: 14,
+    fontWeight: "400",
+    fontFamily: "Heebo",
+  },
+  options_container: {
+    position: "absolute",
+    top: 45,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    width: '100%',
+    maxHeight: 400,
+    zIndex: 1,
+  },
+  options_item: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "flex-end",
+    paddingHorizontal: 12,
+  },
+  options_item_text: {
+    fontSize: 14,
+    fontWeight: "400",
+    fontFamily: "Heebo",
   },
   modal: {
     backgroundColor: "#ffffff",

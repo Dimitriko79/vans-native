@@ -29,15 +29,15 @@ export const Card = ({
                 </View>
             )}
             <View style={styles.card_content}>
-                <Text style={[styles.card_content_item, styles.name]}>{address.firstname} {address.lastname}</Text>
-                <Text style={styles.card_content_item}>{address.city}</Text>
-                {[...address.street].reverse().map((item, index) => (
+                {address.lastname || address.firstname && <Text style={[styles.card_content_item, styles.name]}>{address.firstname} {address.lastname}</Text>}
+                {address.city && <Text style={styles.card_content_item}>{address.city}</Text>}
+                {Array.isArray(address.street) && address.street.length && [...address.street].reverse().map((item, index) => (
                     <Text key={index} style={styles.card_content_item}>
                         {item}
                     </Text>
                 ))}
                 <Text style={styles.card_content_item}>{country?.full_name_locale || 'ישראל'}</Text>
-                <Text style={styles.card_content_item}>{address.telephone}</Text>
+                {address.telephone && <Text style={styles.card_content_item}>{address.telephone}</Text>}
             </View>
             <View style={styles.card_actions}>
                 {isCustomAddress && (

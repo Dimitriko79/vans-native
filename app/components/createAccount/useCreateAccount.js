@@ -29,7 +29,6 @@ const useCreateAccount = () => {
     );
 
     const onSubmit = useCallback(async (values, resetForm) => {
-        Alert.alert(JSON.stringify(values));
         try {
             const input = {
                 date_of_birth: values.date_birth,
@@ -44,7 +43,6 @@ const useCreateAccount = () => {
                     input: input,
                 }
             })
-            //TODO
         } catch (e) {
             console.error(e);
             Alert.alert(e.message);
