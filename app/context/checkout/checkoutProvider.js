@@ -14,7 +14,7 @@ export const CheckoutContextProvider = ({ children }) => {
    useEffect(() => {
        if(user && user.addresses && user.addresses.length > 0) {
            let address = user.addresses
-               .find(address => address.default_billing && address.default_shipping);
+               .find(address => address.default_shipping);
 
            if (address) {
                function parseStreet(pattern) {
