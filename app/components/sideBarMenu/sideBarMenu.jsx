@@ -97,7 +97,7 @@ const SideBarMenu = ({
                             {isSignedIn && (
                                 <TouchableOpacity onPress={handleSignOut}>
                                     <View style={styles.sidebar_wrapper}>
-                                        <Text style={[styles.sidebar_item_text]}>התנתק</Text>
+                                        <Text style={[styles.sidebar_item_text, {flex: 1}]}>התנתק</Text>
                                         <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
                                             <Svg width={16} height={16} viewBox="0 0 256 256">
                                                 <G transform="translate(1.406 1.406) scale(2.81 2.81)">
@@ -128,7 +128,7 @@ const SideBarMenu = ({
                                 onToggle();
                             }}>
                                 <View style={styles.sidebar_wrapper}>
-                                    <Text style={[styles.sidebar_item_text]}>המועדפים שלי</Text>
+                                    <Text style={[styles.sidebar_item_text, {flex: 1}]}>המועדפים שלי</Text>
                                     <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
                                         <IconAwesome name='heart-o' size={18} color='#ffffff'/>
                                     </View>
@@ -139,7 +139,7 @@ const SideBarMenu = ({
                                 onToggle();
                             }}>
                                 <View style={styles.sidebar_wrapper}>
-                                    <Text style={[styles.sidebar_item_text]}>איתור חנות</Text>
+                                    <Text style={[styles.sidebar_item_text, {flex: 1}]}>איתור חנות</Text>
                                     <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
                                         <IconAwesome name='map-marker' size={18} color='#ffffff'/>
                                     </View>

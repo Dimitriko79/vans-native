@@ -7,8 +7,8 @@ import {router} from "expo-router";
 const useAddress = () => {
     const {user, getUserData, setUserUpdate} = useUserContext();
     const {addresses} = user;
-    const shippingAddressDefault = addresses.find((address) => address.default_shipping);
-    const billingAddressDefault = addresses.find((address) => address.default_billing);
+    const shippingAddressDefault = addresses.find((address) => address.id === +user.default_shipping);
+    const billingAddressDefault = addresses.find((address) => address.id === +user.default_billing);
     const customAddresses = addresses.filter((address) => !address.default_billing && !address.default_shipping);
     const [errorMessage, setErrorMessage] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
