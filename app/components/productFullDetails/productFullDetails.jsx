@@ -11,6 +11,7 @@ import ImageCarousel from "../carousel/imageCarousel";
 import Social from "../social/social";
 import ProductInfo from "../productInfo/productInfo";
 import PopularyProduct from "../popularyProduct/popularyProduct";
+import Espot from "../espot/espot";
 
 const { width } = Dimensions.get("window");
 
@@ -81,6 +82,7 @@ const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
                 stateAddToCartButton={stateAddToCartButton}
             />
             <Social product={product} />
+            <Espot/>
             <ProductInfo product={product}/>
             <PopularyProduct data={popularProducts}/>
         </View>

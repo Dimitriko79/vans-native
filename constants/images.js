@@ -25,4 +25,7 @@ import listStar from '../assets/images/list-star.webp';
 import vansJoin from '../assets/images/vans-join.jpg';
 import favorites from '../assets/images/heart.png';
 import heartBlack from '../assets/images/heart_black.png';
-export default {heartBlack, favorites, vansJoin,listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
+import vDelivery from '../assets/images/v-delivery.webp';
+import vReturn from '../assets/images/v-return.webp';
+
+export default {vDelivery, vReturn, heartBlack, favorites, vansJoin,listStar, vansMain, payPal, buyMe, warning, cart, exit, logo, menu, search, heroVans, shopNow, knuSkools, menWomenSquare, menWomenSquareTwo, blog1, blog2, blog3, blog4, loading, categoriesMen, categoriesWomen, categoriesKids, customer };
