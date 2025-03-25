@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontWeight: 'bold',
     paddingBottom: 20,
-    paddingRight: 5,
     textAlign: "right"
   },
   modalOverlay: {
