@@ -21,6 +21,7 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
     const {user, setView, isSignedIn} = useUserContext();
 
     const handleLogoPress = useCallback(() => {
+        onToggle();
         router.replace("/homepage");
     }, []);
 
@@ -46,12 +47,23 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
             <View style={styles.header}>
                 <BurgerMenu onPress={onToggle} isOpen={isSidebarOpen} />
 
-                <TouchableOpacity style={styles.button} onPress={() => router.navigate("/wishlist")}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        router.navigate("/wishlist");
+                        onToggle();
+                }}>
                     <Image source={images.favorites} style={styles.image} resizeMode="contain" />
                     {wishlistItemCount > 0 && <Text style={styles.count}>{wishlistItemCount}</Text>}
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => setMiniCartIsOpen(!miniCartIsOpen)}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        setMiniCartIsOpen(!miniCartIsOpen);
+                        onToggle();
+                    }}
+                >
                     <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 26.947 23.818">
                         <Path
                             d="M8.682,15.789H23a.79.79,0,0,0,.759-.573L26.916,4.164a.789.789,0,0,0-.759-1.006H6.861L6.3.618A.79.79,0,0,0,5.526,0H.789a.789.789,0,0,0,0,1.579h4.1l2.85,12.827a2.368,2.368,0,0,0,.941,4.541H23a.789.789,0,1,0,0-1.579H8.684a.789.789,0,0,1,0-1.579ZM25.111,4.737,22.4,14.21H9.317L7.212,4.737Zm0,0"
