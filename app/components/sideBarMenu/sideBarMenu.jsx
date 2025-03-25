@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
+import IconAwesome from "react-native-vector-icons/FontAwesome";
 import Svg, {G, Path} from "react-native-svg";
+import {router} from "expo-router";
 
 const { width, height } = Dimensions.get('window');
 
@@ -80,43 +82,69 @@ const SideBarMenu = ({
                             <TouchableOpacity onPress={handlePress}>
                                 <View style={styles.sidebar_wrapper}>
                                     <Text style={[styles.sidebar_item_text, styles.sidebar_item_branch]}>{isSignedIn ? 'איזור אישי' : 'התחברות'}</Text>
-                                    <Svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                         viewBox="0 0 33.414 33.414">
-                                        <G transform="translate(0)">
-                                            <Path
-                                                d="M28.521,21.6a16.643,16.643,0,0,0-6.349-3.982,9.659,9.659,0,1,0-10.93,0A16.734,16.734,0,0,0,0,33.414H2.61a14.1,14.1,0,0,1,28.193,0h2.61A16.6,16.6,0,0,0,28.521,21.6ZM16.707,16.707a7.048,7.048,0,1,1,7.048-7.048A7.056,7.056,0,0,1,16.707,16.707Z"
-                                                transform="translate(0)" fill="#ffffff"></Path>
-                                        </G>
-                                    </Svg>
+                                    <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
+                                        <Svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             viewBox="0 0 33.414 33.414">
+                                            <G transform="translate(0)">
+                                                <Path
+                                                    d="M28.521,21.6a16.643,16.643,0,0,0-6.349-3.982,9.659,9.659,0,1,0-10.93,0A16.734,16.734,0,0,0,0,33.414H2.61a14.1,14.1,0,0,1,28.193,0h2.61A16.6,16.6,0,0,0,28.521,21.6ZM16.707,16.707a7.048,7.048,0,1,1,7.048-7.048A7.056,7.056,0,0,1,16.707,16.707Z"
+                                                    transform="translate(0)" fill="#ffffff"></Path>
+                                            </G>
+                                        </Svg>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                             {isSignedIn && (
                                 <TouchableOpacity onPress={handleSignOut}>
                                     <View style={styles.sidebar_wrapper}>
                                         <Text style={[styles.sidebar_item_text]}>התנתק</Text>
-                                        <Svg width={16} height={16} viewBox="0 0 256 256">
-                                            <G transform="translate(1.406 1.406) scale(2.81 2.81)">
-                                                <Path
-                                                    d="M 83.37 45.677 c 0.012 -0.035 0.022 -0.068 0.032 -0.103 c 0.055 -0.183 0.094 -0.373 0.094 -0.574 c 0 -0.201 -0.039 -0.391 -0.094 -0.574 c -0.01 -0.035 -0.02 -0.068 -0.032 -0.103 c -0.066 -0.183 -0.156 -0.353 -0.27 -0.507 c -0.008 -0.011 -0.01 -0.024 -0.018 -0.035 L 71.094 28.176 c -0.673 -0.876 -1.93 -1.04 -2.805 -0.368 c -0.876 0.673 -1.04 1.928 -0.367 2.804 L 77.437 43 H 27.497 c -1.104 0 -2 0.896 -2 2 s 0.896 2 2 2 h 49.941 l -9.515 12.387 c -0.673 0.876 -0.509 2.132 0.367 2.805 c 0.363 0.279 0.792 0.414 1.218 0.414 c 0.6 0 1.193 -0.269 1.587 -0.781 l 11.988 -15.605 c 0.008 -0.011 0.011 -0.025 0.019 -0.036 C 83.215 46.029 83.304 45.86 83.37 45.677 z"
-                                                    fill="#ffffff"
-                                                    stroke="#ffffff"
-                                                    strokeWidth={4}
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                                <Path
-                                                    d="M 60.811 90 H 8.504 c -1.104 0 -2 -0.896 -2 -2 V 2 c 0 -1.104 0.896 -2 2 -2 h 52.306 c 1.104 0 2 0.896 2 2 v 34.423 c 0 1.104 -0.896 2 -2 2 s -2 -0.896 -2 -2 V 4 H 10.504 v 82 h 48.306 V 53.513 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 V 88 C 62.811 89.104 61.915 90 60.811 90 z"
-                                                    fill="#ffffff"
-                                                    stroke="#ffffff"
-                                                    strokeWidth={4}
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </G>
-                                        </Svg>
+                                        <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
+                                            <Svg width={16} height={16} viewBox="0 0 256 256">
+                                                <G transform="translate(1.406 1.406) scale(2.81 2.81)">
+                                                    <Path
+                                                        d="M 83.37 45.677 c 0.012 -0.035 0.022 -0.068 0.032 -0.103 c 0.055 -0.183 0.094 -0.373 0.094 -0.574 c 0 -0.201 -0.039 -0.391 -0.094 -0.574 c -0.01 -0.035 -0.02 -0.068 -0.032 -0.103 c -0.066 -0.183 -0.156 -0.353 -0.27 -0.507 c -0.008 -0.011 -0.01 -0.024 -0.018 -0.035 L 71.094 28.176 c -0.673 -0.876 -1.93 -1.04 -2.805 -0.368 c -0.876 0.673 -1.04 1.928 -0.367 2.804 L 77.437 43 H 27.497 c -1.104 0 -2 0.896 -2 2 s 0.896 2 2 2 h 49.941 l -9.515 12.387 c -0.673 0.876 -0.509 2.132 0.367 2.805 c 0.363 0.279 0.792 0.414 1.218 0.414 c 0.6 0 1.193 -0.269 1.587 -0.781 l 11.988 -15.605 c 0.008 -0.011 0.011 -0.025 0.019 -0.036 C 83.215 46.029 83.304 45.86 83.37 45.677 z"
+                                                        fill="#ffffff"
+                                                        stroke="#ffffff"
+                                                        strokeWidth={4}
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    />
+                                                    <Path
+                                                        d="M 60.811 90 H 8.504 c -1.104 0 -2 -0.896 -2 -2 V 2 c 0 -1.104 0.896 -2 2 -2 h 52.306 c 1.104 0 2 0.896 2 2 v 34.423 c 0 1.104 -0.896 2 -2 2 s -2 -0.896 -2 -2 V 4 H 10.504 v 82 h 48.306 V 53.513 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 V 88 C 62.811 89.104 61.915 90 60.811 90 z"
+                                                        fill="#ffffff"
+                                                        stroke="#ffffff"
+                                                        strokeWidth={4}
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    />
+                                                </G>
+                                            </Svg>
+                                        </View>
                                     </View>
                                 </TouchableOpacity>
                             )}
+                            <TouchableOpacity onPress={() => {
+                                router.navigate('/wishlist');
+                                onToggle();
+                            }}>
+                                <View style={styles.sidebar_wrapper}>
+                                    <Text style={[styles.sidebar_item_text]}>המועדפים שלי</Text>
+                                    <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
+                                        <IconAwesome name='heart-o' size={18} color='#ffffff'/>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                router.navigate('/stores');
+                                onToggle();
+                            }}>
+                                <View style={styles.sidebar_wrapper}>
+                                    <Text style={[styles.sidebar_item_text]}>איתור חנות</Text>
+                                    <View style={{width: 18, flexDirection: 'row', justifyContent: 'center'}}>
+                                        <IconAwesome name='map-marker' size={18} color='#ffffff'/>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     )}
                 />

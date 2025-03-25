@@ -1,25 +1,28 @@
-import {View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import useSocial from "./useSocial";
+import {router} from "expo-router";
 
 const Social = props => {
     const {handleWishlistItem, onShare } = useSocial(props);
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.social} onPress={handleWishlistItem}>
-                <Icon name='heart' size={16} color='#589bc6'/>
-                <Text style={styles.social_text}>הוספה למועדפים</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.social} onPress={onShare}>
-                <Icon name='share-alt' size={16} color='#589bc6'/>
-                <Text style={styles.social_text}>שתף זאת</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.social} onPress={() => {}}>
-                <Icon name='map-marker' size={16} color='#589bc6'/>
-                <Text style={styles.social_text}>אתר חנות</Text>
-            </TouchableOpacity>
-        </View>
+        <>
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.social} onPress={handleWishlistItem}>
+                    <Icon name='heart' size={16} color='#589bc6'/>
+                    <Text style={styles.social_text}>הוספה למועדפים</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.social} onPress={onShare}>
+                    <Icon name='share-alt' size={16} color='#589bc6'/>
+                    <Text style={styles.social_text}>שתף זאת</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.social} onPress={() => router.navigate('/stores')}>
+                    <Icon name='map-marker' size={16} color='#589bc6'/>
+                    <Text style={styles.social_text}>אתר חנות</Text>
+                </TouchableOpacity>
+            </View>
+        </>
     )
 }
 

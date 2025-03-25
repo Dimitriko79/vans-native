@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     breadcrumbs: {
-        width: width - 20,
+        width: width - 40,
 
     },
     product_attribute_label: {

@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
     },
     popular_title_before: {
         height: 5,
-        width: 50,
+        width: width * 0.1,
         borderTopWidth: 1,
         borderBottomWidth: 1,
         borderColor: "#c1c2bd",
     },
     popular_title_after: {
         height: 5,
-        width: 60,
+        width: width * 0.1,
         borderTopWidth: 1,
         borderBottomWidth: 1,
         borderColor: "#c1c2bd",

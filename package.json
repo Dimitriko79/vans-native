@@ -32,6 +32,7 @@
     "react-native-element-textinput": "^2.2.0",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-htmlview": "^0.17.0",
+    "react-native-maps": "^1.20.1",
     "react-native-modal-selector": "^2.1.2",
     "react-native-reanimated": "^3.16.7",
     "react-native-reanimated-carousel": "^4.0.2",
