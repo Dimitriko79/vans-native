@@ -13,7 +13,7 @@ import useUserContext from "../../../context/user/userProvider";
 
 const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
     const { cartId, createCart } = useCartProvider();
-    const { dispatch } = useCheckoutContext();
+    const { dispatch, shippingDetails } = useCheckoutContext();
     const {getCustomerOrders} = useUserContext();
 
     const [selectedPayment, setSelectedPayment] = useState('');
@@ -70,6 +70,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
             if (!cartId) return;
             try {
                 await placeOrder({ variables: { cartId } });
+                dispatch({type: 'SET_SHIPPING_DETAILS', payload: {...shippingDetails, confirm_terms: '', delivery: ''}})
                 await createCart();
                 await getCustomerOrders();
             } catch (e) {

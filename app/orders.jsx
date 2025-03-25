@@ -116,7 +116,7 @@ const Orders = () => {
                         />
                     </View>
 
-                    <View style={[styles.pagination, !orders.length && { display: "none" }]}>
+                    {totalPages > 1 && <View style={[styles.pagination, !orders.length && {display: "none"}]}>
                         <View style={styles.pagination_inner}>
                             <TouchableOpacity
                                 style={[
@@ -135,7 +135,7 @@ const Orders = () => {
 
                             <View style={styles.pagination_page_numbers}>
                                 {Array.from(
-                                    { length: endPage - startPage + 1 },
+                                    {length: endPage - startPage + 1},
                                     (_, i) => startPage + i
                                 ).map((page) => (
                                     <TouchableOpacity
@@ -149,7 +149,7 @@ const Orders = () => {
                                         <Text
                                             style={[
                                                 styles.pagination_page_number_text,
-                                                currentPage === page && { color: "#000" },
+                                                currentPage === page && {color: "#000"},
                                             ]}
                                         >
                                             {page}
@@ -173,9 +173,9 @@ const Orders = () => {
                                 />
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View>}
 
-                    <View style={[styles.pagination_items_per_page_container, !orders.length && { display: "none" }]}>
+                    {totalPages > 1 && <View style={[styles.pagination_items_per_page_container, !orders.length && {display: "none"}]}>
                         <Text style={styles.pagination_items_per_page_name}>הצגה:</Text>
 
                         <View style={styles.pagination_dropdown_wrapper}>
@@ -223,7 +223,7 @@ const Orders = () => {
                                 </Animated.View>
                             )}
                         </View>
-                    </View>
+                    </View>}
                 </View>
             );
         }

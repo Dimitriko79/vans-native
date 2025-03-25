@@ -2,6 +2,7 @@ import {useCallback, useState} from "react";
 import {Alert} from "react-native";
 import {useMutation} from "@apollo/client";
 import {CREATE_ACCOUNT} from "./createAccaunt.gql";
+import {router} from "expo-router";
 
 const useCreateAccount = () => {
 
@@ -29,6 +30,7 @@ const useCreateAccount = () => {
     );
 
     const onSubmit = useCallback(async (values, resetForm) => {
+        setErrorMessage([]);
         try {
             const input = {
                 date_of_birth: values.date_birth,
@@ -43,6 +45,7 @@ const useCreateAccount = () => {
                     input: input,
                 }
             })
+            router.navigate('/homepage');
         } catch (e) {
             console.error(e);
             Alert.alert(e.message);
