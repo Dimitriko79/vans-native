@@ -42,12 +42,20 @@ const RootLayout = () => {
         if (loaded) SplashScreen.hideAsync();
     }, [loaded, error]);
 
-    const toggleSidebar = () => {
-        Animated.timing(translateX, {
-            toValue: isSidebarOpen ? -width : 0,
-            duration: 200,
-            useNativeDriver: false,
-        }).start(() => setSidebarOpen(!isSidebarOpen));
+    const toggleSidebar = (type) => {
+        if (type === 'close') {
+            Animated.timing(translateX, {
+                toValue: -width,
+                duration: 200,
+                useNativeDriver: false,
+            }).start(() => setSidebarOpen(false));
+        } else {
+            Animated.timing(translateX, {
+                toValue: isSidebarOpen ? -width : 0,
+                duration: 200,
+                useNativeDriver: false,
+            }).start(() => setSidebarOpen(!isSidebarOpen));
+        }
     };
 
     const handlePress = (id) => {

@@ -20,9 +20,10 @@ const useForm = ({ onErrorMessage = [], setIsAddingAddress = () => {}, address =
         default_billing: false,
         default_shipping: false,
     };
+
     const [initialValues, setInitialValues] = useState(defaultValues);
     const [loading, setLoading] = useState(false);
-    const isUpdateAddress = !!address;
+    const isUpdateAddress = Object.keys(address).length !== 0;
     const isDefaultBillingAddress = address?.default_billing;
     const isDefaultShippingAddress = address?.default_shipping;
 

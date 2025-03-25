@@ -21,7 +21,7 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
     const {user, setView, isSignedIn} = useUserContext();
 
     const handleLogoPress = useCallback(() => {
-        onToggle();
+        onToggle('close');
         router.replace("/homepage");
     }, []);
 
@@ -50,8 +50,8 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
+                        onToggle('close');
                         router.navigate("/wishlist");
-                        onToggle();
                 }}>
                     <Image source={images.favorites} style={styles.image} resizeMode="contain" />
                     {wishlistItemCount > 0 && <Text style={styles.count}>{wishlistItemCount}</Text>}
@@ -60,8 +60,8 @@ const Header = ({ onToggle = () => {}, scrollY, isSidebarOpen = false }) => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
+                        onToggle('close');
                         setMiniCartIsOpen(!miniCartIsOpen);
-                        onToggle();
                     }}
                 >
                     <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 26.947 23.818">
