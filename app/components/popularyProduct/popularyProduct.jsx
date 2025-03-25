@@ -12,7 +12,7 @@ const PopularProduct = ({ data = { title: "", popular_products: [] }, isHomepage
     const products = useMemo(() => popular_products, [popular_products]);
 
     return (
-        <View style={[styles.popular, isHomepage && {marginTop: 40, marginHorizontal: 10}]}>
+        <View style={[styles.popular, isHomepage && {marginTop: 40}]}>
             <View style={styles.popular_title_wrapper}>
                 <Text style={styles.popular_title_before} />
                 <Text style={styles.popular_title}>{title}</Text>

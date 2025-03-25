@@ -92,11 +92,9 @@ const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
 const styles = StyleSheet.create({
     product_top_details: {
         flex: 1,
-        paddingRight: 10,
-        paddingLeft: 10,
     },
     breadcrumbs: {
-        width: width - 40,
+        width: width - 20,
 
     },
     product_attribute_label: {

@@ -231,7 +231,6 @@ const Form = props => {
 
 const styles = StyleSheet.create({
     container: {
-        minHeight: height,
         backgroundColor: "#f1f2ed",
         marginTop: 25
     },
@@ -243,8 +242,8 @@ const styles = StyleSheet.create({
     },
     address_form: {
         backgroundColor: "#fff",
-        marginLeft: 25,
-        marginRight: 25,
+        marginLeft: 10,
+        marginRight: 10,
     },
     customer_form_content: {
         flexDirection: "column",

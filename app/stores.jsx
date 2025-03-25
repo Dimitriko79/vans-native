@@ -40,20 +40,20 @@ const Stores = () => {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       paddingHorizontal: 20,
+       paddingHorizontal: 10,
         paddingVertical: 20,
     },
     stores_title: {
-      textAlign: "center",
-      fontSize: 26,
-      fontWeight: "700",
-      fontFamily: "Heebo",
+        fontSize: 22,
+        fontFamily: "Heebo",
+        fontWeight: "900",
+        textAlign: "right",
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
         marginBottom: 20
     },
     map: {
-        width: Dimensions.get('window').width - 40,
+        width: Dimensions.get('window').width - 20,
         height: Dimensions.get('window').width,
     },
     markerWrapper: {

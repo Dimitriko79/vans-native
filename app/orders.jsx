@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
         minHeight: height,
     },
     orders: {
-        padding: 25,
+        paddingVertical: 25,
+        paddingHorizontal: 10
     },
     orders_title: {
         fontSize: 22,
@@ -252,8 +253,8 @@ const styles = StyleSheet.create({
     },
     orders_content: {
         backgroundColor: "#fff",
-        marginLeft: 25,
-        marginRight: 25,
+        marginLeft: 10,
+        marginRight: 10,
     },
     order_item: {
         borderBottomColor: "#ccc",
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
     pagination: {
         width: width,
         marginVertical: 20,
-        paddingHorizontal: 25,
+        paddingHorizontal: 10,
     },
     pagination_inner: {
         direction: "rtl",
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
         direction: "rtl",
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingHorizontal: 25,
+        paddingHorizontal: 10,
         marginTop: 20,
         marginBottom: 40,
         gap: 16,
@@ -353,7 +354,6 @@ const styles = StyleSheet.create({
     pagination_items_per_page_name: {
         fontSize: 16,
         fontWeight: "bold",
-        marginRight: 10,
     },
     pagination_dropdown_button_current: {
         justifyContent: "center",

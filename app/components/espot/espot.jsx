@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontFamily: "Heebo",
         textAlign: "left",
-        width: "88%"
+        width: "85%"
     }
 })
 

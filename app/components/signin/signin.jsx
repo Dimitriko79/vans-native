@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     inner: {
         marginTop: 10,
         marginBottom: 25,
-        marginLeft: 25,
-        marginRight: 25,
+        marginLeft: 10,
+        marginRight: 10,
         backgroundColor: "#fff",
     },
     sign_in_content_phone: {
@@ -311,11 +311,11 @@ const styles = StyleSheet.create({
     },
     create_account_wrapper: {
         flex: 1,
-        width: width - 50,
-        height: (width - 50) * 1.8,
+        width: width - 20,
+        height: (width - 20) * 1.8,
         justifyContent: "center",
-        marginLeft: 25,
-        marginRight: 25,
+        marginLeft: 10,
+        marginRight: 10,
         marginTop: 50,
         marginBottom: 10
     },

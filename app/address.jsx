@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
         paddingBottom: 25
     },
     addresses: {
-        padding: 25,
+        paddingVertical: 25,
+        paddingHorizontal: 10
     },
     addresses_title: {
         fontSize: 22,

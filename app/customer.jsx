@@ -280,7 +280,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#f1f2ed"
     },
     customer: {
-        padding: 25
+        paddingVertical: 25,
+        paddingHorizontal: 10
     },
     customer_title: {
         fontSize: 22,
@@ -293,8 +294,8 @@ const styles = StyleSheet.create({
     },
     customer_form: {
         backgroundColor: "#fff",
-        marginLeft: 25,
-        marginRight: 25,
+        marginLeft: 10,
+        marginRight: 10,
     },
     customer_form_content: {
         flexDirection: "column",

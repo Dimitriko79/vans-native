@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "flex-start",
-        paddingHorizontal: 25,
+        paddingHorizontal: 10,
         marginBottom: 25
     },
     order_delivery: {

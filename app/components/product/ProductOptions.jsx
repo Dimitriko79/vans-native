@@ -35,7 +35,7 @@ const ProductOptions = ({
               }))
               .filter(item => item.stock_status !== 'OUT_OF_STOCK');
 
-          return !items.length ? (
+          return items.length ? (
               <View key={option.attribute_code} style={styles.dropdown_container}>
                 <Text style={styles.label}>
                   {option.label} <Text style={styles.label_required}>*</Text>

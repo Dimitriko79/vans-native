@@ -3,7 +3,6 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {CREATE_CART_MUTATION, GET_CART_DETAILS, GET_CUSTOMER_CART, MERGE_CARTS} from "../../components/cart/cart.gql";
 import { cartReducer, initialState } from "./reducer/cartReducer";
 import useUserContext from "../user/userProvider";
-import {router} from "expo-router";
 
 const CartContext = createContext(null);
 const useCartProvider = () => useContext(CartContext);
@@ -14,12 +13,10 @@ export const CartContextProvider = ({ children }) => {
     const { cartId, isFetchingCart } = state;
     const {isSignedIn} = useUserContext();
 
-
     const [fetchCartId] = useMutation(CREATE_CART_MUTATION);
     const [mergeCarts] = useMutation(MERGE_CARTS);
     const [getCartDetailsQuery] = useLazyQuery(GET_CART_DETAILS);
     const [getCustomerCart] = useLazyQuery(GET_CUSTOMER_CART);
-
     const saveCartId = (id) => {
         if (!id) return;
         dispatch({ type: "SET_CART_ID", payload: id });

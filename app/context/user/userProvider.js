@@ -39,8 +39,8 @@ export const UserContextProvider = ({ children }) => {
 
             if (response?.data?.customer) {
                 const userData = response.data.customer;
-                dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: userData})
+                dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
                 dispatch({type: 'SET_WISHLIST_ITEMS', payload: userData.wishlist});
             }
             await getCustomerOrders();

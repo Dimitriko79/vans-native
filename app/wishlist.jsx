@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#f1f2ed"
     },
     wishlist: {
-        padding: 25
+        paddingVertical: 25,
+        paddingHorizontal: 10
     },
     wishlist_title: {
         fontSize: 22,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#c6c6c6",
     },
-    gallery: {
+    wishlist_gallery: {
         paddingHorizontal: 4,
     },
     loaderContainerOverlay: {
