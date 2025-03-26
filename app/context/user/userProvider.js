@@ -105,6 +105,7 @@ export const UserContextProvider = ({ children }) => {
 
     const signIn = async credentials => {
         try {
+            await AsyncStorage.removeItem('sign-token');
             const res = await signInCustomer({
                 variables: {
                     email: credentials.email,
