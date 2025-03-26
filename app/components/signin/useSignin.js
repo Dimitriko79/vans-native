@@ -1,4 +1,4 @@
-import {useCallback, useState, useMemo, useEffect} from "react";
+import {useCallback, useState, useMemo} from "react";
 import useUserContext from "../../context/user/userProvider";
 import useCartProvider from "../../context/cart/cartProvider";
 import { router } from "expo-router";
