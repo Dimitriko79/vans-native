@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity, Dimensions, Image} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Dimensions, Image, Modal} from "react-native";
 import {Formik} from "formik";
 import React from "react";
 import {TextInput} from "react-native-element-textinput";
@@ -7,6 +7,7 @@ import useForm from "./useForm";
 import * as Yup from "yup";
 import {validateMobilePhone} from "../../../helpers/validationSchema";
 import {images} from "../../../../constants";
+import LoadingIndicator from "../../loadingIndicator/loadingIndicator";
 
 const { height } = Dimensions.get("window");
 
@@ -42,6 +43,14 @@ const Form = props => {
 
     return (
         <View style={styles.container}>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <View style={styles.address_form}>
                 <View style={styles.address_form_title}>
                     <Text style={[styles.address_form_title_text, {paddingHorizontal: 25, paddingTop: 25,}]}>
@@ -208,7 +217,7 @@ const Form = props => {
                                         <Image style={styles.checkout_form_delivery_method_error_image} source={images.warning} />
                                     </View>
                                 )}
-                                <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.customer_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
+                                <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.customer_form_submit} onPress={() => handleSubmit()}>
                                     <Text style={styles.customer_form_submit_text}>שמור כתובת</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -298,9 +307,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 600,
     },
-    disabled: {
-        opacity: 0.5
-    },
     checkout_form_delivery_method_error: {
         backgroundColor: "#fdf0d5",
         flexDirection: "row",
@@ -320,6 +326,13 @@ const styles = StyleSheet.create({
     checkout_form_delivery_method_error_image: {
         width: 24,
         height: 24,
+    },
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
     }
 })
 
