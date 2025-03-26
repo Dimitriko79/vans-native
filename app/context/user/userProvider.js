@@ -123,7 +123,7 @@ export const UserContextProvider = ({ children }) => {
             const token = res?.data?.generateCustomerToken.token || null;
 
             if (token) {
-                await setToken(token, 300);
+                await setToken(token, 3600);
                 await SecureStore.setItemAsync("user-email", credentials.email);
                 await SecureStore.setItemAsync("user-password", credentials.password);
                 await getUserData();

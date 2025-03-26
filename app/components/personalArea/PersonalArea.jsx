@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     personal_area: {
         flexDirection: "column",
         justifyContent: "flex-start",
-        paddingHorizontal: 25,
+        paddingHorizontal: 10,
         marginTop: 25,
         marginBottom: 25,
         gap: 30
