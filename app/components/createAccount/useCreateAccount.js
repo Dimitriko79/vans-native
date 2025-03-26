@@ -52,6 +52,7 @@ const useCreateAccount = () => {
             router.navigate('/homepage');
         } catch (e) {
             console.error(e);
+            Alert.alert(e.message)
             setErrorMessage([e.message]);
             setLoading(false);
         }

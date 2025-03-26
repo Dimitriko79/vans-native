@@ -5,7 +5,8 @@ import { AppState } from "react-native";
 const useSmartAutoSignOut = (isSignedIn, signOut, extendToken, expiresAt) => {
     // const appState = useRef(AppState.currentState);
     // const [isActive, setIsActive] = useState(appState.current === 'active');
-    const timerRef = useRef(null);
+    // const timerRef = useRef(null);
+    let timer;
 
     // Подписка на AppState
     // useEffect(() => {
@@ -43,7 +44,7 @@ const useSmartAutoSignOut = (isSignedIn, signOut, extendToken, expiresAt) => {
                 return;
             }
 
-            timerRef.current = setTimeout(() => {
+            timer = setTimeout(() => {
                 signOut();
                 // const isStillActive = appState.current === 'active';
                 // setIsActive(isStillActive);
@@ -53,7 +54,7 @@ const useSmartAutoSignOut = (isSignedIn, signOut, extendToken, expiresAt) => {
         setup();
 
         return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
+            if (timer) clearTimeout(timer);
         };
     }, [isSignedIn, expiresAt]);
 
