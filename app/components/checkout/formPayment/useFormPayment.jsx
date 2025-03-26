@@ -20,7 +20,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
     const [placeOrderButtonClicked, setPlaceOrderButtonClicked] = useState(false);
 
-    const [fetchCustomerPaymentMethod] = useMutation(SET_CUSTOMER_PAYMENT_METHOD_ON_CART);
+    const [fetchCustomerPaymentMethod, {loading: customerPaymentMethodLoading}] = useMutation(SET_CUSTOMER_PAYMENT_METHOD_ON_CART);
     const [placeOrder, { data: placeOrderData, error: placeOrderError, loading: placeOrderLoading }] = useMutation(PLACE_ORDER);
 
     const [getOrderDetails, { data: orderDetails, loading: orderDetailsLoading }] = useLazyQuery(GET_ORDER_DETAILS, {
@@ -112,7 +112,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
         selectedPayment,
         setSelectedPayment,
         handlePlaceOrder,
-        loading: orderDetailsLoading || placeOrderLoading || placeOrderButtonClicked
+        loading: orderDetailsLoading || placeOrderLoading
     };
 };
 

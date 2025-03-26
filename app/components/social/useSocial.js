@@ -38,6 +38,7 @@ const useSocial = ({product = null}) => {
 
     return {
         handleWishlistItem,
+        loading,
         onShare
     }
 }

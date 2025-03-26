@@ -22,8 +22,6 @@ const useSignin = () => {
     }), []);
 
     const onSubmit = useCallback(async (values, type, resetForm) => {
-        if (loading) return;
-
         setLoading(true);
         setErrorMessage([]);
 

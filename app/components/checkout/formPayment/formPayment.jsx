@@ -1,9 +1,12 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Modal, Dimensions} from 'react-native';
 import CouponCode from "./couponCode/couponCode";
 import useFormPayment from "./useFormPayment";
 import PaymentsWrapper from "./paymentsWrapper";
 import React, { useCallback } from "react";
 import { images } from "../../../../constants";
+import LoadingIndicator from "../../loadingIndicator/loadingIndicator";
+
+const { height } = Dimensions.get('window');
 
 const FormPayment = ({
                          payments = [],
@@ -27,6 +30,14 @@ const FormPayment = ({
 
     return (
         <View>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <CouponCode />
             {payments && payments.length && payments.map((payment) => (
                 <PaymentsWrapper
@@ -41,7 +52,7 @@ const FormPayment = ({
                             <TouchableOpacity
                                 activeOpacity={0.5}
                                 disabled={loading}
-                                style={[styles.form_payment_submit, loading && styles.disabled]}
+                                style={styles.form_payment_submit}
                                 onPress={handlePlaceOrder}
                             >
                                 <Text style={styles.form_payment_submit_text}>לסיום הזמנה</Text>
@@ -77,8 +88,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "600",
     },
-    disabled: {
-        opacity: 0.5
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
     }
 });
 

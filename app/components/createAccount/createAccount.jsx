@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions} from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Modal} from "react-native";
 import {Formik} from "formik";
 import React, {useState} from "react";
 import Error from "../error/error";
@@ -10,6 +10,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Checkbox from "../checkout/formDetails/checkbox";
 import {images} from "../../../constants";
 import {JOIN_REWARDS} from "../signin/useSignin";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,6 +54,14 @@ const CreateAccount = props => {
     return (
         <View style={styles.container}>
             <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <View style={styles.inner}>
                 <View style={styles.create_account}>
                     <Formik
@@ -256,7 +265,7 @@ const CreateAccount = props => {
                                             errors={errors}
                                         />
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.create_account_content_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
+                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.create_account_content_form_submit} onPress={() => handleSubmit()}>
                                         <Text style={styles.create_account_content_form_submit_text}>צור חשבון</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -416,9 +425,12 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 400,
     },
-    disabled: {
-        opacity: 0.5
-    },
+    loaderContainerOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 })
 
 export default CreateAccount;

@@ -22,13 +22,13 @@ const Homepage = () => {
 
     if (loading) {
         content = (
-            <View style={styles.loaderContainer}>
+            <View style={styles.container}>
                 <LoadingIndicator/>
             </View>
         )
     } else if (error) {
         content = (
-            <View style={styles.loaderContainer}>
+            <View style={styles.container}>
                 <Text style={styles.errorText}>Error: Unable to load homepage data.</Text>
             </View>
         )
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#fff",
     },
-    loaderContainer: {
+    container: {
         justifyContent: "center",
         alignItems: "center",
     },

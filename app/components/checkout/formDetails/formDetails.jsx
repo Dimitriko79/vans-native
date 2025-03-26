@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Modal, Dimensions} from "react-native";
 import {TextInput} from "react-native-element-textinput";
 import React from "react";
 import { Formik } from "formik";
@@ -9,6 +9,9 @@ import * as Yup from "yup";
 import ShippingMethods from "../shippingMethods/shippingMethods";
 import {CHECKOUT_STEP} from "../useCheckout";
 import DetailsReview from "../detailsReview/detailsReview";
+import LoadingIndicator from "../../loadingIndicator/loadingIndicator";
+
+const { height } = Dimensions.get("window");
 
 const FormDetails = ({
         shippingMethods = [],
@@ -56,6 +59,14 @@ const FormDetails = ({
 
     return (
         <>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             {CHECKOUT_STEP[step].id === 2 && (
                 <View>
                     <Text style={{textAlign: "right", fontSize: 24, fontWeight: 700}}>
@@ -131,7 +142,7 @@ const FormDetails = ({
                                                 {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                                             </View>
                                             <Text style={styles.sign_in_content_form_submit_description}>יש לך כבר חשבון אצלנו. היכנס או המשך כאורח.</Text>
-                                            <TouchableOpacity activeOpacity={0.5} disabled={loadingLogin} style={[styles.sign_in_content_form_submit, loadingLogin && styles.disabled]} onPress={() => onLogin(values)}>
+                                            <TouchableOpacity activeOpacity={0.5} disabled={loadingLogin} style={styles.sign_in_content_form_submit} onPress={() => onLogin(values)}>
                                                 <Text style={styles.sign_in_content_form_submit_text}>התחברות</Text>
                                             </TouchableOpacity>
                                         </>
@@ -372,9 +383,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 600,
     },
-    disabled: {
-        opacity: 0.5
-    },
     sign_in_content_form_submit: {
         flexDirection: "row",
         justifyContent: "center",
@@ -398,6 +406,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 600,
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 })
 
 export default FormDetails;

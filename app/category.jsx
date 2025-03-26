@@ -67,14 +67,6 @@ const Category = () => {
                 {description ? (
                     <RichContent html={description} />
                 ) : null}
-                <Modal
-                    visible={!isLoadMore && productLoading}
-                    transparent={true}
-                    animationType="fade"
-                    statusBarTranslucent={true}
-                >
-                    <LoadingIndicator style={styles.loaderContainerOverlay}/>
-                </Modal>
                 <Text style={styles.category_name}>{categoryData.name}</Text>
                 <View style={styles.choosen_section}>
                     <View style={styles.choosen_section_top}>
@@ -118,6 +110,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         position: "relative",
+        minHeight: height,
         backgroundColor: "#f1f2ed",
     },
     breadcrumbs: {
@@ -158,7 +151,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     loaderContainer: {
-        height: height,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },

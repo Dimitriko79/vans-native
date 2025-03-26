@@ -47,7 +47,7 @@ const useFormDetails = ({
     const [customerShippingMethod, { loading: customerShippingMethodLoading }] = useMutation(SET_CUSTOMER_SHIPPING_METHOD_ON_CART);
     const [customerBillingAddresses, { loading: customerBillingAddressesLoading }] = useMutation(SET_CUSTOMER_BILLING_ADDRESSES_ON_CART);
     const [setGuestEmailOnCart, { loading: guestEmailOnCartLoading }] = useMutation(SET_GUEST_EMAIL_ON_CART);
-    const [checkEmailAvailable] = useLazyQuery(IS_EMAIL_AVAILABLE);
+    const [checkEmailAvailable, {loading: checkEmailAvailableLoading}] = useLazyQuery(IS_EMAIL_AVAILABLE);
 
     const onSubmit = useCallback(async (values, resetForm) => {
         if (!values) return;
@@ -132,7 +132,7 @@ const useFormDetails = ({
         handleEmailAvailable,
         onSubmit,
         onLogin,
-        loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading || guestEmailOnCartLoading,
+        loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading || guestEmailOnCartLoading || checkEmailAvailableLoading,
     };
 };
 

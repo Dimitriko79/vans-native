@@ -7,12 +7,13 @@ import {
     TouchableOpacity,
     View,
     Animated,
-    Easing,
+    Easing, Image,
 } from "react-native";
 import React, { useMemo, useState } from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 import Order from "./components/orders/order";
 import useOrders from "./components/orders/useOrders";
+import {images} from "../constants";
 
 const { height, width } = Dimensions.get("window");
 
@@ -62,168 +63,179 @@ const Orders = () => {
         } else {
             return (
                 <View style={styles.container}>
-                    <View style={styles.orders}>
-                        <Text style={styles.orders_title}>היסטורית הזמנות שלי</Text>
-                    </View>
-
-                    <View style={styles.orders_content}>
-                        <FlatList
-                            data={orders}
-                            keyExtractor={(item) => String(item.order_number)}
-                            numColumns={1}
-                            renderItem={({ item }) => (
-                                <View style={styles.order_item}>
-                                    <View style={styles.order_item_field}>
-                                        <Text style={styles.order_item_field_name}># הזמנה: </Text>
-                                        <Text style={styles.order_item_field_value}>
-                                            {item.order_number}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.order_item_field}>
-                                        <Text style={styles.order_item_field_name}>תאריך: </Text>
-                                        <Text style={styles.order_item_field_value}>
-                                            {new Date(item.created_at).toLocaleDateString()}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.order_item_field}>
-                                        <Text style={styles.order_item_field_name}>
-                                            סה"כ להזמנה:{" "}
-                                        </Text>
-                                        <Text style={styles.order_item_field_value}>
-                                            ₪ {item.grand_total}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.order_item_field}>
-                                        <Text style={styles.order_item_field_name}>סטטוס: </Text>
-                                        <Text style={styles.order_item_field_value}>
-                                            {item.status}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.order_item_actions}>
-                                        <TouchableOpacity onPress={() => onOrder(item)}>
-                                            <Text style={styles.order_item_action}>הצג הזמנה</Text>
-                                        </TouchableOpacity>
-                                        <Text>|</Text>
-                                        <TouchableOpacity onPress={() => Alert.alert("Click!")}>
-                                            <Text style={styles.order_item_action}>הזמן מחדש</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            )}
-                            contentContainerStyle={styles.orders_item}
-                            scrollEnabled={false}
-                            nestedScrollEnabled={false}
-                        />
-                    </View>
-
-                    {totalPages > 1 && <View style={[styles.pagination, !orders.length && {display: "none"}]}>
-                        <View style={styles.pagination_inner}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.pagination_page_arrow,
-                                    currentPage === totalPages && styles.pagination_page_arrow_disabled,
-                                ]}
-                                onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                                disabled={currentPage === totalPages}
-                            >
-                                <Icon
-                                    name="right"
-                                    size={20}
-                                    color={currentPage === totalPages ? "#ccc" : "#858585"}
-                                />
-                            </TouchableOpacity>
-
-                            <View style={styles.pagination_page_numbers}>
-                                {Array.from(
-                                    {length: endPage - startPage + 1},
-                                    (_, i) => startPage + i
-                                ).map((page) => (
-                                    <TouchableOpacity
-                                        key={page}
-                                        style={[
-                                            styles.pagination_page_number,
-                                            currentPage === page && styles.pagination_page_active,
-                                        ]}
-                                        onPress={() => setCurrentPage(page)}
-                                    >
-                                        <Text
-                                            style={[
-                                                styles.pagination_page_number_text,
-                                                currentPage === page && {color: "#000"},
-                                            ]}
-                                        >
-                                            {page}
-                                        </Text>
-                                    </TouchableOpacity>
-                                ))}
+                    {!orders.length ? (
+                        <View style={styles.empty_block}>
+                            <Text style={styles.empty_block_text}>
+                                אין לך פריטים בהיסטוריה הזמנות.
+                            </Text>
+                            <Image style={styles.empty_block_image} source={images.warning} />
+                        </View>
+                    ) : (
+                        <>
+                            <View style={styles.orders}>
+                                <Text style={styles.orders_title}>היסטורית הזמנות שלי</Text>
                             </View>
 
-                            <TouchableOpacity
-                                style={[
-                                    styles.pagination_page_arrow,
-                                    currentPage === 1 && styles.pagination_page_arrow_disabled,
-                                ]}
-                                onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                disabled={currentPage === 1}
-                            >
-                                <Icon
-                                    name="left"
-                                    size={20}
-                                    color={currentPage === 1 ? "#ccc" : "#858585"}
+                            <View style={styles.orders_content}>
+                                <FlatList
+                                    data={orders}
+                                    keyExtractor={(item) => String(item.order_number)}
+                                    numColumns={1}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.order_item}>
+                                            <View style={styles.order_item_field}>
+                                                <Text style={styles.order_item_field_name}># הזמנה: </Text>
+                                                <Text style={styles.order_item_field_value}>
+                                                    {item.order_number}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.order_item_field}>
+                                                <Text style={styles.order_item_field_name}>תאריך: </Text>
+                                                <Text style={styles.order_item_field_value}>
+                                                    {new Date(item.created_at).toLocaleDateString()}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.order_item_field}>
+                                                <Text style={styles.order_item_field_name}>
+                                                    סה"כ להזמנה:{" "}
+                                                </Text>
+                                                <Text style={styles.order_item_field_value}>
+                                                    ₪ {item.grand_total}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.order_item_field}>
+                                                <Text style={styles.order_item_field_name}>סטטוס: </Text>
+                                                <Text style={styles.order_item_field_value}>
+                                                    {item.status}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.order_item_actions}>
+                                                <TouchableOpacity onPress={() => onOrder(item)}>
+                                                    <Text style={styles.order_item_action}>הצג הזמנה</Text>
+                                                </TouchableOpacity>
+                                                <Text>|</Text>
+                                                <TouchableOpacity onPress={() => Alert.alert("Click!")}>
+                                                    <Text style={styles.order_item_action}>הזמן מחדש</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    )}
+                                    contentContainerStyle={styles.orders_item}
+                                    scrollEnabled={false}
+                                    nestedScrollEnabled={false}
                                 />
-                            </TouchableOpacity>
-                        </View>
-                    </View>}
+                            </View>
 
-                    {totalPages > 1 && <View style={[styles.pagination_items_per_page_container, !orders.length && {display: "none"}]}>
-                        <Text style={styles.pagination_items_per_page_name}>הצגה:</Text>
+                            {totalPages > 1 && <View style={[styles.pagination, !orders.length && {display: "none"}]}>
+                                <View style={styles.pagination_inner}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.pagination_page_arrow,
+                                            currentPage === totalPages && styles.pagination_page_arrow_disabled,
+                                        ]}
+                                        onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        <Icon
+                                            name="right"
+                                            size={20}
+                                            color={currentPage === totalPages ? "#ccc" : "#858585"}
+                                        />
+                                    </TouchableOpacity>
 
-                        <View style={styles.pagination_dropdown_wrapper}>
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                style={styles.pagination_dropdown_button_current}
-                                onPress={toggleDropdown}
-                            >
-                                <Text>{itemsPerPage}</Text>
-                            </TouchableOpacity>
+                                    <View style={styles.pagination_page_numbers}>
+                                        {Array.from(
+                                            {length: endPage - startPage + 1},
+                                            (_, i) => startPage + i
+                                        ).map((page) => (
+                                            <TouchableOpacity
+                                                key={page}
+                                                style={[
+                                                    styles.pagination_page_number,
+                                                    currentPage === page && styles.pagination_page_active,
+                                                ]}
+                                                onPress={() => setCurrentPage(page)}
+                                            >
+                                                <Text
+                                                    style={[
+                                                        styles.pagination_page_number_text,
+                                                        currentPage === page && {color: "#000"},
+                                                    ]}
+                                                >
+                                                    {page}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
 
-                            {isShowOptions && (
-                                <Animated.View
-                                    style={[
-                                        styles.pagination_dropdown_animated,
-                                        {
-                                            transform: [
-                                                {
-                                                    translateX: dropdownAnim.interpolate({
-                                                        inputRange: [0, 1],
-                                                        outputRange: [40, 0],
-                                                    }),
-                                                },
-                                            ],
-                                            opacity: dropdownAnim,
-                                        },
-                                    ]}
-                                >
-                                    {[5, 10, 20, 50].map((num) => (
-                                        <TouchableOpacity
-                                            key={num}
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.pagination_page_arrow,
+                                            currentPage === 1 && styles.pagination_page_arrow_disabled,
+                                        ]}
+                                        onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        <Icon
+                                            name="left"
+                                            size={20}
+                                            color={currentPage === 1 ? "#ccc" : "#858585"}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>}
+
+                            {totalPages > 1 && <View style={[styles.pagination_items_per_page_container, !orders.length && {display: "none"}]}>
+                                <Text style={styles.pagination_items_per_page_name}>הצגה:</Text>
+
+                                <View style={styles.pagination_dropdown_wrapper}>
+                                    <TouchableOpacity
+                                        activeOpacity={1}
+                                        style={styles.pagination_dropdown_button_current}
+                                        onPress={toggleDropdown}
+                                    >
+                                        <Text>{itemsPerPage}</Text>
+                                    </TouchableOpacity>
+
+                                    {isShowOptions && (
+                                        <Animated.View
                                             style={[
-                                                styles.pagination_dropdown_item,
-                                                itemsPerPage === num && styles.pagination_dropdown_item_active,
+                                                styles.pagination_dropdown_animated,
+                                                {
+                                                    transform: [
+                                                        {
+                                                            translateX: dropdownAnim.interpolate({
+                                                                inputRange: [0, 1],
+                                                                outputRange: [40, 0],
+                                                            }),
+                                                        },
+                                                    ],
+                                                    opacity: dropdownAnim,
+                                                },
                                             ]}
-                                            onPress={() => {
-                                                setItemsPerPage(num);
-                                                setCurrentPage(1);
-                                                toggleDropdown();
-                                            }}
                                         >
-                                            <Text style={styles.pagination_dropdown_item_text}>{num}</Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </Animated.View>
-                            )}
-                        </View>
-                    </View>}
+                                            {[5, 10, 20, 50].map((num) => (
+                                                <TouchableOpacity
+                                                    key={num}
+                                                    style={[
+                                                        styles.pagination_dropdown_item,
+                                                        itemsPerPage === num && styles.pagination_dropdown_item_active,
+                                                    ]}
+                                                    onPress={() => {
+                                                        setItemsPerPage(num);
+                                                        setCurrentPage(1);
+                                                        toggleDropdown();
+                                                    }}
+                                                >
+                                                    <Text style={styles.pagination_dropdown_item_text}>{num}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </Animated.View>
+                                    )}
+                                </View>
+                            </View>}
+                        </>
+                    )}
                 </View>
             );
         }
@@ -392,6 +404,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#e5e5e5",
         borderRadius: 4,
     },
+    empty_block: {
+        backgroundColor: "#fdf0d5",
+        flexDirection: "row",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        gap: 15,
+        direction: "rtl",
+        marginTop: 25,
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    empty_block_text: {
+        fontSize: 13,
+        color: "#6f4400",
+        width: "80%",
+        textAlign: "left",
+    },
+    empty_block_image: {
+        width: 24,
+        height: 24,
+    }
 });
 
 export default Orders;

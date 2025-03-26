@@ -1,4 +1,4 @@
-import {Dimensions, Text, View, StyleSheet} from "react-native";
+import {Dimensions, Text, View, StyleSheet, Modal} from "react-native";
 import Price from "../price/price";
 import ProductOptions from "../product/ProductOptions";
 import SizeChart from "../product/SizeChart";
@@ -12,8 +12,9 @@ import Social from "../social/social";
 import ProductInfo from "../productInfo/productInfo";
 import PopularyProduct from "../popularyProduct/popularyProduct";
 import Espot from "../espot/espot";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 
-const { width } = Dimensions.get("window");
+const { width,height } = Dimensions.get("window");
 
 const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
     const {
@@ -33,6 +34,14 @@ const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
 
     return (
         <View style={styles.product_top_details}>
+            <Modal
+                visible={isAddToCartDisabled}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <View style={styles.breadcrumbs}>
                 <Breadcrumbs
                     categoryIds={breadcrumbCategoryId}
@@ -161,6 +170,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
         textAlign: "right",
+    },
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
     }
 })
 export default ProductFullDetails;

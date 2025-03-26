@@ -15,7 +15,6 @@ const useItem = () => {
         {
             loading: removeItemLoading,
             called: removeItemCalled,
-            error: removeItemError
         }
     ] = useMutation(REMOVE_ITEM_MUTATION);
 

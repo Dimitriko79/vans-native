@@ -7,13 +7,14 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     Dimensions,
-    FlatList
+    FlatList, Modal
 } from 'react-native';
 import useSideBarMenu from "./useSideBarMenu";
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconAwesome from "react-native-vector-icons/FontAwesome";
 import Svg, {G, Path} from "react-native-svg";
 import {router} from "expo-router";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 
 const { width, height } = Dimensions.get('window');
 
@@ -33,11 +34,20 @@ const SideBarMenu = ({
         handleChosenCategory,
         handlePress,
         handleSignOut,
+        loading,
         isSignedIn, signOut
     } = useSideBarMenu({ onPress, onToggle, isSidebarOpen });
 
     return (
         <View style={styles.container}>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             {isSidebarOpen && (
                 <TouchableWithoutFeedback onPress={onToggle}>
                     <View style={styles.overlay} />
@@ -222,6 +232,12 @@ const styles = StyleSheet.create({
         width: 16,
         height: 16,
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 });
 
 export default SideBarMenu;

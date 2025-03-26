@@ -15,8 +15,10 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
 
     const [categoryId, setCategoryId] = useState(rootCategoryId);
     const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const [fetchNavigation, { loading, error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
+
+    const [fetchNavigation, { error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: "cache-first",
         errorPolicy: "all",
@@ -49,9 +51,16 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
     }, [onToggle]);
 
     const handleSignOut = useCallback(async () => {
-        await signOut();
-        dispatch({ type: 'REMOVE_CHECKOUT_DETAILS' });
-        onToggle();
+        setLoading(true);
+        try {
+            await signOut();
+            setLoading(false);
+            dispatch({ type: 'REMOVE_CHECKOUT_DETAILS' });
+            onToggle();
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
+        }
     }, [signOut, dispatch, onToggle]);
 
     useEffect(() => {

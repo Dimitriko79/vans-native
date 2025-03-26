@@ -16,7 +16,7 @@ const AddToCart = ({
       <TouchableOpacity
           activeOpacity={0.7}
           disabled={disabled}
-          style={[styles.button, disabled && styles.buttonDisabled]}
+          style={styles.button}
           onPress={onPress}
       >
         <Text style={styles.buttonText}>
@@ -38,9 +38,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-  },
-  buttonDisabled: {
-    opacity: 0.5,
   },
   buttonText: {
     color: "#fff",

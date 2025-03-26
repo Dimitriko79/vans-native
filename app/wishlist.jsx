@@ -21,11 +21,11 @@ const Wishlist = () => {
         return (
             <View style={styles.container}>
                 <View style={styles.wishlist}>
-                    <View style={styles.checkout_form_delivery_method_error}>
-                        <Text style={styles.checkout_form_delivery_method_error_text}>
+                    <View style={styles.empty_block}>
+                        <Text style={styles.empty_block_text}>
                             אין לך פריטים ב Wish List.
                         </Text>
-                        <Image style={styles.checkout_form_delivery_method_error_image} source={images.warning} />
+                        <Image style={styles.empty_block_image} source={images.warning} />
                     </View>
                 </View>
             </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    checkout_form_delivery_method_error: {
+    empty_block: {
         backgroundColor: "#fdf0d5",
         flexDirection: "row",
         alignItems: "flex-start",
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
         gap: 15,
         direction: "rtl"
     },
-    checkout_form_delivery_method_error_text: {
+    empty_block_text: {
         fontSize: 13,
         color: "#6f4400",
         width: "80%",
         textAlign: "left",
     },
-    checkout_form_delivery_method_error_image: {
+    empty_block_image: {
         width: 24,
         height: 24,
     }

@@ -1,14 +1,26 @@
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, Modal, Dimensions} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import useSocial from "./useSocial";
 import {router} from "expo-router";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
+import React from "react";
+
+const { height } = Dimensions.get("window");
 
 const Social = props => {
-    const {handleWishlistItem, onShare } = useSocial(props);
+    const {handleWishlistItem, onShare, loading } = useSocial(props);
 
     return (
         <>
             <View style={styles.container}>
+                <Modal
+                    visible={loading}
+                    transparent={true}
+                    animationType="fade"
+                    statusBarTranslucent={true}
+                >
+                    <LoadingIndicator style={styles.loaderContainerOverlay}/>
+                </Modal>
                 <TouchableOpacity style={styles.social} onPress={handleWishlistItem}>
                     <Icon name='heart' size={16} color='#589bc6'/>
                     <Text style={styles.social_text}>הוספה למועדפים</Text>
@@ -50,6 +62,13 @@ const styles = StyleSheet.create({
         fontFamily: "Heebo",
         fontWeight: '500',
         color: '#589bc6'
+    },
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
     }
 })
 export default Social

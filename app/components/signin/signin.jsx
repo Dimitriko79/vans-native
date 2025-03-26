@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, Image} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, Image, Modal} from "react-native";
 import Error from "../error/error";
 import React from "react";
 import {TextInput} from "react-native-element-textinput";
@@ -7,6 +7,7 @@ import useSignin, {JOIN_REWARDS} from "./useSignin";
 import {validateMobilePhone} from "../../helpers/validationSchema";
 import * as Yup from "yup";
 import {images} from "../../../constants";
+import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 
 const { height } = Dimensions.get("window");
 
@@ -39,6 +40,14 @@ const Signin = ({handleView = () => {}}) => {
     return (
         <View style={styles.container}>
             <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
+            <Modal
+                visible={loading}
+                transparent={true}
+                animationType="fade"
+                statusBarTranslucent={true}
+            >
+                <LoadingIndicator style={styles.loaderContainerOverlay}/>
+            </Modal>
             <View style={styles.inner}>
                 <View style={styles.sign_in_content_phone}>
                     <Formik
@@ -70,7 +79,7 @@ const Signin = ({handleView = () => {}}) => {
                                         />
                                         {touched.telephone && errors.telephone && <Text style={styles.errorText}>{errors.telephone}</Text>}
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.sign_in_content_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
+                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
                                         <Text style={styles.sign_in_content_form_submit_text}>כניסה</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -134,7 +143,7 @@ const Signin = ({handleView = () => {}}) => {
                                         />
                                         {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={[styles.sign_in_content_form_submit, loading && styles.disabled]} onPress={() => handleSubmit()}>
+                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
                                         <Text style={styles.sign_in_content_form_submit_text}>התחברות</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -281,9 +290,6 @@ const styles = StyleSheet.create({
     sign_in_content_mail: {
         flex: 1,
     },
-    disabled: {
-        opacity: 0.5
-    },
     create_account_spacer: {
         flex: 1,
         flexDirection: "row",
@@ -384,6 +390,13 @@ const styles = StyleSheet.create({
         fontFamily: "Heebo",
         fontWeight: 700,
     },
+    loaderContainerOverlay: {
+        flex: 1,
+        minHeight: height,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 })
 
 export default Signin;

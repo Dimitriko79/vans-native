@@ -20,7 +20,7 @@ const useCategory = (ids) => {
     const [products, setProducts] = useState([]);
     const { isLoadMore, setIsLoadMore } = useCartProvider();
 
-    const [runQuery, { loading, error, data }] = useLazyQuery(GET_CATEGORY, {
+    const [runQuery, { loading: categoryLoading, error, data }] = useLazyQuery(GET_CATEGORY, {
         fetchPolicy: "cache-and-network",
         nextFetchPolicy: "cache-first",
         context: { headers: { Store: "he" } },
@@ -141,7 +141,7 @@ const useCategory = (ids) => {
         aggregations,
         sortFields,
         description: categoryData?.description || null,
-        loading: loading || filterLoading,
+        loading: categoryLoading || filterLoading,
         productLoading,
         isLoadMore,
         error,

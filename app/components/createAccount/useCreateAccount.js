@@ -8,6 +8,8 @@ const useCreateAccount = () => {
 
     const [errorMessage, setErrorMessage] = useState([]);
     const [isOpenCalendar, setOpenCalendar] = useState(false);
+    const [loading, setLoading] = useState(false);
+
 
     const initialValues = {
         firstname: '',
@@ -22,7 +24,7 @@ const useCreateAccount = () => {
         is_subscribed: false
     };
 
-    const [createAccount, { loading: createAccountLoading,error: createAccountError }] = useMutation(
+    const [createAccount] = useMutation(
         CREATE_ACCOUNT,
         {
             fetchPolicy: 'no-cache'
@@ -30,6 +32,7 @@ const useCreateAccount = () => {
     );
 
     const onSubmit = useCallback(async (values, resetForm) => {
+        setLoading(true);
         setErrorMessage([]);
         try {
             const input = {
@@ -45,13 +48,14 @@ const useCreateAccount = () => {
                     input: input,
                 }
             })
+            setLoading(false);
             router.navigate('/homepage');
         } catch (e) {
             console.error(e);
-            Alert.alert(e.message);
             setErrorMessage([e.message]);
+            setLoading(false);
         }
-    }, []);
+    }, [createAccount]);
 
 
     return {
@@ -60,7 +64,7 @@ const useCreateAccount = () => {
         onSubmit,
         errorMessage,
         onErrorMessage: setErrorMessage,
-        loading: createAccountLoading,
+        loading,
         initialValues
     }
 }
