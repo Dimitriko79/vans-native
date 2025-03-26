@@ -10,7 +10,7 @@ export const JOIN_REWARDS = [
 
 const useSignin = () => {
     const { cartId, retrieveCartId, mergeCarts, startFetchCart } = useCartProvider();
-    const { signIn, setView } = useUserContext();
+    const { signIn, setView} = useUserContext();
 
     const [errorMessage, setErrorMessage] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const useSignin = () => {
                         setErrorMessage([e.message]);
                     }
                 }
-
+                startFetchCart(true);
                 resetForm();
                 router.push({ pathname: "/account" });
                 setView("ACCOUNT")
