@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const useAutoSignOut = (isSignedIn, signOut) => {
+const useSmartAutoSignOut = (isSignedIn, signOut) => {
     const timeoutRef = useRef(null);
-
+    const [trackActivity, setTrackActivity] = useState(false);
     useEffect(() => {
-        const setupTimeout = async () => {
+        const setup = async () => {
             if (!isSignedIn) return;
 
             const tokenData = await AsyncStorage.getItem("sign-token");
@@ -13,22 +13,31 @@ const useAutoSignOut = (isSignedIn, signOut) => {
 
             const { expiresAt } = JSON.parse(tokenData);
             const timeLeft = expiresAt - Date.now();
-
             if (timeLeft <= 0) {
                 signOut();
+                return;
+            }
+
+            const monitorDelay = timeLeft - (60 * 1000);
+            if (monitorDelay <= 0) {
+                setTrackActivity(true);
             } else {
                 timeoutRef.current = setTimeout(() => {
-                    signOut();
-                }, timeLeft);
+                    setTrackActivity(true);
+                }, monitorDelay);
             }
         };
 
-        setupTimeout();
+        setup();
 
         return () => {
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
-    }, [isSignedIn, signOut]);
+    }, [isSignedIn]);
+
+    return {
+        trackActivity, setTrackActivity
+    }
 };
 
-export default useAutoSignOut;
+export default useSmartAutoSignOut;

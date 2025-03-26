@@ -3,16 +3,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {initialState, userReducer} from "./reducer/userReducer";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {GET_CUSTOMER_DETAILS, GET_CUSTOMER_ORDERS, REVOKE_CUSTOMER_TOKEN, SIGN_IN} from "./user.gql.js";
-import {Alert} from "react-native";
 import {router} from "expo-router";
-import useAutoSignOut from "./useAutoSignOut";
+import * as SecureStore from 'expo-secure-store';
 
 const UserContext = createContext(null);
 const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
-    const [state, dispatch, user] = useReducer(userReducer, initialState);
-    const {isSignedIn} = state;
+    const [state, dispatch] = useReducer(userReducer, initialState);
     const [view, setView] = useState("SIGNIN");
     const [isUserUpdate, setUserUpdate] = useState(false);
 
@@ -23,17 +21,26 @@ export const UserContextProvider = ({ children }) => {
     const [signInCustomer] = useMutation(SIGN_IN);
 
     const extendToken = async () => {
-        const tokenData = await AsyncStorage.getItem("sign-token");
-        if (!tokenData) return;
+        try {
+            const email = await SecureStore.getItemAsync("user-email");
+            const password = await SecureStore.getItemAsync("user-password");
 
-        const { token } = JSON.parse(tokenData);
-        const newExpiresAt = Date.now() + 5 * 60 * 1000;
+            if (!email || !password) return;
 
-        await AsyncStorage.setItem(
-            "sign-token",
-            JSON.stringify({ token, expiresAt: newExpiresAt })
-        );
+            const res = await signInCustomer({
+                variables: { email, password }
+            });
+
+            const token = res?.data?.generateCustomerToken?.token;
+            if (token) {
+                await setToken(token, 3600);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
+
+
 
     const setToken = async (token, expiresInSeconds) => {
         const expiryTimestamp = Date.now() + expiresInSeconds * 1000;
@@ -99,28 +106,32 @@ export const UserContextProvider = ({ children }) => {
             }
         } catch (error) {
             console.log(error)
-            Alert.alert(error.message);
         }
     }, []);
 
     const signIn = async credentials => {
         try {
             await AsyncStorage.removeItem('sign-token');
+
             const res = await signInCustomer({
                 variables: {
                     email: credentials.email,
                     password: credentials.password,
                 }
             });
+
             const token = res?.data?.generateCustomerToken.token || null;
+
             if (token) {
                 await setToken(token, 3600);
+                await SecureStore.setItemAsync("user-email", credentials.email);
+                await SecureStore.setItemAsync("user-password", credentials.password);
                 await getUserData();
             }
+
             return !!token;
         } catch (e) {
             console.log(e);
-            Alert.alert(e.message);
         }
     }
 
@@ -129,6 +140,8 @@ export const UserContextProvider = ({ children }) => {
             const res = await revokeToken();
             if(res?.data?.revokeCustomerToken?.result){
                 await AsyncStorage.removeItem("sign-token");
+                await SecureStore.deleteItemAsync("user-email");
+                await SecureStore.deleteItemAsync("user-password");
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 dispatch({type: 'SET_CUSTOMER_ORDERS', payload: []});
@@ -140,11 +153,8 @@ export const UserContextProvider = ({ children }) => {
             }
         } catch (e) {
             console.log(e)
-            Alert.alert(e.message);
         }
     };
-
-    useAutoSignOut(isSignedIn, signOut);
 
     useEffect(() => {
         getUserData();

@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import UserInactivity from "react-native-user-inactivity";
 import useUserContext from "./userProvider";
+import useSmartAutoSignOut from "./useSmartAutoSignOut";
+
 
 const AutoLogoutWrapper = ({ children }) => {
-    const { signOut, extendToken, isSignedIn } = useUserContext();
-    const [isActive, setIsActive] = useState(true);
+    const { isSignedIn, signOut, extendToken } = useUserContext();
+    const {trackActivity, setTrackActivity} = useSmartAutoSignOut(isSignedIn, signOut);
 
     const handleInactivity = useCallback((active) => {
-        setIsActive(active);
         if (active) {
             extendToken();
+            setTrackActivity(false);
         } else {
             signOut();
         }
@@ -17,8 +19,8 @@ const AutoLogoutWrapper = ({ children }) => {
 
     return (
         <UserInactivity
-            isActive={isSignedIn}
-            timeForInactivity={5 * 60 * 1000}
+            isActive={trackActivity}
+            timeForInactivity={60000}
             onAction={handleInactivity}
         >
             {children}
