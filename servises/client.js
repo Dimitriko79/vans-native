@@ -1,9 +1,17 @@
 import { ApolloClient, HttpLink, InMemoryCache, ApolloLink } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const getToken = async () => {
+    const tokenData = await AsyncStorage.getItem('sign-token');
+    console.log('tokenData', tokenData)
+    if (!tokenData) return null;
+
+    const { token } = JSON.parse(tokenData);
+    return token;
+};
 const authLink = new ApolloLink((operation, forward) => {
     return new Promise(async (resolve) => {
-        const token = await AsyncStorage.getItem("sign-token");
+        const token = await getToken();
         console.log('token', token)
         operation.setContext(({ headers = {} }) => ({
             headers: {
