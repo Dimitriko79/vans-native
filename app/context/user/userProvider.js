@@ -5,6 +5,7 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {GET_CUSTOMER_DETAILS, GET_CUSTOMER_ORDERS, REVOKE_CUSTOMER_TOKEN, SIGN_IN} from "./user.gql.js";
 import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
+import useSmartAutoSignOut from "./useSmartAutoSignOut";
 
 const UserContext = createContext(null);
 const useUserContext = () => useContext(UserContext);
@@ -13,6 +14,7 @@ export const UserContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(userReducer, initialState);
     const [view, setView] = useState("SIGNIN");
     const [isUserUpdate, setUserUpdate] = useState(false);
+    const [expiresAt, setExpiresAt] = useState(null);
 
     const [fetchCustomerDetails] = useLazyQuery(GET_CUSTOMER_DETAILS, {fetchPolicy: "network-only"});
     const [fetchCustomerOrders, {error}] = useLazyQuery(GET_CUSTOMER_ORDERS, {fetchPolicy: "network-only"});
@@ -33,24 +35,21 @@ export const UserContextProvider = ({ children }) => {
 
             const token = res?.data?.generateCustomerToken?.token;
             if (token) {
-                await setToken(token, 3600);
+                await setToken(token, 600);
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-
-
     const setToken = async (token, expiresInSeconds) => {
         const expiryTimestamp = Date.now() + expiresInSeconds * 1000;
-
         const tokenData = JSON.stringify({
             token,
             expiresAt: expiryTimestamp
         });
-
         await AsyncStorage.setItem('sign-token', tokenData);
+        setExpiresAt(expiryTimestamp)
     }
 
     const getToken = async () => {
@@ -123,7 +122,7 @@ export const UserContextProvider = ({ children }) => {
             const token = res?.data?.generateCustomerToken.token || null;
 
             if (token) {
-                await setToken(token, 3600);
+                await setToken(token, 300);
                 await SecureStore.setItemAsync("user-email", credentials.email);
                 await SecureStore.setItemAsync("user-password", credentials.password);
                 await getUserData();
@@ -146,6 +145,7 @@ export const UserContextProvider = ({ children }) => {
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 dispatch({type: 'SET_CUSTOMER_ORDERS', payload: []});
                 dispatch({type: 'SET_WISHLIST_ITEMS', payload: []});
+                setExpiresAt(null);
                 if (router.pathname !== "/homepage") {
                     router.push({ pathname: "/homepage"});
                     setView("SIGNIN");
@@ -155,6 +155,7 @@ export const UserContextProvider = ({ children }) => {
             console.log(e)
         }
     };
+    useSmartAutoSignOut(state.isSignedIn, signOut, extendToken, expiresAt);
 
     useEffect(() => {
         getUserData();
@@ -178,8 +179,7 @@ export const UserContextProvider = ({ children }) => {
             view,
             setView,
             isUserUpdate,
-            setUserUpdate,
-            extendToken
+            setUserUpdate
         }}>
             {children}
         </UserContext.Provider>

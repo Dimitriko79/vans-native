@@ -14,7 +14,6 @@ import { apolloClient } from "../servises/client";
 import { StoreContextProvider } from "./context/store/storeProvider";
 import { UserContextProvider } from "./context/user/userProvider";
 import { CheckoutContextProvider } from "./context/checkout/checkoutProvider";
-import AutoLogoutWrapper from "./context/user/autoLogoutWrapper";
 
 const { width } = Dimensions.get("window");
 SplashScreen.preventAutoHideAsync();
@@ -70,27 +69,25 @@ const RootLayout = () => {
     return (
         <ApolloProvider client={apolloClient}>
             <UserContextProvider>
-                <AutoLogoutWrapper>
-                    <CheckoutContextProvider>
-                        <StoreContextProvider>
-                            <CartContextProvider>
-                                <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                                    <Header onToggle={toggleSidebar} scrollY={scrollY} isSidebarOpen={isSidebarOpen} />
-                                    <SideBarMenu
-                                        onToggle={toggleSidebar}
-                                        isSidebarOpen={isSidebarOpen}
-                                        onPress={handlePress}
-                                        translateX={translateX}
-                                    />
-                                    <Main onPress={handlePress} scrollY={scrollY}>
-                                        <Footer />
-                                    </Main>
-                                </SafeAreaView>
-                                <StatusBar barStyle="dark-content" />
-                            </CartContextProvider>
-                        </StoreContextProvider>
-                    </CheckoutContextProvider>
-                </AutoLogoutWrapper>
+                <CheckoutContextProvider>
+                    <StoreContextProvider>
+                        <CartContextProvider>
+                            <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
+                                <Header onToggle={toggleSidebar} scrollY={scrollY} isSidebarOpen={isSidebarOpen} />
+                                <SideBarMenu
+                                    onToggle={toggleSidebar}
+                                    isSidebarOpen={isSidebarOpen}
+                                    onPress={handlePress}
+                                    translateX={translateX}
+                                />
+                                <Main onPress={handlePress} scrollY={scrollY}>
+                                    <Footer />
+                                </Main>
+                            </SafeAreaView>
+                            <StatusBar barStyle="dark-content" />
+                        </CartContextProvider>
+                    </StoreContextProvider>
+                </CheckoutContextProvider>
             </UserContextProvider>
         </ApolloProvider>
     );
