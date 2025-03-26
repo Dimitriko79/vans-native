@@ -2,7 +2,6 @@ import {useCallback, useState, useMemo} from "react";
 import useUserContext from "../../context/user/userProvider";
 import useCartProvider from "../../context/cart/cartProvider";
 import { router } from "expo-router";
-import {Alert} from "react-native";
 
 export const JOIN_REWARDS = [
     'בקרוב באתר הרשמה, מימוש וצבירת נקודות כחברי מועדון VANS',
@@ -58,7 +57,6 @@ const useSignin = () => {
             }
         } catch (e) {
             console.error(e);
-            Alert.alert(e.message)
             setErrorMessage([e.message]);
         } finally {
             setLoading(false);

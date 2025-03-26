@@ -6,6 +6,7 @@ import {GET_CUSTOMER_DETAILS, GET_CUSTOMER_ORDERS, REVOKE_CUSTOMER_TOKEN, SIGN_I
 import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import useSmartAutoSignOut from "./useSmartAutoSignOut";
+import {Alert} from "react-native";
 
 const UserContext = createContext(null);
 const useUserContext = () => useContext(UserContext);
@@ -131,6 +132,7 @@ export const UserContextProvider = ({ children }) => {
             return !!token;
         } catch (e) {
             console.log(e);
+            Alert.alert(e.message)
         }
     }
 
