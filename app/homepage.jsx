@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {View, StyleSheet, Text, Dimensions, ScrollView, RefreshControl} from "react-native";
 import ShopNowBanner from "./components/shopNowBanner/shopNowBanner";
 import News from "./components/news/news";
@@ -7,6 +7,7 @@ import useHomepage from "./components/homepage/useHomepage";
 import Hero from "./components/hero/hero";
 import PopularyProduct from "./components/popularyProduct/popularyProduct";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height } = Dimensions.get("window");
 
@@ -17,8 +18,12 @@ const Homepage = () => {
         homepageData,
         handlePress,
     } = useHomepage();
-
+    const { setResetScroll } = useScrollContext();
     let content = null;
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     if (loading) {
         content = (
