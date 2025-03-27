@@ -272,6 +272,7 @@ const CreateAccount = props => {
                                     <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.create_account_content_form_submit} onPress={() => handleSubmit()}>
                                         <Text style={styles.create_account_content_form_submit_text}>צור חשבון</Text>
                                     </TouchableOpacity>
+                                    <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{marginTop: 0, marginHorizontal: 0}}/>
                                 </View>
                             </React.Fragment>
                         )}

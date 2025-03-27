@@ -39,7 +39,6 @@ const Signin = ({handleView = () => {}}) => {
 
     return (
         <View style={styles.container}>
-            <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
             <Modal
                 visible={loading}
                 transparent={true}
@@ -146,6 +145,7 @@ const Signin = ({handleView = () => {}}) => {
                                     <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
                                         <Text style={styles.sign_in_content_form_submit_text}>התחברות</Text>
                                     </TouchableOpacity>
+                                    <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{marginTop: 0, marginHorizontal: 0}}/>
                                 </View>
                             </React.Fragment>
                         )}
@@ -374,9 +374,8 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         paddingVertical: 15,
         marginTop: 10,
-        marginLeft: 25,
-        marginRight: 25,
-        width: width - 100,
+        marginHorizontal: 15,
+        width: width - 50,
 
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
