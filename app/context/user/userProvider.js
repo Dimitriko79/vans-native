@@ -74,25 +74,26 @@ export const UserContextProvider = ({ children }) => {
              const token = await getToken();
 
             if (!token) {
+                setView("SIGNIN");
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: null})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
                 dispatch({type: 'SET_CUSTOMER_ORDERS', payload: []});
                 dispatch({type: 'SET_WISHLIST_ITEMS', payload: []});
-                setView("SIGNIN");
                 return;
             }
             const response = await fetchCustomerDetails();
 
             if (response?.data?.customer) {
+                setView("ACCOUNT");
                 const userData = response.data.customer;
                 dispatch({type: 'GET_USER_DETAILS_SUCCESS', payload: userData})
                 dispatch({type: 'SET_IS_SIGNED_IN', payload: true});
                 dispatch({type: 'SET_WISHLIST_ITEMS', payload: userData.wishlist});
-                setView("ACCOUNT");
             }
             await getCustomerOrders();
         } catch (error) {
             console.log(error)
+            setView("SIGNIN");
             dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
             dispatch({type: 'USER_ERROR', payload: error});
         } finally {
