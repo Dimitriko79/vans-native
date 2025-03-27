@@ -3,6 +3,8 @@ import {Dimensions, Text, View, StyleSheet} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import useStoreContext from "./context/store/storeProvider";
 
+const { height, width } = Dimensions.get("window");
+
 const Stores = () => {
     const {stores} = useStoreContext();
 
@@ -42,6 +44,7 @@ const styles = StyleSheet.create({
        flex: 1,
        paddingHorizontal: 10,
         paddingVertical: 20,
+        minHeight: height
     },
     stores_title: {
         fontSize: 22,
@@ -53,8 +56,8 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     map: {
-        width: Dimensions.get('window').width - 20,
-        height: Dimensions.get('window').width,
+        width: width - 20,
+        height: width,
     },
     markerWrapper: {
         alignItems: 'center',
