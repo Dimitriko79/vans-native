@@ -183,6 +183,7 @@ const useProductFullDetails = ({product}) => {
 
     const {cartId, startFetchCart, setMiniCartIsOpen} = useCartProvider();
     const [stateAddToCartButton, setStateAddToCartButton] = useState('pending');
+    const [errorMessage, setErrorMessage] = useState([]);
     const productType = product.__typename;
     const isSupportedType = isSupportedProductType(productType);
     const derivedOptionSelections = useMemo(
@@ -303,6 +304,7 @@ const useProductFullDetails = ({product}) => {
     const handleAddToCart = useCallback(
         async () => {
             setStateAddToCartButton('addition');
+            setErrorMessage([]);
             try {
                 const quantity  = 1;
 
@@ -341,7 +343,8 @@ const useProductFullDetails = ({product}) => {
                         } catch (e) {
                             console.log(e);
                             setStateAddToCartButton('pending');
-                            Alert.alert(e.message);
+                            // Alert.alert(e.message);
+                            setErrorMessage([e.message])
                             return
                         }
                     } else if (productType === 'ConfigurableProduct') {
@@ -354,22 +357,25 @@ const useProductFullDetails = ({product}) => {
                         } catch (e) {
                             console.log(e);
                             setStateAddToCartButton('pending');
-                            Alert.alert(e.message);
+                            // Alert.alert(e.message);
+                            setErrorMessage([e.message])
                             return
                         }
                     }
                     setStateAddToCartButton('added');
                 } else {
-                    Alert.alert(
-                        'Unsupported product type. Cannot add to cart.'
-                    );
+                    // Alert.alert(
+                    //     'Unsupported product type. Cannot add to cart.'
+                    // );
+                    setErrorMessage(['Unsupported product type. Cannot add to cart.'])
                     await startFetchCart(false);
                     setStateAddToCartButton('pending');
                 }
             } catch (e) {
                 console.log(e);
                 setStateAddToCartButton('pending');
-                Alert.alert(e.message);
+                // Alert.alert(e.message);
+                setErrorMessage([e.message])
             } finally {
                 await startFetchCart(true);
             }
@@ -423,7 +429,8 @@ const useProductFullDetails = ({product}) => {
             // isEverythingOutOfStock ||
             // isMissingOptions ||
             isAddConfigurableLoading ||
-            isAddSimpleLoading
+            isAddSimpleLoading,
+        errorMessage, onErrorMessage: setErrorMessage
     }
 }
 

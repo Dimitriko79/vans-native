@@ -13,6 +13,7 @@ import ProductInfo from "../productInfo/productInfo";
 import PopularyProduct from "../popularyProduct/popularyProduct";
 import Espot from "../espot/espot";
 import LoadingIndicator from "../loadingIndicator/loadingIndicator";
+import Error from "../error/error";
 
 const { width,height } = Dimensions.get("window");
 
@@ -27,7 +28,8 @@ const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
         isAddToCartDisabled,
         breadcrumbCategoryId,
         mediaGalleryEntries = [],
-        stateAddToCartButton
+        stateAddToCartButton,
+        errorMessage, onErrorMessage
     } = useProductFullDetails({ product });
 
     const images = mediaGalleryEntries.map(({ url, label }) => ({ url, label }));
@@ -90,6 +92,7 @@ const ProductFullDetails = ({ product = {}, popularProducts = [] }) => {
                 disabled={isAddToCartDisabled}
                 stateAddToCartButton={stateAddToCartButton}
             />
+            <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{marginTop: 0, marginHorizontal: 0}}/>
             <Social product={product} />
             <Espot/>
             <ProductInfo product={product}/>

@@ -2,7 +2,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import React, { useCallback } from "react";
 
-const Error = ({ errorMessage = [], onErrorMessage = () => {} }) => {
+const Error = ({ errorMessage = [], onErrorMessage = () => {}, style = {} }) => {
     const handleClose = useCallback(() => {
         onErrorMessage([]);
     }, [onErrorMessage]);
@@ -10,7 +10,7 @@ const Error = ({ errorMessage = [], onErrorMessage = () => {} }) => {
     if (!errorMessage.length) return null;
 
     return (
-        <View style={styles.error}>
+        <View style={[styles.error, style]}>
             <View style={styles.error_messages}>
                 {errorMessage.map((message, index) => (
                     <Text key={index} style={styles.error_messages_text}>

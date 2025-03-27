@@ -4,11 +4,12 @@ import useSocial from "./useSocial";
 import {router} from "expo-router";
 import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 import React from "react";
+import Error from "../error/error";
 
 const { height } = Dimensions.get("window");
 
 const Social = props => {
-    const {handleWishlistItem, onShare, loading } = useSocial(props);
+    const {handleWishlistItem, onShare, loading, errorMessage, onErrorMessage } = useSocial(props);
 
     return (
         <>
@@ -34,6 +35,7 @@ const Social = props => {
                     <Text style={styles.social_text}>אתר חנות</Text>
                 </TouchableOpacity>
             </View>
+            <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{ marginHorizontal: 0}}/>
         </>
     )
 }
