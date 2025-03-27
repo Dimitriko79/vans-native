@@ -90,6 +90,7 @@ export const UserContextProvider = ({ children }) => {
             }
             await getCustomerOrders();
         } catch (error) {
+            console.log(error)
             dispatch({type: 'SET_IS_SIGNED_IN', payload: false});
             dispatch({type: 'USER_ERROR', payload: error});
         } finally {
@@ -132,7 +133,7 @@ export const UserContextProvider = ({ children }) => {
             return !!token;
         } catch (e) {
             console.log(e);
-            Alert.alert(e.message)
+            throw e;
         }
     }
 

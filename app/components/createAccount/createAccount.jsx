@@ -15,6 +15,13 @@ import LoadingIndicator from "../loadingIndicator/loadingIndicator";
 const { width, height } = Dimensions.get('window');
 
 const CreateAccount = props => {
+    const [editable, setEditable] = useState(false);
+    const today = new Date();
+    const eighteenYearsAgo = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+    );
 
     const validationSchema = Yup.object().shape({
         firstname: Yup.string()
@@ -115,41 +122,38 @@ const CreateAccount = props => {
                                         {touched.lastname && errors.lastname && <Text style={styles.errorText}>{errors.lastname}</Text>}
                                     </View>
                                     <View style={styles.create_account_content_form_field}>
-                                        <TouchableOpacity
-                                            activeOpacity={1}
-                                            style={{ zIndex: 2 }}
+                                        <TextInput
+                                            name="date_birth"
+                                            style={styles.input}
+                                            inputStyle={styles.inputStyle}
+                                            labelStyle={styles.labelStyle}
+                                            placeholderStyle={styles.placeholderStyle}
+                                            textErrorStyle={styles.textErrorStyle}
+                                            label="תאריך לידה"
+                                            placeholderTextColor="#64686b"
+                                            value={values.date_birth ? new Date(values.date_birth).toLocaleDateString() : ''}
+                                            readOnly={editable}
+                                            clearButtonMode="never"
+                                            onBlur={handleBlur("date_birth")}
                                             onPress={() => {
-                                                setOpenCalendar(!isOpenCalendar);
+                                                setEditable(true);
+                                                setTimeout(() => {
+                                                    setEditable(false);
+                                                }, 1);
                                                 setFieldTouched("date_birth", true);
+                                                setOpenCalendar(!isOpenCalendar);
                                             }}
-                                        >
-                                            <TextInput
-                                                name="date_birth"
-                                                style={styles.input}
-                                                inputStyle={styles.inputStyle}
-                                                labelStyle={styles.labelStyle}
-                                                placeholderStyle={styles.placeholderStyle}
-                                                textErrorStyle={styles.textErrorStyle}
-                                                label="תאריך לידה"
-                                                placeholderTextColor="#64686b"
-                                                focusColor="#00699d"
-                                                value={values.date_birth ? new Date(values.date_birth).toLocaleDateString() : ''}
-                                                editable={false}
-                                                pointerEvents="none"
-                                                clearButtonMode="never"
-                                                selectTextOnFocus={false}
-                                                showIcon={false}
-                                            />
-                                            {touched.date_birth && errors.date_birth && (
-                                                <Text style={styles.errorText}>{errors.date_birth}</Text>
-                                            )}
-                                        </TouchableOpacity>
-
+                                            showIcon={false}
+                                        />
+                                        {touched.date_birth && errors.date_birth && (
+                                            <Text style={styles.errorText}>{errors.date_birth}</Text>
+                                        )}
                                         {isOpenCalendar && (
                                             <DateTimePicker
                                                 textColor="#2b2b2b"
                                                 value={values.date_birth !== '' ? new Date(values.date_birth) : new Date()}
                                                 mode="date"
+                                                maximumDate={eighteenYearsAgo}
                                                 display="spinner"
                                                 onChange={(event, selectedDate) => {
                                                     if (selectedDate) {

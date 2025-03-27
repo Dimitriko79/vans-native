@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     error_messages: {
+        flex: 1,
         flexDirection: "column",
         gap: 3,
     },

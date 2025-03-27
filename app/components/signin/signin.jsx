@@ -49,49 +49,49 @@ const Signin = ({handleView = () => {}}) => {
                 <LoadingIndicator style={styles.loaderContainerOverlay}/>
             </Modal>
             <View style={styles.inner}>
-                <View style={styles.sign_in_content_phone}>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchemaOTP}
-                        onSubmit={(values, {resetForm}) => {
-                            onSubmit(values, 'otp', resetForm);
-                        }}
-                    >
-                        {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (
-                            <React.Fragment>
-                                <View style={styles.sign_in_content_form}>
-                                    <Text style={styles.sign_in_content_title}>כניסה עם קוד חד פעמי ב SMS</Text>
-                                    <View style={styles.sign_in_content_form_field}>
-                                        <TextInput
-                                            keyboardType="phone-pad"
-                                            name="telephone"
-                                            style={styles.input}
-                                            inputStyle={styles.inputStyle}
-                                            labelStyle={styles.labelStyle}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            textErrorStyle={styles.textErrorStyle}
-                                            label="מספר טלפון נייד"
-                                            placeholderTextColor="#64686b"
-                                            focusColor="#00699d"
-                                            value={values.telephone}
-                                            onChangeText={handleChange("telephone")}
-                                            onBlur={handleBlur("telephone")}
-                                        />
-                                        {touched.telephone && errors.telephone && <Text style={styles.errorText}>{errors.telephone}</Text>}
-                                    </View>
-                                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>
-                                        <Text style={styles.sign_in_content_form_submit_text}>כניסה</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </React.Fragment>
-                        )}
-                    </Formik>
-                </View>
-                <View style={styles.sign_spacer}>
-                    <View style={styles.sign_spacer_before}/>
-                    <Text style={styles.sign_spacer_text}>OR</Text>
-                    <View style={styles.sign_spacer_after}/>
-                </View>
+                {/*<View style={styles.sign_in_content_phone}>*/}
+                {/*    <Formik*/}
+                {/*        initialValues={initialValues}*/}
+                {/*        validationSchema={validationSchemaOTP}*/}
+                {/*        onSubmit={(values, {resetForm}) => {*/}
+                {/*            onSubmit(values, 'otp', resetForm);*/}
+                {/*        }}*/}
+                {/*    >*/}
+                {/*        {({ handleChange, handleSubmit, values, errors, touched, handleBlur, setFieldValue, resetForm }) => (*/}
+                {/*            <React.Fragment>*/}
+                {/*                <View style={styles.sign_in_content_form}>*/}
+                {/*                    <Text style={styles.sign_in_content_title}>כניסה עם קוד חד פעמי ב SMS</Text>*/}
+                {/*                    <View style={styles.sign_in_content_form_field}>*/}
+                {/*                        <TextInput*/}
+                {/*                            keyboardType="phone-pad"*/}
+                {/*                            name="telephone"*/}
+                {/*                            style={styles.input}*/}
+                {/*                            inputStyle={styles.inputStyle}*/}
+                {/*                            labelStyle={styles.labelStyle}*/}
+                {/*                            placeholderStyle={styles.placeholderStyle}*/}
+                {/*                            textErrorStyle={styles.textErrorStyle}*/}
+                {/*                            label="מספר טלפון נייד"*/}
+                {/*                            placeholderTextColor="#64686b"*/}
+                {/*                            focusColor="#00699d"*/}
+                {/*                            value={values.telephone}*/}
+                {/*                            onChangeText={handleChange("telephone")}*/}
+                {/*                            onBlur={handleBlur("telephone")}*/}
+                {/*                        />*/}
+                {/*                        {touched.telephone && errors.telephone && <Text style={styles.errorText}>{errors.telephone}</Text>}*/}
+                {/*                    </View>*/}
+                {/*                    <TouchableOpacity activeOpacity={0.5} disabled={loading} style={styles.sign_in_content_form_submit} onPress={() => handleSubmit()}>*/}
+                {/*                        <Text style={styles.sign_in_content_form_submit_text}>כניסה</Text>*/}
+                {/*                    </TouchableOpacity>*/}
+                {/*                </View>*/}
+                {/*            </React.Fragment>*/}
+                {/*        )}*/}
+                {/*    </Formik>*/}
+                {/*</View>*/}
+                {/*<View style={styles.sign_spacer}>*/}
+                {/*    <View style={styles.sign_spacer_before}/>*/}
+                {/*    <Text style={styles.sign_spacer_text}>OR</Text>*/}
+                {/*    <View style={styles.sign_spacer_after}/>*/}
+                {/*</View>*/}
                 <View style={styles.sign_in_content_mail}>
                     <Formik
                         initialValues={initialValues}
