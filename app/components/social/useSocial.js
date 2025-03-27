@@ -12,6 +12,7 @@ const useSocial = ({product = null}) => {
     const [fetchAddProductToWishlist, {loading}] = useMutation(ADD_PRODUCT_TO_WISHLIST);
 
     const handleWishlistItem = useCallback(async () => {
+        setErrorMessage([]);
         try {
             await fetchAddProductToWishlist({variables: {sku: product.sku}});
             await getUserData();
