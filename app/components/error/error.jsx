@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         gap: 20,
         marginTop: 10,
-        marginHorizontal: 15,
+        marginHorizontal: 10,
         borderRadius: 5,
     },
     error_icon: {

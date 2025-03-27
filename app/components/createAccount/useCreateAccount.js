@@ -51,12 +51,11 @@ const useCreateAccount = () => {
             setLoading(false);
             router.navigate('/homepage');
         } catch (e) {
-            console.error(e);
-            // Alert.alert(e.message)
-            setErrorMessage([e.message]);
             setLoading(false);
+            console.error(e);
+            setErrorMessage([e.message]);
         }
-    }, [createAccount]);
+    }, [createAccount, setErrorMessage]);
 
 
     return {

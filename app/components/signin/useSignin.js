@@ -52,14 +52,14 @@ const useSignin = () => {
                 }
                 startFetchCart(true);
                 resetForm();
+                setLoading(false);
                 router.push({ pathname: "/account" });
-                setView("ACCOUNT")
+                setView("ACCOUNT");
             }
         } catch (e) {
+            setLoading(false);
             console.error(e);
             setErrorMessage([e.message]);
-        } finally {
-            setLoading(false);
         }
     }, [loading, cartId, signIn, retrieveCartId, mergeCarts]);
 
