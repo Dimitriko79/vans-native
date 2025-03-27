@@ -1,11 +1,21 @@
 import {Animated} from "react-native";
 import { router, Slot } from "expo-router";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useCartProvider from "./context/cart/cartProvider";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const Main = ({children, scrollY}) => {
     const [isRedirecting, setIsRedirecting] = useState(false);
     const {setIsLoadMore} = useCartProvider();
+    const scrollRef = useRef(null);
+    const { resetScroll, setResetScroll } = useScrollContext();
+
+    useEffect(() => {
+        if (resetScroll && scrollRef.current) {
+            scrollRef.current.scrollTo({ y: 0, animated: false });
+            setResetScroll(false);
+        }
+    }, [resetScroll])
 
     useEffect(() => {
         if (!isRedirecting) {
@@ -20,6 +30,7 @@ const Main = ({children, scrollY}) => {
 
     return (
         <Animated.ScrollView
+            ref={scrollRef}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ flexGrow: 1 }}
             onScroll={Animated.event(

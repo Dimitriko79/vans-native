@@ -1,12 +1,19 @@
 import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 import ItemReview from "../checkout/itemsReview/itemsReview";
 import useStoreContext from "../../context/store/storeProvider";
 import Icon from "react-native-vector-icons/AntDesign";
+import {useScrollContext} from "../../context/scroll/scrollContext";
 
 const Order = ({ order, onOrder }) => {
     const {payment_method, shipping_method, shipping_address, billing_address} = order;
     const {country} = useStoreContext();
+    const { setResetScroll } = useScrollContext();
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
+
     return (
         <View style={styles.container}>
             <ItemReview totalPrice={{ value: order.grand_total, currency: "ILS" }} productList={order.products} isPlacingOrder={true} isCustomerOrders={true} isShowRemove={false}/>

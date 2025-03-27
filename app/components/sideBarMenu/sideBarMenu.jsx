@@ -73,6 +73,7 @@ const SideBarMenu = ({
                     keyExtractor={(item, index) => item.id || `footer-item-${index}`}
                     renderItem={({ item }) => {
                         const [id, { category, isLeaf }] = item;
+
                         return isLeaf ? (
                             <TouchableOpacity activeOpacity={0.7} onPress={() => handleChosenCategory(id)}>
                                 <Text style={styles.sidebar_item_text}>{category.name}</Text>

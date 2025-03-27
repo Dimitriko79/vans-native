@@ -4,7 +4,7 @@ import {router} from "expo-router";
 import {useMutation} from "@apollo/client";
 import {CREATE_CUSTOMER_ADDRESS, UPDATE_CUSTOMER_ADDRESS} from "../address.gql";
 
-const useForm = ({ onErrorMessage = [], setIsAddingAddress = () => {}, address = null, setUpdateAddress = () => {}}) => {
+const useForm = ({ onErrorMessage = [], setIsAddingAddress = () => {}, address = null, setUpdateAddress = () => {}, setResetScroll = () => {}}) => {
     const {user, getUserData, setUserUpdate} = useUserContext();
 
     const [fetchCustomerAddress] = useMutation(CREATE_CUSTOMER_ADDRESS);
@@ -48,6 +48,7 @@ const useForm = ({ onErrorMessage = [], setIsAddingAddress = () => {}, address =
                 setLoading(false);
                 setIsAddingAddress(false);
                 setUserUpdate(true);
+                setResetScroll(true);
                 router.push({ pathname: "/account" });
             }
         } catch (e) {
@@ -115,7 +116,8 @@ const useForm = ({ onErrorMessage = [], setIsAddingAddress = () => {}, address =
         isDefaultBillingAddress,
         isDefaultShippingAddress,
         setIsAddingAddress,
-        setUpdateAddress
+        setUpdateAddress,
+        setResetScroll
     }
 }
 

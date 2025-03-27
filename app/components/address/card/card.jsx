@@ -9,7 +9,8 @@ export const Card = ({
                          isCustomAddress = false,
                          setAddressId = () => {},
                          setIsOpenModal = () => {},
-                         setUpdateAddress = () => {}
+                         setUpdateAddress = () => {},
+                         setResetScroll = () => {}
 }) => {
     const {country} = useStoreContext();
 
@@ -46,7 +47,13 @@ export const Card = ({
                         <Icon name="delete" size={16}/>
                     </TouchableOpacity>
                 )}
-                <TouchableOpacity style={styles.card_actions_button} onPress={() => setUpdateAddress(address)}>
+                <TouchableOpacity
+                    style={styles.card_actions_button}
+                    onPress={() => {
+                        setUpdateAddress(address);
+                        setResetScroll(true);
+                    }}
+                >
                     <Text style={styles.card_actions_text}>ערוך</Text>
                     <Icon name="edit" size={16}/>
                 </TouchableOpacity>

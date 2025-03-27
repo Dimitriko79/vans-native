@@ -14,6 +14,7 @@ import { apolloClient } from "../servises/client";
 import { StoreContextProvider } from "./context/store/storeProvider";
 import { UserContextProvider } from "./context/user/userProvider";
 import { CheckoutContextProvider } from "./context/checkout/checkoutProvider";
+import {ScrollProvider} from "./context/scroll/scrollContext";
 
 const { width } = Dimensions.get("window");
 SplashScreen.preventAutoHideAsync();
@@ -72,18 +73,20 @@ const RootLayout = () => {
                 <CheckoutContextProvider>
                     <StoreContextProvider>
                         <CartContextProvider>
-                            <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
-                                <Header onToggle={toggleSidebar} scrollY={scrollY} isSidebarOpen={isSidebarOpen} />
-                                <SideBarMenu
-                                    onToggle={toggleSidebar}
-                                    isSidebarOpen={isSidebarOpen}
-                                    onPress={handlePress}
-                                    translateX={translateX}
-                                />
-                                <Main onPress={handlePress} scrollY={scrollY}>
-                                    <Footer />
-                                </Main>
-                            </SafeAreaView>
+                            <ScrollProvider>
+                                <SafeAreaView style={{ flex: 1, flexGrow: 1, backgroundColor: "white" }}>
+                                    <Header onToggle={toggleSidebar} scrollY={scrollY} isSidebarOpen={isSidebarOpen} />
+                                    <SideBarMenu
+                                        onToggle={toggleSidebar}
+                                        isSidebarOpen={isSidebarOpen}
+                                        onPress={handlePress}
+                                        translateX={translateX}
+                                    />
+                                    <Main onPress={handlePress} scrollY={scrollY}>
+                                        <Footer />
+                                    </Main>
+                                </SafeAreaView>
+                            </ScrollProvider>
                             <StatusBar barStyle="dark-content" />
                         </CartContextProvider>
                     </StoreContextProvider>

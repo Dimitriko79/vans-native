@@ -9,15 +9,17 @@ import {
     Animated,
     Easing, Image,
 } from "react-native";
-import React, { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 import Order from "./components/orders/order";
 import useOrders from "./components/orders/useOrders";
 import {images} from "../constants";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height, width } = Dimensions.get("window");
 
 const Orders = () => {
+    const { setResetScroll } = useScrollContext();
     const {
         orders,
         itemsPerPage,
@@ -52,6 +54,10 @@ const Orders = () => {
             }).start();
         }
     };
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     const content = useMemo(() => {
         if (currentOrder) {
@@ -113,10 +119,10 @@ const Orders = () => {
                                                 <TouchableOpacity onPress={() => onOrder(item)}>
                                                     <Text style={styles.order_item_action}>הצג הזמנה</Text>
                                                 </TouchableOpacity>
-                                                <Text>|</Text>
-                                                <TouchableOpacity onPress={() => Alert.alert("Click!")}>
-                                                    <Text style={styles.order_item_action}>הזמן מחדש</Text>
-                                                </TouchableOpacity>
+                                                {/*<Text>|</Text>*/}
+                                                {/*<TouchableOpacity onPress={() => Alert.alert("Click!")}>*/}
+                                                {/*    <Text style={styles.order_item_action}>הזמן מחדש</Text>*/}
+                                                {/*</TouchableOpacity>*/}
                                             </View>
                                         </View>
                                     )}
@@ -241,7 +247,7 @@ const Orders = () => {
         }
     }, [currentOrder, orders, startPage, endPage, isShowOptions]);
 
-    return <>{content}</>;
+    return content;
 };
 
 const styles = StyleSheet.create({

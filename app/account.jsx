@@ -21,11 +21,12 @@ const Account = () => {
         content = <PersonalArea />;
     }
 
-    return (
-        <ScrollView keyboardShouldPersistTaps="handled">
-            {content}
-        </ScrollView>
-    );
+    return content
+    // return (
+    //     <ScrollView keyboardShouldPersistTaps="handled">
+    //         {content}
+    //     </ScrollView>
+    // );
 };
 
 export default Account;

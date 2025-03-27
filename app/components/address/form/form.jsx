@@ -22,7 +22,8 @@ const Form = props => {
         isDefaultBillingAddress,
         isDefaultShippingAddress,
         setIsAddingAddress,
-        setUpdateAddress
+        setUpdateAddress,
+        setResetScroll
     } = useForm(props);
 
     const validationSchema = Yup.object().shape({
@@ -225,6 +226,7 @@ const Form = props => {
                                     onPress={() => {
                                         setIsAddingAddress(false);
                                         setUpdateAddress(null);
+                                        setResetScroll(true);
                                     }}
                                 >
                                     <Text style={{color: '#006bb4', fontWeight: '400', fontSize: 16, fontFamily: 'Heebo'}}>תחזור</Text>

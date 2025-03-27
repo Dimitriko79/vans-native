@@ -1,9 +1,10 @@
 import {Text, View, StyleSheet, Pressable, Dimensions} from "react-native";
 import Svg, {Circle, G, Path} from "react-native-svg";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {router} from "expo-router";
 import useUserContext from "../../context/user/userProvider";
 import Icon from "react-native-vector-icons/AntDesign";
+import {useScrollContext} from "../../context/scroll/scrollContext";
 
 const { width,height } = Dimensions.get("window");
 
@@ -11,6 +12,12 @@ const PersonalArea = () => {
 
     const [hoveredLink, setHoveredLink] = useState(null);
     const {isUserUpdate} = useUserContext();
+    const { setResetScroll } = useScrollContext();
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.personal_area}>

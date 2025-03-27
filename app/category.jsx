@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, {useCallback, useEffect} from "react";
 import {
     View,
     Text,
@@ -18,11 +18,13 @@ import Icon from "react-native-vector-icons/AntDesign";
 import useDropdownSideBar from "./components/sortSideBar/useDropdownSideBar";
 import RichContent from "./components/richContent/richContent";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height, width } = Dimensions.get("window");
 
 const Category = () => {
     const { ids } = useLocalSearchParams();
+    const { setResetScroll } = useScrollContext();
     const {
         categoryData = { name: "", description: "" },
         products = [],
@@ -94,11 +96,11 @@ const Category = () => {
         )
     };
 
-    return (
-        <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
-            {content}
-        </ScrollView>
-    );
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
+
+    return content;
 };
 
 const styles = StyleSheet.create({

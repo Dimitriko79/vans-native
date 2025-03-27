@@ -2,9 +2,11 @@ import {StyleSheet, View, Text, TouchableOpacity, Modal, Dimensions} from 'react
 import CouponCode from "./couponCode/couponCode";
 import useFormPayment from "./useFormPayment";
 import PaymentsWrapper from "./paymentsWrapper";
-import React, { useCallback } from "react";
+import React, {useCallback, useEffect} from "react";
 import { images } from "../../../../constants";
 import LoadingIndicator from "../../loadingIndicator/loadingIndicator";
+import {useScrollContext} from "../../../context/scroll/scrollContext";
+import Error from "../../error/error";
 
 const { height } = Dimensions.get('window');
 
@@ -17,8 +19,10 @@ const FormPayment = ({
         selectedPayment,
         setSelectedPayment,
         handlePlaceOrder,
-        loading
+        loading,
+        errorMessage, onErrorMessage
     } = useFormPayment({ handleStep, step });
+    const { setResetScroll } = useScrollContext();
 
     const getPaymentImage = useCallback((code) => {
         const paymentImages = {
@@ -26,6 +30,10 @@ const FormPayment = ({
             paypal_express: images.payPal
         };
         return paymentImages[code] || null;
+    }, []);
+
+    useEffect(() => {
+        setResetScroll(true);
     }, []);
 
     return (
@@ -39,7 +47,8 @@ const FormPayment = ({
                 <LoadingIndicator style={styles.loaderContainerOverlay}/>
             </Modal>
             <CouponCode />
-            {payments && payments.length && payments.map((payment) => (
+            /*TODO Need remove filter*/
+            {payments && payments.length && payments.filter(payment => payment.code === 'cashondelivery').map((payment) => (
                 <PaymentsWrapper
                     key={payment.code}
                     title={payment.title}
@@ -57,6 +66,7 @@ const FormPayment = ({
                             >
                                 <Text style={styles.form_payment_submit_text}>לסיום הזמנה</Text>
                             </TouchableOpacity>
+                            <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{ marginHorizontal: 0}}/>
                         </View>
                     ) : (
                         <Text>{payment.title}</Text>

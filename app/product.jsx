@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     View,
     Text,
@@ -11,15 +11,21 @@ import { useLocalSearchParams } from "expo-router";
 import useProduct from "./components/product/useProduct";
 import ProductFullDetails from "./components/productFullDetails/productFullDetails";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height } = Dimensions.get("window");
 
 const Product = () => {
+    const { setResetScroll } = useScrollContext();
     const { urlKey } = useLocalSearchParams();
 
     const talonProps = useProduct(urlKey);
 
     const { productData, popularProducts, loading, error } = talonProps;
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     if (loading) {
         return (
@@ -39,14 +45,9 @@ const Product = () => {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
-            <ScrollView
-                contentContainerStyle={styles.scrollContainer}
-                keyboardShouldPersistTaps="handled"
-            >
-                <View style={styles.container}>
-                    <ProductFullDetails product={productData} popularProducts={popularProducts} />
-                </View>
-            </ScrollView>
+            <View style={styles.container}>
+                <ProductFullDetails product={productData} popularProducts={popularProducts} />
+            </View>
         </SafeAreaView>
     );
 };

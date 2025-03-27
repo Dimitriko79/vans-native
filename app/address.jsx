@@ -1,14 +1,16 @@
 import {Dimensions, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 import {Card} from "./components/address/card/card";
 import useAddress from "./components/address/useAddress";
 import Icon from "react-native-vector-icons/AntDesign";
 import Error from "./components/error/error";
 import Form from "./components/address/form/form";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height, width } = Dimensions.get("window");
 
 const Address = () => {
+    const { setResetScroll } = useScrollContext();
     const {
         shippingAddressDefault,
         billingAddressDefault,
@@ -22,11 +24,15 @@ const Address = () => {
         updateAddress, setUpdateAddress
     } = useAddress();
 
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
+
     return (
         <View style={styles.container}>
             <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage}/>
             {isAddingAddress || updateAddress ? (
-                <Form onErrorMessage={onErrorMessage} setIsAddingAddress={setIsAddingAddress} address={updateAddress} setUpdateAddress={setUpdateAddress}/>
+                <Form onErrorMessage={onErrorMessage} setIsAddingAddress={setIsAddingAddress} address={updateAddress} setUpdateAddress={setUpdateAddress} setResetScroll={setResetScroll}/>
             ) : (
                 <>
                     <View style={styles.addresses}>
@@ -39,6 +45,7 @@ const Address = () => {
                                 setAddressId={setAddressId}
                                 setIsOpenModal={setIsOpenModal}
                                 setUpdateAddress={setUpdateAddress}
+                                setResetScroll={setResetScroll}
                             />
                             <Card
                                 isBillingAddress={false}
@@ -47,6 +54,7 @@ const Address = () => {
                                 setAddressId={setAddressId}
                                 setIsOpenModal={setIsOpenModal}
                                 setUpdateAddress={setUpdateAddress}
+                                setResetScroll={setResetScroll}
                             />
                             {customAddresses.map((address, index) => (
                                 <Card
@@ -57,6 +65,7 @@ const Address = () => {
                                     setAddressId={setAddressId}
                                     setIsOpenModal={setIsOpenModal}
                                     setUpdateAddress={setUpdateAddress}
+                                    setResetScroll={setResetScroll}
                                 />
                             ))}
                             {!customAddresses.length && (

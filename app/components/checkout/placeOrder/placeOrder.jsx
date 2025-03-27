@@ -3,10 +3,11 @@ import {images} from "../../../../constants";
 import {EXCLUSIVES} from "../useCheckout";
 import ItemReview from "../itemsReview/itemsReview";
 import DetailsReview from "../detailsReview/detailsReview";
-import React from "react";
+import React, {useEffect} from "react";
 import useCheckoutContext from "../../../context/checkout/checkoutProvider";
 import {router} from "expo-router";
 import useUserContext from "../../../context/user/userProvider";
+import {useScrollContext} from "../../../context/scroll/scrollContext";
 
 const { width } = Dimensions.get("window");
 
@@ -19,11 +20,16 @@ const PlaceOrder = () => {
         payment
     } = useCheckoutContext();
     const {setView} = useUserContext();
+    const { setResetScroll } = useScrollContext();
 
     const handleView = () => {
         setView("CREATE");
         router.navigate({ pathname: "/account" });
     }
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     return (
         <React.Fragment>

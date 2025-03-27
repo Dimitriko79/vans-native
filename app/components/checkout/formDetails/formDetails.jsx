@@ -1,6 +1,6 @@
 import {Text, View, StyleSheet, TouchableOpacity, Modal, Dimensions} from "react-native";
 import {TextInput} from "react-native-element-textinput";
-import React from "react";
+import React, {useEffect} from "react";
 import { Formik } from "formik";
 import useFormDetails from "./useFormDetails";
 import Checkbox from "./checkbox";
@@ -10,6 +10,8 @@ import ShippingMethods from "../shippingMethods/shippingMethods";
 import {CHECKOUT_STEP} from "../useCheckout";
 import DetailsReview from "../detailsReview/detailsReview";
 import LoadingIndicator from "../../loadingIndicator/loadingIndicator";
+import {useScrollContext} from "../../../context/scroll/scrollContext";
+import Error from "../../error/error";
 
 const { height } = Dimensions.get("window");
 
@@ -19,7 +21,7 @@ const FormDetails = ({
         step = 1,
         ...props
     }) => {
-
+    const { setResetScroll } = useScrollContext();
     const {
         isSignedIn,
         isEmailAvailable,
@@ -30,7 +32,8 @@ const FormDetails = ({
         onLogin,
         setStepOneDone,
         loading,
-        loadingLogin
+        loadingLogin,
+        errorMessage, onErrorMessage
     } = useFormDetails(props);
 
     const validationSchema = Yup.object().shape({
@@ -56,6 +59,10 @@ const FormDetails = ({
         confirm_terms: Yup.boolean().oneOf([true], "עליך לקבל את תנאי השימוש"),
         delivery: Yup.string().required("יש לבחור שיטת משלוח"),
     });
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     return (
         <>
@@ -311,6 +318,7 @@ const FormDetails = ({
                                         <Text style={styles.checkout_form_submit_text}>הבא</Text>
                                     </TouchableOpacity>
                                 </View>
+                                <Error errorMessage={errorMessage} onErrorMessage={onErrorMessage} style={{ marginHorizontal: 0}}/>
                             </>
                         )}
                     </Formik>

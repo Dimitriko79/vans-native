@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Modal} from "react-native";
 import {Formik} from "formik";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Error from "../error/error";
 import * as Yup from "yup";
 import {validateMobilePhone} from "../../helpers/validationSchema";
@@ -11,10 +11,12 @@ import Checkbox from "../checkout/formDetails/checkbox";
 import {images} from "../../../constants";
 import {JOIN_REWARDS} from "../signin/useSignin";
 import LoadingIndicator from "../loadingIndicator/loadingIndicator";
+import {useScrollContext} from "../../context/scroll/scrollContext";
 
 const { width, height } = Dimensions.get('window');
 
 const CreateAccount = props => {
+    const { setResetScroll } = useScrollContext();
     const [editable, setEditable] = useState(false);
     const today = new Date();
     const eighteenYearsAgo = new Date(
@@ -57,6 +59,10 @@ const CreateAccount = props => {
         loading,
         onSubmit
     } = useCreateAccount();
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     return (
         <View style={styles.container}>

@@ -50,11 +50,10 @@ const useSignin = () => {
                         setErrorMessage([e.message]);
                     }
                 }
-                startFetchCart(true);
                 resetForm();
                 setLoading(false);
+                startFetchCart(true);
                 router.push({ pathname: "/account" });
-                setView("ACCOUNT");
             }
         } catch (e) {
             setLoading(false);

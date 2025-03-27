@@ -21,7 +21,6 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
     const [fetchNavigation, { error, data }] = useLazyQuery(GET_NAVIGATION_MENU, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: "cache-first",
-        errorPolicy: "all",
     });
 
     const handleGoBack = useCallback(() => {
@@ -88,7 +87,7 @@ const useSideBarMenu = ({ onPress, onToggle, isSidebarOpen}) => {
 
     const childCategories = new Map();
     children
-        .filter(child => child.include_in_menu)
+        .filter(child => child.include_in_menu && child.name === 'נעלי נשים')
         .sort((a, b) => a.position - b.position)
         .forEach(category => {
             childCategories.set(category.id, {

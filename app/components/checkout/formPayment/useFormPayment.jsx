@@ -19,7 +19,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
     const [selectedPayment, setSelectedPayment] = useState('');
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
     const [placeOrderButtonClicked, setPlaceOrderButtonClicked] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState([]);
     const [fetchCustomerPaymentMethod, {loading: customerPaymentMethodLoading}] = useMutation(SET_CUSTOMER_PAYMENT_METHOD_ON_CART);
     const [placeOrder, { data: placeOrderData, error: placeOrderError, loading: placeOrderLoading }] = useMutation(PLACE_ORDER);
 
@@ -68,6 +68,7 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
     useEffect(() => {
         const placeOrderAndCleanup = async () => {
             if (!cartId) return;
+            setErrorMessage([]);
             try {
                 await placeOrder({ variables: { cartId } });
                 dispatch({type: 'SET_SHIPPING_DETAILS', payload: {...shippingDetails, confirm_terms: '', delivery: ''}})
@@ -75,7 +76,8 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
                 await getCustomerOrders();
             } catch (e) {
                 console.log(e);
-                Alert.alert(e.message);
+                // Alert.alert(e.message);
+                setErrorMessage([e.message]);
                 setPlaceOrderButtonClicked(false);
             }
         };
@@ -112,7 +114,8 @@ const useFormPayment = ({ handleStep = () => {}, step = 1 }) => {
         selectedPayment,
         setSelectedPayment,
         handlePlaceOrder,
-        loading: orderDetailsLoading || placeOrderLoading
+        loading: orderDetailsLoading || placeOrderLoading,
+        errorMessage, onErrorMessage: setErrorMessage
     };
 };
 

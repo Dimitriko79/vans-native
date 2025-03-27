@@ -1,9 +1,10 @@
 import {Dimensions, FlatList, Image, Modal, StyleSheet, Text, View} from "react-native";
 import useWishlist from "./components/wishlist/useWishlist";
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import Item from "./components/wishlist/item";
 import LoadingIndicator from "./components/loadingIndicator/loadingIndicator";
 import {images} from "../constants";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 
 
@@ -11,11 +12,16 @@ const { height } = Dimensions.get("window");
 
 const Wishlist = () => {
     const {items, handleWishlist, loading} = useWishlist();
+    const { setResetScroll } = useScrollContext();
 
     const renderItem = useMemo(
         () => ({ item }) => <Item item={item} handleWishlist={handleWishlist}/>,
         []
     );
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     if (!items.length){
         return (

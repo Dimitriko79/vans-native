@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, Image, Modal} from "react-native";
 import Error from "../error/error";
-import React from "react";
+import React, {useEffect} from "react";
 import {TextInput} from "react-native-element-textinput";
 import {Formik} from "formik";
 import useSignin, {JOIN_REWARDS} from "./useSignin";
@@ -8,6 +8,7 @@ import {validateMobilePhone} from "../../helpers/validationSchema";
 import * as Yup from "yup";
 import {images} from "../../../constants";
 import LoadingIndicator from "../loadingIndicator/loadingIndicator";
+import {useScrollContext} from "../../context/scroll/scrollContext";
 
 const { height } = Dimensions.get("window");
 
@@ -28,7 +29,7 @@ export const validationSchema = Yup.object().shape({
 const { width } = Dimensions.get('window');
 
 const Signin = ({handleView = () => {}}) => {
-
+    const { setResetScroll } = useScrollContext();
     const {
         loading = false,
         errorMessage = [],
@@ -36,6 +37,10 @@ const Signin = ({handleView = () => {}}) => {
         initialValues = { email: "", password: "", telephone: "" },
         onSubmit = () => {},
     } = useSignin();
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     return (
         <View style={styles.container}>

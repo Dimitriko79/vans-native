@@ -24,6 +24,7 @@ const useFormDetails = ({
 
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [isEmailAvailable, setEmailAvailable] = useState(true);
+    const [errorMessage, setErrorMessage] = useState([]);
 
     const defaultValues = {
         email: '',
@@ -51,7 +52,7 @@ const useFormDetails = ({
 
     const onSubmit = useCallback(async (values, resetForm) => {
         if (!values) return;
-
+        setErrorMessage([])
         try {
             const address = {
                 city: values.city,
@@ -80,7 +81,9 @@ const useFormDetails = ({
             handleStep("SENDING");
             setStepOneDone(true);
         } catch (e) {
-            Alert.alert(e.message);
+            console.log(e);
+            setErrorMessage([e.message]);
+            // Alert.alert(e.message);
         }
     }, [cartId, isSignedIn, setGuestEmailOnCart, customerBillingAddresses, customerShippingAddresses, customerShippingMethod, dispatch, shippingDetails, handleCustomerDetails, handleStep, setStepOneDone]);
 
@@ -133,6 +136,7 @@ const useFormDetails = ({
         onSubmit,
         onLogin,
         loading: customerBillingAddressesLoading || customerShippingAddressesLoading || customerShippingMethodLoading || guestEmailOnCartLoading || checkEmailAvailableLoading,
+        errorMessage, onErrorMessage: setErrorMessage
     };
 };
 

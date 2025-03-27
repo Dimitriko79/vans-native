@@ -1,17 +1,18 @@
 import {Text, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
 import * as Yup from "yup";
 import {validateMobilePhone} from "./helpers/validationSchema";
-import React from "react";
+import React, {useEffect} from "react";
 import {TextInput} from "react-native-element-textinput";
 import Checkbox from "./components/checkout/formDetails/checkbox";
 import {Formik} from "formik";
 import useCustomer from "./components/customer/useCustomer";
 import Error from "./components/error/error";
+import {useScrollContext} from "./context/scroll/scrollContext";
 
 const { height } = Dimensions.get("window");
 
 const Customer = () => {
-
+    const { setResetScroll } = useScrollContext();
     const {
         initialValues,
         onSubmit,
@@ -49,6 +50,10 @@ const Customer = () => {
             .oneOf([Yup.ref('password')], "הסיסמאות חייבות להיות תואמות")
             .required("אשר סיסמה נדרש")
     });
+
+    useEffect(() => {
+        setResetScroll(true);
+    }, []);
 
     return (
         <View style={styles.container}>
